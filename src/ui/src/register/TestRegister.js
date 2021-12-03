@@ -9,8 +9,8 @@ const UseForm = (callback, validate) => {
     usertype: '',
     doctype: '',
     moredoc: '',
-    firstName:'',
-    lastName: '',
+    firstname:'',
+    lastname: '',
     birthday: '',
     gender:'',
     amka:'',
@@ -20,7 +20,7 @@ const UseForm = (callback, validate) => {
     phone:'',
     height:'',
     weight:'',
-    blood:'',
+    bloodtype:'Unknown',
     tos:''
 
   });
@@ -38,7 +38,10 @@ const UseForm = (callback, validate) => {
   };
 
 
+
+
   const handleSubmit = e => {
+    console.log(errors);
     e.preventDefault();
 
     setErrors(validate(values));
@@ -47,6 +50,7 @@ const UseForm = (callback, validate) => {
 
   useEffect(
     () => {
+      console.log(errors);
       if (Object.keys(errors).length === 0 && isSubmitting) {
         callback();
       }

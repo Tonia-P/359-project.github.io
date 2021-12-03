@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import "./Register.css"
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
-import * as L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import { 
     Stack, 
@@ -26,8 +25,7 @@ import {
     NumberDecrementStepper,
     NumberInputStepper,
     Checkbox,
-    Textarea,
-    Box
+    Textarea
 } from '@chakra-ui/react'
 import UseForm from "./TestRegister";
 import validateInfo from "./validation";
@@ -35,36 +33,44 @@ import {
     MapContainer,
     TileLayer,
     Marker,
-    Popup,
-    Icon
+    Popup
 } from 'react-leaflet'
 
 const RegisterForm = ({ submitForm }) => {
 
 
-    // TODO:    Loading
-    //          Replace useEffect
+    // TODO:    
     //          Validations.
-    //          Disable buttons when no address.
     //          Get address.
+    //          login page
+
 
     // handles lit. everything that isn't here.
-    const { handleChange, handleSubmit, values, errors } = UseForm(
+    const { handleChange, handleSubmit, values, errors, setValues } = UseForm(
         submitForm,
         validateInfo
     );
     const [mapReady, setMapReady] = useState(false);
+    const [tosReady, setTosReady] = useState(false);
+    
+/*
+    useEffect(() => {
+        if(values.usertype === "Doctor"){
+            setShowDoc(true);
+        }
+        else setShowDoc(false);
+    }, [values.usertype])
+*/
 
-
-    const mapRequest = () =>{
+    const handleMapRequest = e =>{
         // GET request using fetch inside useEffect React hook
+        handleChange(e);
         if(values.address) console.log(values.address);
         if(values.city) console.log(values.city)
         if(values.country) console.log(values.country)
         var tmp = null;
-        var data = null;
 
-        if(values.address && values.city && values.country){
+        if(values.address && values.city && values.country === "GR"){
             var sum = values.address + '+' + values.city + '+Greece' ;
             
             fetch("https://forward-reverse-geocoding.p.rapidapi.com/v1/search?q="+
@@ -84,6 +90,7 @@ const RegisterForm = ({ submitForm }) => {
                 console.log(tmp);
 
                 if(!tmp.length){
+                    setMapReady(false);
                     // Error, address does not exist.
                 }
                 else{
@@ -100,16 +107,19 @@ const RegisterForm = ({ submitForm }) => {
                     if(flag === 0){
                         // Error, not in Crete.
                         alert("Not in Crete.");
+                        setMapReady(false);
                         return;
                     }
                     setLat(tmp[0].lat);
                     setLon(tmp[0].lon);
+                    setMapReady(true);
 
                 }
                     
             })
             .catch((error) => {
               console.error('Error:', error);
+              setMapReady(false);
             });
         }
 
@@ -121,82 +131,33 @@ const RegisterForm = ({ submitForm }) => {
     }
 
 
-    
-
-
-    useEffect(() => {
-        // GET request using fetch inside useEffect React hook
-        if(values.address) console.log(values.address);
-        if(values.city) console.log(values.city)
-        if(values.country) console.log(values.country)
-        var tmp = null;
-        var data = null;
-
-        if(values.address && values.city && values.country){
-            var sum = values.address + '+' + values.city + '+Greece' ;
+    const getLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
             
-            fetch("https://forward-reverse-geocoding.p.rapidapi.com/v1/search?q="+
-            sum +
-            "&accept-language=en&polygon_threshold=0.0", {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-host": "forward-reverse-geocoding.p.rapidapi.com",
-                    "x-rapidapi-key": "36fc04be0cmsh6b954fe89f7caa4p174e39jsn1c14d11d8a9f"
-                }
-
-            })
-            .then(response => response.json())
-            .then(data => {
-              console.log('Success:', data);
-                tmp = data;
-                console.log(tmp);
-
-                if(!tmp.length){
-                    // Error, address does not exist.
-                }
-                else{
-                    var names = tmp[0].display_name.split(',');
-                    var flag = 0;
-                    console.log(names.length);
-                    for(let i = 0; i < names.length; i++){
-                        console.log(names[i]);
-                        if(names[i] === "Crete" || names[i] === " Region of Crete"){  
-                            flag = 1;
-                        }
-                    }
-                    console.log("Flag: "+ flag);
-                    if(flag === 0){
-                        // Error, not in Crete.
-                        alert("Not in Crete.");
-                        return;
-                    }
-                    setLat(tmp[0].lat);
-                    setLon(tmp[0].lon);
-
-                }
-                    
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+          
+        } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
         }
-
-
-
+      }
     
-    // empty dependency array means this effect will only run once (like componentDidMount in classes)
-    }, [values.address]);
-
+      const showPosition = (position) => {
+          console.log(position);
+        setLon(position.coords.longitude);
+            setLat(position.coords.latitude);
+            console.log(lon + "    " + lat);
+            setValues([{ address: "kappa" }]);
+            console.log(values.address)
+      }
+      
     
-
-    // Showing password as text and hiding it back.
     const [showPass, setShowPass] = useState(false)
     const handlePassword = () => setShowPass(!showPass);
 
     // Showing extra fields for when user is doctor.
     const [showDoc, setShowDoc] = useState(false)
     const handleDoc = () => setShowDoc(!showDoc);
-
+    const handleTos = () => setTosReady(!tosReady);
 
     const [lat, setLat] = useState('')
     const [lon, setLon] = useState('')
@@ -222,6 +183,7 @@ const RegisterForm = ({ submitForm }) => {
                     minLength="8"
                     />
                 <FormHelperText>Please enter an username of at least 8 characters.</FormHelperText>
+                <FormErrorMessage >{errors.username}</FormErrorMessage>
             </FormControl>
 
             <FormControl isRequired id= "email" isInvalid={errors.email}>
@@ -235,6 +197,7 @@ const RegisterForm = ({ submitForm }) => {
                     placeholder= "E-mail"
                     />
                 <FormHelperText>We'll never share your email. Kappa</FormHelperText>
+                <FormErrorMessage >{errors.email}</FormErrorMessage>
             </FormControl>
 
             <FormControl isRequired id= "password" isInvalid={errors.password}>
@@ -268,7 +231,7 @@ const RegisterForm = ({ submitForm }) => {
                     onChange= {handleChange} 
                     placeholder= "Password"
                     />
-                <FormErrorMessage  ></FormErrorMessage>
+                <FormErrorMessage >{errors.confirmpassword}</FormErrorMessage>
             </FormControl>
 
 
@@ -276,10 +239,14 @@ const RegisterForm = ({ submitForm }) => {
 
             <FormControl>
                 <FormLabel>User Type</FormLabel>
-                <RadioGroup defaultValue='Default User' onChange={handleDoc}>
+                <RadioGroup 
+                    defaultValue='Default User' 
+                    name= "usertype"
+                    onChange= {handleDoc}
+                    id= "usertype">
                     <HStack spacing='24px'>
-                        <Radio colorScheme= 'teal' value='Default User'>Default User</Radio>
-                        <Radio colorScheme= 'teal' value='Doctor'>Doctor</Radio>
+                        <Radio colorScheme= 'teal' value='Default User' onChange={handleChange}>Default User</Radio>
+                        <Radio colorScheme= 'teal' value='Doctor' onChange={handleChange}>Doctor</Radio>
                     </HStack>
                   </RadioGroup>
                   <FormHelperText></FormHelperText>
@@ -287,12 +254,14 @@ const RegisterForm = ({ submitForm }) => {
 
             {showDoc && 
             <Stack maxWidth= {1000} margin= "auto" spacing={7} marginTop= {0}>
-            <FormControl id="usertype">
+            <FormControl >
                 <FormLabel>Doctor Type</FormLabel>
-                <RadioGroup defaultValue='General Doctor'>
+                <RadioGroup 
+                    defaultValue='General Doctor'
+                    name="speciality">
                     <HStack spacing='24px'>
-                        <Radio colorScheme= 'teal' value='General Doctor'>General Doctor</Radio>
-                        <Radio colorScheme= 'teal' value='Pathologist'>Pathologist</Radio>
+                        <Radio colorScheme= 'teal' onChange={handleChange} value='General Doctor'>General Doctor</Radio>
+                        <Radio colorScheme= 'teal' onChange={handleChange} value='Pathologist'>Pathologist</Radio>
                     </HStack>
                   </RadioGroup>
                   <FormHelperText></FormHelperText>
@@ -303,41 +272,46 @@ const RegisterForm = ({ submitForm }) => {
                 <FormLabel>More info about doctor</FormLabel>
                 <Textarea 
                     placeholder='Write info here'
-                    name= "docInfo"
+                    name= "doctor_info"
+                    value= "doctor_info"
+                    onChange= {handleChange}
                     autoComplete= "off"
+
                 />
             </FormControl>
             </Stack>
             }
 
-            <FormControl isRequired id= "firstName" isInvalid={errors.firstName}>
+            <FormControl isRequired id= "firstname" isInvalid={errors.firstname}>
                 <FormLabel>First Name</FormLabel>
                 <Input 
                     type= "text" 
-                    name= "firstName"
+                    name= "firstname"
                     autoComplete= "on"
-                    value= {values.firstName}
+                    value= {values.firstname}
                     onChange= {handleChange} 
                     placeholder= "First name"
                     minLength="3"
                     maxLength= "30"
                     />
                 <FormHelperText></FormHelperText>
+                <FormErrorMessage >{errors.firstname}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isRequired id= "lastName" isInvalid={errors.lastName}>
+            <FormControl isRequired id= "lastname" isInvalid={errors.lastname}>
                 <FormLabel>Last Name</FormLabel>
                 <Input 
                     type= "text" 
-                    name= "lastName"
+                    name= "lastname"
                     autoComplete= "on"
-                    value= {values.lastName}
+                    value= {values.lastname}
                     onChange= {handleChange} 
                     placeholder= "Last name"
                     minLength="3"
                     maxLength= "30"
-                    />
+                    />-
                 <FormHelperText></FormHelperText>
+                <FormErrorMessage >{errors.lastname}</FormErrorMessage>
             </FormControl>
 
 
@@ -359,18 +333,21 @@ const RegisterForm = ({ submitForm }) => {
 
             <FormControl isRequired id= "gender" isInvalid={errors.gender}>
                 <FormLabel>Gender</FormLabel>
-                <RadioGroup defaultValue='male'>
+                <RadioGroup 
+                    defaultValue='male'
+                    name= "gender"
+                    >
                     <HStack spacing='24px'>
-                        <Radio colorScheme= 'teal' value='male'>Male</Radio>
-                        <Radio colorScheme= 'teal' value='female'>Female</Radio>
-                        <Radio colorScheme= 'teal' value='other'>Other</Radio>
+                        <Radio colorScheme= 'teal' onChange= {handleChange} value='male'>Male</Radio>
+                        <Radio colorScheme= 'teal' onChange= {handleChange} value='female'>Female</Radio>
+                        <Radio colorScheme= 'teal' onChange= {handleChange} value='other'>Other</Radio>
                     </HStack>
                   </RadioGroup>
                   <FormHelperText></FormHelperText>
             </FormControl>
 
 
-            <FormControl isRequired id= "amka" isInvalid={errors.username}>
+            <FormControl isRequired id= "amka" isInvalid={errors.amka}>
                 <FormLabel>AMKA</FormLabel>
                 <Input 
                     type= "text" 
@@ -382,12 +359,14 @@ const RegisterForm = ({ submitForm }) => {
                     minLength="8"
                     />
                 <FormHelperText>First 8 numbers must be same with birthday(DD/MM/YYY).</FormHelperText>
+                <FormErrorMessage >{errors.amka}</FormErrorMessage>
             </FormControl>
 
             <FormControl id= 'country'>
                 <FormLabel>Country</FormLabel>
                 <Select 
                     onChange={handleChange}
+                    onBlur={handleMapRequest}
                     placeholder='Country' 
                     name= "country" 
                     value={values.country}
@@ -654,10 +633,12 @@ const RegisterForm = ({ submitForm }) => {
                     autoComplete= "on"
                     value= {values.city}
                     onChange= {handleChange} 
+                    onBlur={handleMapRequest}
                     placeholder= "City"
                     minLength="8"
                     />
                 <FormHelperText>We won't share with anyone. Promise!</FormHelperText>
+                <FormErrorMessage >{errors.city}</FormErrorMessage>
             </FormControl>
 
 
@@ -669,10 +650,12 @@ const RegisterForm = ({ submitForm }) => {
                     autoComplete= "on"
                     value= {values.address}
                     onChange= {handleChange} 
+                    onBlur={handleMapRequest}
                     placeholder= "Address"
                     minLength="8"
                     />
                 <FormHelperText>We won't share with anyone. Promise!</FormHelperText>
+                <FormErrorMessage >{errors.address}</FormErrorMessage>
             </FormControl>
 
             <Grid templateColumns='repeat(2, 1fr)' gap={6}>
@@ -699,7 +682,7 @@ const RegisterForm = ({ submitForm }) => {
             <Button
                 mt = {4}
                 colorScheme="teal"
-                isDisabled
+                onClick={getLocation}
             >
                 Get address
             </Button>
@@ -725,7 +708,7 @@ const RegisterForm = ({ submitForm }) => {
 
 
 
-            <FormControl isRequired id= "phone" isInvalid={errors.username}>
+            <FormControl isRequired id= "phone" isInvalid={errors.phone}>
                 <FormLabel>Phone number</FormLabel>
                 <Input 
                     type= "text" 
@@ -738,6 +721,7 @@ const RegisterForm = ({ submitForm }) => {
                     maxLength="14"
                     />
                 <FormHelperText>Please enter your phone number.</FormHelperText>
+                <FormErrorMessage >{errors.phone}</FormErrorMessage>
             </FormControl>
 
             <Grid templateColumns='repeat(2, 1fr)' gap={6}>
@@ -767,9 +751,29 @@ const RegisterForm = ({ submitForm }) => {
                 </FormControl>
             </Grid>
 
-            <FormControl isRequired id= 'blood'>
+            <FormControl>
+                <FormLabel>Blood donor</FormLabel>
+                <RadioGroup 
+                    defaultValue='0' 
+                    onChange={handleChange}
+                >
+                    <HStack spacing='24px'>
+                        <Radio colorScheme= 'teal' value='1'>Yes</Radio>
+                        <Radio colorScheme= 'teal' value='0'>No</Radio>
+                    </HStack>
+                  </RadioGroup>
+                  <FormHelperText></FormHelperText>
+            </FormControl>
+
+
+            <FormControl 
+                isRequired
+                name= 'bloodtype'
+                onChange= {handleChange}
+                value= {values.bloodtype}
+            >
                 <FormLabel>Blood type</FormLabel>
-                <Select isRequired placeholder='Select option'>
+                <Select placeholder='Select option'>
                   <option value='A+'>A+</option>
                   <option value='A-'>A-</option>
                   <option value='B+'>B+</option>
@@ -782,8 +786,12 @@ const RegisterForm = ({ submitForm }) => {
                 </Select>
             </FormControl>
 
-            <Checkbox id="tos" colorScheme='teal'>I agree to Terms of Service.</Checkbox>
-            
+
+            <Checkbox id="tos" onChange= {handleTos} colorScheme='teal'>I agree to Terms of Service.</Checkbox>
+  
+
+
+            {tosReady ? 
             <Button
                 mt={2}
                 colorScheme="teal"
@@ -791,6 +799,17 @@ const RegisterForm = ({ submitForm }) => {
             >
                 Submit
             </Button>
+
+            :
+            <Button
+                mt={2}
+                colorScheme="teal"
+                type="submit"
+                isDisabled
+            >
+                Submit
+            </Button>
+}
 
         </Stack>
         </form>
