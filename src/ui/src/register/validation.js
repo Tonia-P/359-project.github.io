@@ -83,6 +83,9 @@ export default function validateInfo(values) {
       console.log(values.bloodtype);
     }
 
+    if(values.weight < 20 || values.weight > 300) errors.weight = 'Weight value must be between 20 and 300';
+    if(values.height < 100 || values.height > 250) errors.height = 'Height value must be between 100 and 250';
+
 
     return errors;
   }

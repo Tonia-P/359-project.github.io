@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { gettUser } from "../js/ajax";
 
 const UseForm = (callback, validate) => {
   const [values, setValues] = useState({
@@ -19,9 +20,10 @@ const UseForm = (callback, validate) => {
     address:'',
     phone:'',
     height:'',
+    lon:'0',
+    lat:'0',
     weight:'',
-    bloodtype:'Unknown',
-    tos:''
+    bloodtype:'Unknown'
 
   });
   const [errors, setErrors] = useState({});
@@ -35,22 +37,30 @@ const UseForm = (callback, validate) => {
       ...values,
       [name]: value
     });
+    console.log(values);
   };
 
-
-
-
   const handleSubmit = e => {
-    console.log(errors);
+    console.log("Errors: " + errors);
+    console.log("Values " + values);
     e.preventDefault();
 
     setErrors(validate(values));
+
+    // TODO Validate with database.
+
+    var json_vals = JSON.stringify(values);
+    var json_db = gettUser(json_vals);
+    console.log("JSON DB " + json_db);
+    console.log("JSON  " + json_vals);
+
     setIsSubmitting(true);
   };
 
   useEffect(
     () => {
       console.log(errors);
+      console.log(values);
       if (Object.keys(errors).length === 0 && isSubmitting) {
         callback();
       }
@@ -58,7 +68,10 @@ const UseForm = (callback, validate) => {
     [errors]
   );
 
-  return { handleChange, handleSubmit, values, errors };
+  return { handleChange, handleSubmit, values, errors, setValues };
 };
 
 export default UseForm;
+
+
+
