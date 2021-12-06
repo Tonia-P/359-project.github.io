@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { gettUser } from "../js/ajax";
+import $ from 'jquery'
 
 const UseForm = (callback, validate) => {
   const [values, setValues] = useState({
@@ -12,7 +13,7 @@ const UseForm = (callback, validate) => {
     moredoc: '',
     firstname:'',
     lastname: '',
-    birthday: '',
+    birthdate: '',
     gender:'',
     amka:'',
     country:'GR',
@@ -50,9 +51,23 @@ const UseForm = (callback, validate) => {
     // TODO Validate with database.
 
     var json_vals = JSON.stringify(values);
-    var json_db = gettUser(json_vals);
-    console.log("JSON DB " + json_db);
     console.log("JSON  " + json_vals);
+
+    var urlEnd = 'http://localhost:8080/WebApplication1/UserServlet';
+    $.ajax({
+        url: urlEnd,
+        type: "POST",
+        contentType: 'json',
+        data: json_vals,
+        success: function (result) {
+            var json = JSON.parse(result)
+            console.log("SUCCESS:  "+ json)
+        },
+        error: function (result) {
+          var json = JSON.parse(result)
+            console.log("FAIL:  "+ json)
+        }
+    });
 
     setIsSubmitting(true);
   };

@@ -13,6 +13,7 @@ import {
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 //import { Logo } from './Logo';
 import Form from './register/Form';
+import Test from './register/Test';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Grid minH="100vh" p={3}>
           <ColorModeSwitcher justifySelf="flex-end" />
           <VStack spacing={8}>
+
             <Text fontSize='5xl' >Register</Text>
             <Form />
             

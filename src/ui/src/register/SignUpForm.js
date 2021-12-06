@@ -318,15 +318,15 @@ const RegisterForm = ({ submitForm }) => {
             </FormControl>
 
 
-            <FormControl isRequired id= "birthday" isInvalid={errors.birthday}>
+            <FormControl isRequired id= "birthdate" isInvalid={errors.birthdate}>
                 <FormLabel>Birthday</FormLabel>
                 <Input 
                     type= "date" 
-                    name= "birthday"
+                    name= "birthdate"
                     autoComplete= "on"
-                    value= {values.birthday}
+                    value= {values.birthdate}
                     onChange= {handleChange} 
-                    placeholder= "birthday"
+                    placeholder= "birthdate"
                     minLength="3"
                     maxLength= "30"
                     />

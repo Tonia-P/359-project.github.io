@@ -1,4 +1,6 @@
 import $ from 'jquery'
+import { control } from 'leaflet';
+
 
 function createTableFromJSON(data) {
     var html = "<table><tr><th>Category</th><th>Value</th></tr>";
@@ -64,5 +66,27 @@ export function getAllUsers (){
     xhr.send();
 }
 
+
+export function simpleFFS () {
+    var urlEnd = 'http://localhost:8080/WebApplication1/SimpleServlet';
+    var kappa = null;
+    $.ajax({
+        url: urlEnd,
+        type: "GET",
+        contentType: 'json',
+        success: function (result) {
+            kappa = result;
+            $("#ajax").html("User not exists");
+            console.log(" Kappa result: " + kappa);
+            
+        },
+        error: function (result) {
+            console.log(" Ajax result: " + result);
+            return result;
+        }
+    });
+
+    return kappa;
+}
 
 
