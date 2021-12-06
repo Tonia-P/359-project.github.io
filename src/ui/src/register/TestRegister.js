@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { gettUser } from "../js/ajax";
+import $ from 'jquery'
 
 const UseForm = (callback, validate) => {
   const [values, setValues] = useState({
@@ -11,7 +13,7 @@ const UseForm = (callback, validate) => {
     moredoc: '',
     firstname:'',
     lastname: '',
-    birthday: '',
+    birthdate: '',
     gender:'',
     amka:'',
     country:'GR',
@@ -19,9 +21,10 @@ const UseForm = (callback, validate) => {
     address:'',
     phone:'',
     height:'',
+    lon:'0',
+    lat:'0',
     weight:'',
-    bloodtype:'Unknown',
-    tos:''
+    bloodtype:'Unknown'
 
   });
   const [errors, setErrors] = useState({});
@@ -35,22 +38,44 @@ const UseForm = (callback, validate) => {
       ...values,
       [name]: value
     });
+    console.log(values);
   };
 
-
-
-
   const handleSubmit = e => {
-    console.log(errors);
+    console.log("Errors: " + errors);
+    console.log("Values " + values);
     e.preventDefault();
 
     setErrors(validate(values));
+
+    // TODO Validate with database.
+
+    var json_vals = JSON.stringify(values);
+    console.log("JSON  " + json_vals);
+
+    var urlEnd = 'http://localhost:8080/WebApplication1/UserServlet';
+    $.ajax({
+        url: urlEnd,
+        type: "POST",
+        contentType: 'json',
+        data: json_vals,
+        success: function (result) {
+            var json = JSON.parse(result)
+            console.log("SUCCESS:  "+ json)
+        },
+        error: function (result) {
+          var json = JSON.parse(result)
+            console.log("FAIL:  "+ json)
+        }
+    });
+
     setIsSubmitting(true);
   };
 
   useEffect(
     () => {
       console.log(errors);
+      console.log(values);
       if (Object.keys(errors).length === 0 && isSubmitting) {
         callback();
       }
@@ -58,7 +83,10 @@ const UseForm = (callback, validate) => {
     [errors]
   );
 
-  return { handleChange, handleSubmit, values, errors };
+  return { handleChange, handleSubmit, values, errors, setValues };
 };
 
 export default UseForm;
+
+
+

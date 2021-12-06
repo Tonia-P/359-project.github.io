@@ -25,9 +25,10 @@ import {
     NumberDecrementStepper,
     NumberInputStepper,
     Checkbox,
-    Textarea
+    Textarea,
+    Text
 } from '@chakra-ui/react'
-import UseForm from "./TestRegister";
+import UseForm  from "./TestRegister";
 import validateInfo from "./validation";
 import { 
     MapContainer,
@@ -46,28 +47,26 @@ const RegisterForm = ({ submitForm }) => {
 
 
     // handles lit. everything that isn't here.
-    const { handleChange, handleSubmit, values, errors, setValues } = UseForm(
+    const { handleChange, handleSubmit, values, errors, setValues, handleLonLat } = UseForm(
         submitForm,
         validateInfo
     );
     const [mapReady, setMapReady] = useState(false);
     const [tosReady, setTosReady] = useState(false);
+
     
-/*
+
     useEffect(() => {
         if(values.usertype === "Doctor"){
             setShowDoc(true);
         }
         else setShowDoc(false);
     }, [values.usertype])
-*/
+
 
     const handleMapRequest = e =>{
         // GET request using fetch inside useEffect React hook
         handleChange(e);
-        if(values.address) console.log(values.address);
-        if(values.city) console.log(values.city)
-        if(values.country) console.log(values.country)
         var tmp = null;
 
         if(values.address && values.city && values.country === "GR"){
@@ -87,7 +86,7 @@ const RegisterForm = ({ submitForm }) => {
             .then(data => {
               console.log('Success:', data);
                 tmp = data;
-                console.log(tmp);
+                //console.log(tmp);
 
                 if(!tmp.length){
                     setMapReady(false);
@@ -96,14 +95,14 @@ const RegisterForm = ({ submitForm }) => {
                 else{
                     var names = tmp[0].display_name.split(',');
                     var flag = 0;
-                    console.log(names.length);
+                    //console.log(names.length);
                     for(let i = 0; i < names.length; i++){
-                        console.log(names[i]);
+                        //console.log(names[i]);
                         if(names[i] === "Crete" || names[i] === " Region of Crete"){  
                             flag = 1;
                         }
                     }
-                    console.log("Flag: "+ flag);
+                    //console.log("Flag: "+ flag);
                     if(flag === 0){
                         // Error, not in Crete.
                         alert("Not in Crete.");
@@ -112,6 +111,11 @@ const RegisterForm = ({ submitForm }) => {
                     }
                     setLat(tmp[0].lat);
                     setLon(tmp[0].lon);
+                    console.log("Lat: " + tmp[0].lat + "     Lon: " + tmp[0].lon);
+
+                    setValues({...values, lat: tmp[0].lat, lon: tmp[0].lon})
+                    
+
                     setMapReady(true);
 
                 }
@@ -124,12 +128,10 @@ const RegisterForm = ({ submitForm }) => {
         }
 
 
-
-    
-     
-
     }
 
+
+    
 
     const getLocation = () => {
         if (navigator.geolocation) {
@@ -142,12 +144,12 @@ const RegisterForm = ({ submitForm }) => {
       }
     
       const showPosition = (position) => {
-          console.log(position);
+          //console.log(position);
         setLon(position.coords.longitude);
             setLat(position.coords.latitude);
-            console.log(lon + "    " + lat);
+            //console.log(lon + "    " + lat);
             setValues([{ address: "kappa" }]);
-            console.log(values.address)
+            //console.log(values.address)
       }
       
     
@@ -242,11 +244,12 @@ const RegisterForm = ({ submitForm }) => {
                 <RadioGroup 
                     defaultValue='Default User' 
                     name= "usertype"
-                    onChange= {handleDoc}
+                    onChange={handleDoc}
+                    value={values.usertype}
                     id= "usertype">
                     <HStack spacing='24px'>
-                        <Radio colorScheme= 'teal' value='Default User' onChange={handleChange}>Default User</Radio>
-                        <Radio colorScheme= 'teal' value='Doctor' onChange={handleChange}>Doctor</Radio>
+                        <Radio colorScheme= 'teal' onChange={handleChange} value='Default User' >Default User</Radio>
+                        <Radio colorScheme= 'teal' onChange={handleChange} value='Doctor' >Doctor</Radio>
                     </HStack>
                   </RadioGroup>
                   <FormHelperText></FormHelperText>
@@ -315,15 +318,15 @@ const RegisterForm = ({ submitForm }) => {
             </FormControl>
 
 
-            <FormControl isRequired id= "birthday" isInvalid={errors.birthday}>
+            <FormControl isRequired id= "birthdate" isInvalid={errors.birthdate}>
                 <FormLabel>Birthday</FormLabel>
                 <Input 
                     type= "date" 
-                    name= "birthday"
+                    name= "birthdate"
                     autoComplete= "on"
-                    value= {values.birthday}
+                    value= {values.birthdate}
                     onChange= {handleChange} 
-                    placeholder= "birthday"
+                    placeholder= "birthdate"
                     minLength="3"
                     maxLength= "30"
                     />
@@ -707,6 +710,32 @@ const RegisterForm = ({ submitForm }) => {
             }
 
 
+            <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+            <FormControl>
+                <FormLabel>Lon</FormLabel>
+                <Input 
+                    id= "lon"
+                    name= "lon"
+                    value= {values.lon}
+                    onChange= {handleChange} 
+                    readOnly
+                    />
+            </FormControl>
+
+            <FormControl  >
+                <FormLabel>Lat</FormLabel>
+                <Input  
+                    id="lat"
+                    name= "lat"
+                    value= {values.lat}
+                    onChange= {handleChange} 
+                    readOnly
+                    />
+            </FormControl>
+            </Grid>
+
+
+
 
             <FormControl isRequired id= "phone" isInvalid={errors.phone}>
                 <FormLabel>Phone number</FormLabel>
@@ -725,30 +754,39 @@ const RegisterForm = ({ submitForm }) => {
             </FormControl>
 
             <Grid templateColumns='repeat(2, 1fr)' gap={6}>
-                <FormControl id='height'>
+            <FormControl id='height'>
                   <FormLabel>Height</FormLabel>
-                  <NumberInput min={100} max={250} >
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
+                  <NumberInput 
+                    max={300}
+                    colorScheme="teal"
+                    clampValueOnBlur={false}
+                >
+                    <NumberInputField   
+                    name="height"
+                    onChange= {handleChange}
+                    value={values.height} />
+                    <FormErrorMessage >{errors.height}</FormErrorMessage>
                   </NumberInput>
-                  <FormHelperText>In cm</FormHelperText>
+                  
                 </FormControl>
 
 
                 <FormControl id='weight'>
                   <FormLabel>Weight</FormLabel>
-                  <NumberInput min={20} max={300}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
+                  <NumberInput 
+                    max={300}
+                    colorScheme="teal"
+                    clampValueOnBlur={false}
+                >
+                    <NumberInputField   
+                    name="weight"
+                    onChange= {handleChange}
+                    value={values.weight} />
+                    <FormErrorMessage >{errors.weight}</FormErrorMessage>
                   </NumberInput>
-                  <FormHelperText>In kilos</FormHelperText>
+                  
                 </FormControl>
+                
             </Grid>
 
             <FormControl>
@@ -789,7 +827,12 @@ const RegisterForm = ({ submitForm }) => {
 
             <Checkbox id="tos" onChange= {handleTos} colorScheme='teal'>I agree to Terms of Service.</Checkbox>
   
-
+            <Text  color='tomato'>
+              {errors.weight}
+            </Text>
+            <Text  color='tomato'>
+              {errors.height}
+            </Text>
 
             {tosReady ? 
             <Button
