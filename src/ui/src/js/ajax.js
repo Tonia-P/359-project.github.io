@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import { control } from 'leaflet';
 
 
 function createTableFromJSON(data) {
@@ -12,22 +11,6 @@ function createTableFromJSON(data) {
     html += "</table>";
     return html;
 
-}
-
-function getUser() {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            $("#ajaxContent").html(createTableFromJSON(JSON.parse(xhr.responseText)));
-          //  $("#ajaxContent").html("Successful Login");
-        } else if (xhr.status !== 200) {
-             $("#ajaxContent").html("User not exists");
-        }
-    };
-    var data = $('#loginForm').serialize();
-    xhr.open('GET', 'GetUser?'+data);
-    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    xhr.send();
 }
 
 

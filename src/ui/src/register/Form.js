@@ -3,17 +3,23 @@ import RegisterForm from './SignUpForm';
 import FormSuccess from './SignUpSuccess';
 
 const Form = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  function submitForm() {
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [ userInfo, setUserInfo ] = useState();
+
+  function submitForm(values) {
     setIsSubmitted(true);
+    setUserInfo(values);
   }
+
+
   return (
     <>
         {!isSubmitted ? (
-          <RegisterForm submitForm={submitForm} />
+          <RegisterForm submitForm={ submitForm } />
         ) : (
-          <FormSuccess />
+          <FormSuccess values = { userInfo } />
         )}
     </>
   );

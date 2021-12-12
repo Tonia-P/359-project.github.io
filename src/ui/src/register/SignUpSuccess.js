@@ -1,7 +1,8 @@
 import React from 'react';
 import { CheckCircleIcon } from '@chakra-ui/icons'
-import { Stack, Text } from '@chakra-ui/react'
 import {
+  Stack,
+  Text,
   Table,
   Thead,
   Tbody,
@@ -12,19 +13,14 @@ import {
   TableCaption,
 } from '@chakra-ui/react'
 
-import UseForm from './TestRegister';
 
 
 
-const FormSuccess = () => {
+const FormSuccess = ({ values }) => {
 
-  const { values } = UseForm();
 
 
   return (
-
-
-    
     <Stack maxWidth= {1000} margin= "auto" spacing={7} marginTop= {5} align= 'center'>
       <CheckCircleIcon w={100} h={100}  />
       <div className='form-content-right'>
@@ -36,38 +32,55 @@ const FormSuccess = () => {
 
 
       <Table variant='simple'>
-        <TableCaption>Make sure they good to go.</TableCaption>
+        <TableCaption>Make sure they good to go. Or contact us at +30-696969696969</TableCaption>
         <Thead>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th>Field</Th>
+            <Th>Value</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
             <Td>Username</Td>
             <Td>{values.username} </Td>
-            <Td isNumeric>25.4</Td>
           </Tr>
           <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
+            <Td>Email</Td>
+            <Td>{values.email}</Td>
           </Tr>
           <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
+            <Td>Birthday</Td>
+            <Td>{values.birthdate}</Td>
+          </Tr>
+          <Tr>
+            <Td>First name</Td>
+            <Td>{values.firstname}</Td>
+          </Tr>
+          <Tr>
+            <Td>Last name</Td>
+            <Td>{values.lastname}</Td>
+          </Tr>
+          <Tr>
+            <Td>Gender</Td>
+            <Td>{values.gender}</Td>
+          </Tr>
+          <Tr>
+            <Td>Height</Td>
+            <Td>{values.height}</Td>
+          </Tr>
+          <Tr>
+            <Td>Weight</Td>
+            <Td>{values.weight}</Td>
+          </Tr>
+          <Tr>
+            <Td>Location</Td>
+            <Td>{values.address}, {values.city}, {values.country}</Td>
+          </Tr>
+          <Tr>
+            <Td>Phone</Td>
+            <Td>{values.phone}</Td>
           </Tr>
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot>
       </Table>
       
     </Stack>

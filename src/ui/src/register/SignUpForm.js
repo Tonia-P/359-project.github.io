@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { useState, useEffect } from "react";
 import "./Register.css"
 import 'leaflet/dist/leaflet.css';
@@ -21,9 +20,6 @@ import {
     Grid,
     NumberInput,
     NumberInputField,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    NumberInputStepper,
     Checkbox,
     Textarea,
     Text
@@ -47,12 +43,17 @@ const RegisterForm = ({ submitForm }) => {
 
 
     // handles lit. everything that isn't here.
-    const { handleChange, handleSubmit, values, errors, setValues, handleLonLat } = UseForm(
+    const { handleChange, handleSubmit, values, errors, dberrors, setValues } = UseForm(
         submitForm,
         validateInfo
     );
     const [mapReady, setMapReady] = useState(false);
     const [tosReady, setTosReady] = useState(false);
+    
+    const [lat, setLat] = useState('')
+    const [lon, setLon] = useState('')
+    const [showMap, setShowMap] = useState('')
+    const [showPass, setShowPass] = useState(false)
 
     
 
@@ -64,7 +65,7 @@ const RegisterForm = ({ submitForm }) => {
     }, [values.usertype])
 
 
-    const handleMapRequest = e =>{
+    const handleMapRequest = e => {
         // GET request using fetch inside useEffect React hook
         handleChange(e);
         var tmp = null;
@@ -131,48 +132,42 @@ const RegisterForm = ({ submitForm }) => {
     }
 
 
-    
-
     const getLocation = () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(showPosition);
             
           
-        } else {
-          x.innerHTML = "Geolocation is not supported by this browser.";
         }
-      }
+    }
     
-      const showPosition = (position) => {
+    const showPosition = (position) => {
           //console.log(position);
         setLon(position.coords.longitude);
             setLat(position.coords.latitude);
             //console.log(lon + "    " + lat);
             setValues([{ address: "kappa" }]);
             //console.log(values.address)
-      }
+    }
       
-    
-    const [showPass, setShowPass] = useState(false)
-    const handlePassword = () => setShowPass(!showPass);
-
-    // Showing extra fields for when user is doctor.
-    const [showDoc, setShowDoc] = useState(false)
-    const handleDoc = () => setShowDoc(!showDoc);
-    const handleTos = () => setTosReady(!tosReady);
-
-    const [lat, setLat] = useState('')
-    const [lon, setLon] = useState('')
-    const [showMap, setShowMap] = useState('')
     const handleMap = () => {
         setShowMap(!showMap);
     }
+    
+    
+
+    
+    const [showDoc, setShowDoc] = useState(false)
+    const handleDoc = () => setShowDoc(!showDoc);
+    const handleTos = () => setTosReady(!tosReady);
+    const handlePassword = () => setShowPass(!showPass);
+
 
 
     return (
         <form method= "POST" onSubmit={handleSubmit} noValidate>
 
             <Stack maxWidth= {1000} margin= "auto" spacing={7} marginTop= {5}>
+            <Text fontSize='5xl' >Register</Text>
             <FormControl isRequired id= "username" isInvalid={errors.username}>
                 <FormLabel>Username</FormLabel>
                 <Input 
@@ -793,11 +788,12 @@ const RegisterForm = ({ submitForm }) => {
                 <FormLabel>Blood donor</FormLabel>
                 <RadioGroup 
                     defaultValue='0' 
-                    onChange={handleChange}
+                    name= "blooddonor"
+
                 >
                     <HStack spacing='24px'>
-                        <Radio colorScheme= 'teal' value='1'>Yes</Radio>
-                        <Radio colorScheme= 'teal' value='0'>No</Radio>
+                        <Radio colorScheme= 'teal' onChange= {handleChange} value='1'>Yes</Radio>
+                        <Radio colorScheme= 'teal' onChange= {handleChange} value='0'>No</Radio>
                     </HStack>
                   </RadioGroup>
                   <FormHelperText></FormHelperText>
@@ -807,20 +803,18 @@ const RegisterForm = ({ submitForm }) => {
             <FormControl 
                 isRequired
                 name= 'bloodtype'
-                onChange= {handleChange}
-                value= {values.bloodtype}
             >
                 <FormLabel>Blood type</FormLabel>
                 <Select placeholder='Select option'>
-                  <option value='A+'>A+</option>
-                  <option value='A-'>A-</option>
-                  <option value='B+'>B+</option>
-                  <option value='B-'>B-</option>
-                  <option value='AB+'>AB</option>
-                  <option value='AB-'>AB</option>
-                  <option value='0+'>0+</option>
-                  <option value='0-'>0-</option>
-                  <option value='unknown'>Unknown</option>
+                  <option onChange= {handleChange} value='A+'>A+</option>
+                  <option onChange= {handleChange} value='A-'>A-</option>
+                  <option onChange= {handleChange} value='B+'>B+</option>
+                  <option onChange= {handleChange} value='B-'>B-</option>
+                  <option onChange= {handleChange} value='AB+'>AB</option>
+                  <option onChange= {handleChange} value='AB-'>AB</option>
+                  <option onChange= {handleChange} value='0+'>0+</option>
+                  <option onChange= {handleChange} value='0-'>0-</option>
+                  <option onChange= {handleChange} value='unknown'>Unknown</option>
                 </Select>
             </FormControl>
 
@@ -832,6 +826,9 @@ const RegisterForm = ({ submitForm }) => {
             </Text>
             <Text  color='tomato'>
               {errors.height}
+            </Text>
+            <Text  color='tomato'>
+              {dberrors.error}
             </Text>
 
             {tosReady ? 
@@ -857,6 +854,8 @@ const RegisterForm = ({ submitForm }) => {
         </Stack>
         </form>
     );
+
+
 
 };
 
