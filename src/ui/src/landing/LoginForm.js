@@ -47,6 +47,7 @@ const LoginForm = ({ submitForm }) =>{
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                 <Input 
+                    type= "password" 
                     name= "password"
                     autoComplete= "off"
                     value= {values.password}
