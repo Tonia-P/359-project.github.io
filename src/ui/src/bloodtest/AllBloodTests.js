@@ -62,37 +62,6 @@ import ListRow from './ListRow';
     []);
 
 
-    useEffect(
-      () => {
-        var urlEnd = 'http://localhost:8080/WebApplication1/rest/bloodtests/list';
-        $.ajax({
-            url: urlEnd,
-            type: "GET",
-            contentType: 'application/json',
-            success: function (result) {
-              console.log("Success");
-              console.log(result);
-                //const json = JSON.parse(result[0])
-                //console.log(json);
-                //console.log(result);
-                setTests(result);
-                //setInfo(result)
-                console.log(tests);
-                setIsLoaded(true);
-            },
-            error: function (result) {
-                console.log("Fail");
-                console.log(result.responseText)
-                var json = JSON.parse(result.responseText)
-                console.log(json)
-
-                setIsLoaded(false);
-            }
-        });
-      }
-      , 
-      []
-  )
 
 
     useEffect(

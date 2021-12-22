@@ -4,15 +4,6 @@ import Dashboard from "./Dashboard";
 
 const LoginPage = (isLogged, callback) => {
 
-
-  useEffect(
-    () => {
-      console.log("aa");
-      console.log(isLogged)
-    },
-    []
-  );
-
   function submitForm(values) {
     callback(values);
   }
@@ -24,9 +15,7 @@ const LoginPage = (isLogged, callback) => {
             <LoginForm submitForm={ submitForm } />
           ) : (
             <> 
-        No log
-
-            
+              You shall not log again. 
             </> 
           )}
       </>

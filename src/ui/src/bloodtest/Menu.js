@@ -25,6 +25,9 @@ const BloodTestMenu = () =>{
             <Button>
                 <Link to="/bloodtest/allbloodtests">All blood tests</Link>
             </Button>
+            <Button>
+                <Link to="/bloodtest/new">Add blood test</Link>
+            </Button>
 
 
 

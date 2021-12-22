@@ -1,9 +1,18 @@
-
+import { useState, useEffect } from 'react';
 import { 
     Grid, 
     GridItem, 
     Stack,
-    Button
+    Button,
+    Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  Avatar
     
 } from '@chakra-ui/react'
 import { Logo } from './Logo';
@@ -12,6 +21,14 @@ import { ColorModeSwitcher } from './ColorModeSwitcher';
 
 
 const Header = (isLogged) => {
+
+    const [ username, setUsermame ] = useState('');
+
+    function read_cookie(name) {
+        var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+        if(result) return result[1];
+        else return null;
+    }
 
 
     const handleLogout = () => {
@@ -66,6 +83,27 @@ const Header = (isLogged) => {
             <Button onClick={handleLogout} >
                 <Link to="/">Logout</Link>
             </Button>
+
+            <Avatar name='Kola Tioluwani' src='https://bit.ly/tioluwani-kolawole' />
+
+            <Menu closeOnSelect={false}>
+              <MenuButton as={Button} colorScheme='blue'>
+                MenuItem
+              </MenuButton>
+              <MenuList minWidth='240px'>
+                <MenuOptionGroup defaultValue='asc' title='Order' type='radio'>
+                  <MenuItemOption value='asc'>Ascending</MenuItemOption>
+                  <MenuItemOption value='desc'>Descending</MenuItemOption>
+                </MenuOptionGroup>
+                <MenuDivider />
+                <MenuOptionGroup title='Country' type='checkbox'>
+                  <MenuItemOption value='email'>Email</MenuItemOption>
+                  <MenuItemOption value='phone'>Phone</MenuItemOption>
+                  <MenuItemOption value='country'>Country</MenuItemOption>
+                </MenuOptionGroup>
+              </MenuList>
+            </Menu>
+            
             </GridItem>
 }
 

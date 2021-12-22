@@ -18,6 +18,7 @@ import LoginForm from './landing/LoginForm';
 import Dashboard from './landing/Dashboard';
 import BloodTestMenu from './bloodtest/Menu';
 import AllBloodTests from './bloodtest/AllBloodTests';
+import NewBloodTest from './bloodtest/NewBloodTest';
 
 function App() {
 
@@ -58,8 +59,8 @@ function App() {
     setUserInfo(values);
     setIsLogged(true);
 
-    var cookie_user = "username = " + values.username + "; expires=Thu, 18 Dec 2021 12:00:00 UTC; path=/";
-    var cookie_pass = "password = " + values.password + "; expires=Thu, 18 Dec 2021 12:00:00 UTC; path=/";
+    var cookie_user = "username = " + values.username + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
+    var cookie_pass = "password = " + values.password + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
     
     document.cookie = cookie_user;
     document.cookie = cookie_pass;
@@ -146,6 +147,7 @@ function App() {
                 <Route path="/dashboard" element= { <Dashboard values={ userInfo } />} />
                 <Route path="bloodtest" element= { <BloodTestMenu />} >
                   <Route path="allbloodtests" element={<AllBloodTests />} />
+                  <Route path="newBloodTest" element={<NewBloodTest />} />
                 </Route>
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 
