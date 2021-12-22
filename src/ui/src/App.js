@@ -19,6 +19,7 @@ import Dashboard from './landing/Dashboard';
 import BloodTestMenu from './bloodtest/Menu';
 import AllBloodTests from './bloodtest/AllBloodTests';
 import NewBloodTest from './bloodtest/NewBloodTest';
+import Profile from './dashboard/Profile';
 
 function App() {
 
@@ -150,7 +151,7 @@ function App() {
                   <Route path="newBloodTest" element={<NewBloodTest />} />
                 </Route>
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
-                
+                <Route path="/Profile" element={<Profile values = {userInfo}/>} />
             </Routes>
 
 

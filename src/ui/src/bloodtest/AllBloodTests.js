@@ -50,9 +50,9 @@ import ListRow from './ListRow';
             },
             error: function (result) {
                 console.log("Fail");
-                console.log(result.responseText)
-                var json = JSON.parse(result.responseText)
-                console.log(json)
+                console.log(result)
+                //var json = JSON.parse(result.responseText)
+                //console.log(json)
 
                 setIsLoaded(false);
             }
@@ -60,8 +60,6 @@ import ListRow from './ListRow';
     }
     ,
     []);
-
-
 
 
     useEffect(

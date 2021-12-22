@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import DocList from '../dashboard/DocList';
 import {
-  Heading, Spinner,
+  Heading, Spinner, Button
 } from '@chakra-ui/react';
 import Fitness from '../dashboard/Fitness';
 
-
+import { 
+  BrowserRouter as Router, 
+  Routes, 
+  Route, 
+  Link,
+  Outlet
+} from 'react-router-dom'
 
 const Dashboard = (values, isLogged) => {
 
@@ -31,6 +37,10 @@ const Dashboard = (values, isLogged) => {
 
 
       <DocList />
+
+      <Button>
+        <Link to="/Profile">Profile</Link>
+      </Button>
 
       {isLoaded ?
       <Fitness values={values.values} />
