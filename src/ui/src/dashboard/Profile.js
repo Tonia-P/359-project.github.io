@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import UpdateSelectCountry from '../components/UpdateSelectCountry';
+import UpdateInput from '../components/UpdateInput';
+import UpdateSelectBloodType from '../components/UpdateSelectBloodType';
 import{
     Editable,
     EditableInput, 
@@ -13,7 +16,13 @@ import{
     Input,
     Button,
     Spinner,
-    Flex
+    Flex,
+    InputRightElement,
+    InputGroup,
+    Stack,
+    Grid,
+    InputLeftElement,
+    GridItem
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
@@ -78,22 +87,11 @@ const Profile=(values)=> {
   
     return (<>
     {isLoaded ? <>
-    <FormControl>
-        <FormLabel htmlFor='email'>First Name</FormLabel>
-        <Input 
-        name = 'firstname'
-        type = 'text'
-        value={userInfo.firstname}  
-        autoComplete='on' 
-        onChange = {handleChange} 
-       // isReadOnly={true}
-        />
-        <FormHelperText>Nice dong bro.</FormHelperText>
-    </FormControl>
 
-    <Button type = "submit" colorScheme='teal' onClick={changeDet}>
-        Change
-    </Button>
+        <UpdateInput/>
+        <UpdateSelectCountry/>
+        <UpdateSelectBloodType/>
+
     </>
 : <Spinner size='xl' />}
     </>
