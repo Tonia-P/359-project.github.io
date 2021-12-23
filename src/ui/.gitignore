@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# jars...
+/src/java/WebApplication1/build/web/WEB-INF/lib
+/src/java/WebApplication1/gson-2.8.0.jar
+/src/java/WebApplication1/javax.servlet-3.0.0.jar
+
+
+# etc
+src/java/WebApplication1/web/index.html

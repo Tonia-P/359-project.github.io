@@ -148,7 +148,7 @@ function App() {
                 <Route path="/dashboard" element= { <Dashboard values={ userInfo } />} />
                 <Route path="bloodtest" element= { <BloodTestMenu />} >
                   <Route path="allbloodtests" element={<AllBloodTests />} />
-                  <Route path="newBloodTest" element={<NewBloodTest />} />
+                  <Route path="new" element={<NewBloodTest />} />
                 </Route>
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 <Route path="/Profile" element={<Profile values = {userInfo}/>} />

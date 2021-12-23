@@ -12,12 +12,14 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
+  Box,
   Avatar
     
 } from '@chakra-ui/react'
 import { Logo } from './Logo';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { ColorModeSwitcher } from './ColorModeSwitcher';
+import './header.css';
 
 
 const Header = (isLogged) => {
@@ -40,9 +42,15 @@ const Header = (isLogged) => {
         window.location.reload();
     }
 
+    useEffect(
+      () =>{
+        setUsermame (read_cookie('username'));
+      },[]
+    )
+
     return (
 
-        <Stack>
+      <Box className='kappa' p={3} borderBottomWidth='2px' sx={{ position: '-webkit-sticky', /* Safari */ position: 'sticky', top: '0',}}>
         <Grid templateColumns='repeat(12, 1fr)' align='center' >
             <GridItem colSpan={1} h='10' justifySelf="flex-start" />
             <GridItem colSpan={1} h='10' justifySelf="flex-start" >
@@ -80,27 +88,18 @@ const Header = (isLogged) => {
             :
             <GridItem colSpan={2} h='10'  justifySelf="flex-end" >
                 
-            <Button onClick={handleLogout} >
-                <Link to="/">Logout</Link>
-            </Button>
 
-            <Avatar name='Kola Tioluwani' src='https://bit.ly/tioluwani-kolawole' />
-
-            <Menu closeOnSelect={false}>
-              <MenuButton as={Button} colorScheme='blue'>
-                MenuItem
+            <Menu closeOnSelect={true} direction= "rtl">
+              <MenuButton  colorScheme='blue' >
+              <Avatar name={ username } size='md' src='https://bit.ly/tioluwani-kolawole' />
               </MenuButton>
               <MenuList minWidth='240px'>
-                <MenuOptionGroup defaultValue='asc' title='Order' type='radio'>
-                  <MenuItemOption value='asc'>Ascending</MenuItemOption>
-                  <MenuItemOption value='desc'>Descending</MenuItemOption>
-                </MenuOptionGroup>
-                <MenuDivider />
-                <MenuOptionGroup title='Country' type='checkbox'>
-                  <MenuItemOption value='email'>Email</MenuItemOption>
-                  <MenuItemOption value='phone'>Phone</MenuItemOption>
-                  <MenuItemOption value='country'>Country</MenuItemOption>
-                </MenuOptionGroup>
+              <MenuItem><Link to="/dashboard">Dashboard</Link></MenuItem>
+              <MenuItem><Link to="/Profile">Profile</Link></MenuItem>
+
+              <MenuDivider />
+                <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
+                
               </MenuList>
             </Menu>
             
@@ -109,7 +108,7 @@ const Header = (isLogged) => {
 
             <GridItem colSpan={1} h='10' justifySelf="flex-start" />
         </Grid>
-        </Stack>
+        </Box>
     );
 }
 

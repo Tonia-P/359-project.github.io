@@ -22,12 +22,15 @@ const BloodTestMenu = () =>{
 
     return (
         <Stack>
-            <Button>
-                <Link to="/bloodtest/allbloodtests">All blood tests</Link>
-            </Button>
-            <Button>
-                <Link to="/bloodtest/new">Add blood test</Link>
-            </Button>
+
+            <Grid templateColumns='repeat(5, 1fr)' gap={6}>
+                <Button>
+                    <Link to="/bloodtest/allbloodtests">All blood tests</Link>
+                </Button>
+                <Button>
+                    <Link to="/bloodtest/new">Add blood test</Link>
+                </Button>
+            </Grid>
 
 
 
