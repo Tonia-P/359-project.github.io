@@ -20,6 +20,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Response;
+import java.util.ArrayList;
 import mainClasses.Doctor;
 import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
@@ -28,7 +30,7 @@ import mainClasses.JSON_Converter;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/LoginUser", "/AllUsers", "/UpdateUser"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser"})
 public class UserServlet extends HttpServlet {
     
     
@@ -122,7 +124,67 @@ public class UserServlet extends HttpServlet {
             if(json==null){
                 System.out.println("Hello 404!");
                 json = "{\"error\":\"The username or password is incorrect.\"}";
+                response.setStatus(403);
+                out.println(json);
+             
+             }
+            else{
+                response.setStatus(200);
+                out.println(json); 
+            }
+                
+                
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void listUsersArr (HttpServletRequest request, HttpServletResponse response) 
+            throws IOException, ServletException, SQLException{
+        
+        EditSimpleUserTable edyt = new EditSimpleUserTable();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        try(PrintWriter out = response.getWriter()){
+            ArrayList<SimpleUser> docs;
+            docs = edyt.databaseToUsers();
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(docs != null){
+                response.setStatus(200);
+                gson.toJson(docs,response.getWriter());
+            }
+            else{
+                jo.addProperty("error", "The list doesn't exist.");
                 response.setStatus(404);
+                response.getWriter().write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     private void loginAdmin (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            
+            response.setContentType("text/html;charset=UTF-8");
+            JSON_Converter jc = new JSON_Converter();
+            SimpleUser u,p;
+            String s = jc.getJSONFromAjax(request.getReader());
+            u = eut.jsonToSimpleUser(s);
+            
+            p = eut.databaseToSimpleUserU("admin");
+            String json = eut.databaseUserToJSON(u.getUsername(), u.getPassword());
+            
+            
+            if(!u.getUsername().equals(p.getUsername()) || !u.getPassword().equals(p.getPassword())){
+                System.out.println("Hello 404!");
+                json = "{\"error\":\"The username or password is incorrect.\"}";
+                response.setStatus(403);
                 out.println(json);
              
              }
@@ -266,10 +328,29 @@ public class UserServlet extends HttpServlet {
 	case "/AllUsers":
 		listUsers(request, response);
 		break;
+        case "/ListUsersArr":
+            {
+                try {
+                    listUsersArr(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        break;
+
 	case "/LoginUser":
             {
                 try {
                     loginUser(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+		break;
+        case "/LoginAdmin":
+            {
+                try {
+                    loginAdmin(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -308,6 +389,16 @@ public class UserServlet extends HttpServlet {
                        }
                    }
 		break;
+                
+        case "/LoginAdmin":
+                   {
+                       try {
+                           loginAdmin(request, response);
+                       } catch (SQLException ex) {
+                           Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }
+		break;  
                 
         case "/UpdateUser":
                     {
