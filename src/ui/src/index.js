@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <StrictMode>
+  <StrictMode >
     <ColorModeScript />
     <App />
   </StrictMode>,

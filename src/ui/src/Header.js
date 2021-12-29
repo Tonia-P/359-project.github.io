@@ -75,7 +75,7 @@ const Header = (isLogged) => {
             <GridItem colSpan={1} h='10'  justifySelf="flex-end" >
                 
             <Button >
-                <Link to="/login">Login</Link>
+                <Link to="/loginMenu">Login</Link>
             </Button>
             </GridItem>
 
@@ -96,7 +96,7 @@ const Header = (isLogged) => {
               <MenuList minWidth='240px'>
               <MenuItem><Link to="/dashboard">Dashboard</Link></MenuItem>
               <MenuItem><Link to="/Profile">Profile</Link></MenuItem>
-
+              <MenuItem><Link to="/Users">User List</Link></MenuItem>
               <MenuDivider />
                 <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
                 

@@ -76,6 +76,28 @@ public class EditSimpleUserTable {
         stmt.executeUpdate(update);
     }
     
+     public ArrayList<SimpleUser> databaseToUsers() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<SimpleUser> users=new ArrayList<SimpleUser>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM users");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                SimpleUser u = gson.fromJson(json, SimpleUser.class);
+                users.add(u);
+            }
+            return users;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
     public void printSimpleUserDetails(String username, String password) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

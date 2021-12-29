@@ -5,6 +5,8 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import database.tables.EditDoctorTable;
 import database.tables.EditSimpleUserTable;
 import java.io.IOException;
@@ -17,12 +19,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Response;
+import static jakarta.ws.rs.core.Response.status;
+import java.util.ArrayList;
+import mainClasses.Doctor;
  
 /**
  *
  * @author oparc
  */
-@WebServlet(name = "DocServlet", urlPatterns = {"/DocServlet", "/AllDoctors", "/LoginDoctor", "/RegisterDoctor"})
+@WebServlet(name = "DocServlet", urlPatterns = {"/DocServlet", "/AllDoctors", "/AllDoctorsArr", "/LoginDoctor", "/RegisterDoctor"})
 public class DocServlet extends HttpServlet {
     
     
@@ -49,6 +55,32 @@ public class DocServlet extends HttpServlet {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    private void listDoctorsArr (HttpServletRequest request, HttpServletResponse response) 
+            throws IOException, ServletException, SQLException{
+        
+        EditDoctorTable edyt = new EditDoctorTable();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        try(PrintWriter out = response.getWriter()){
+            ArrayList<Doctor> docs;
+            docs = edyt.databaseToDoctors();
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(docs != null){
+                response.setStatus(200);
+                gson.toJson(docs,response.getWriter());
+            }
+            else{
+                jo.addProperty("error", "The list doesn't exist.");
+                response.setStatus(404);
+                response.getWriter().write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -95,6 +127,17 @@ public class DocServlet extends HttpServlet {
 	case "/AllDoctors":
 		listDoctors(request, response);
 		break;
+                
+        case "/AllDoctorsArr":
+            {
+                try {
+                    listDoctorsArr(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+		break;
+
 	
 	default:
 		listDoctors(request, response);

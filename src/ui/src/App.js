@@ -15,11 +15,14 @@ import Form from './register/Form';
 import Header from './Header';
 import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom'
 import LoginForm from './landing/LoginForm';
+import LoginFormAdmin from './landing/LoginFormAdmin';
 import Dashboard from './landing/Dashboard';
 import BloodTestMenu from './bloodtest/Menu';
 import AllBloodTests from './bloodtest/AllBloodTests';
 import NewBloodTest from './bloodtest/NewBloodTest';
 import Profile from './dashboard/Profile';
+import LoginPage from './landing/LoginPage';
+import AdminTable from './adminBoard/AdminTable';
 
 function App() {
 
@@ -60,11 +63,17 @@ function App() {
     setUserInfo(values);
     setIsLogged(true);
 
+    if(values.username === "admin"){
+      values.usertype = "admin";
+    }
+
     var cookie_user = "username = " + values.username + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
     var cookie_pass = "password = " + values.password + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
     
     document.cookie = cookie_user;
     document.cookie = cookie_pass;
+
+    console.log(values)
     
   }
 
@@ -139,10 +148,16 @@ function App() {
 
           
           <Routes>
-                {!isLogged ?
-                <Route path="/login" element={ <LoginForm submitForm= {submitForm} /> } />
+                {!isLogged ?<>
+                <Route path="/loginMenu" element={ <LoginPage/>}/>
+                <Route path="/login" element={ <LoginForm submitForm= {submitForm} />}/>
+                <Route path="/loginAdmin" element={<LoginFormAdmin submitForm = {submitForm} />} />
+                </>
                 :
+                <>
                 <Route path="/login" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
+                <Route path="/admin" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
+                </>
                 }
                 <Route path="/register" element={ <Form /> } />
                 <Route path="/dashboard" element= { <Dashboard values={ userInfo } />} />
@@ -152,6 +167,7 @@ function App() {
                 </Route>
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 <Route path="/Profile" element={<Profile values = {userInfo}/>} />
+                <Route path="/Users" element={<AdminTable />}/>
             </Routes>
 
 
