@@ -8,7 +8,9 @@ import {
     FormErrorMessage,
     InputGroup,
     Text,
-    InputRightElement
+    InputRightElement,
+    VStack,
+    Grid
 } from '@chakra-ui/react'
 import LoginControl from './LoginControl';
 
@@ -25,6 +27,8 @@ const LoginForm = ({ submitForm }) =>{
     );
 
     return(
+    <Grid minH="100vh" p={3}>
+    <VStack spacing={8}>
         <form method= "POST" onSubmit={handleSubmit} noValidate>
 
 
@@ -81,6 +85,9 @@ const LoginForm = ({ submitForm }) =>{
             </Stack>
 
         </form>
+</VStack>
+        </Grid>
+        
         
     );
 }

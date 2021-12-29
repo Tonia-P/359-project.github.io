@@ -18,8 +18,12 @@ import{
     InputGroup,
     Stack,
     Grid,
+    Box,
+    Text,
+    Link,
     InputLeftElement,
-    GridItem
+    GridItem,
+    Skeleton
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
@@ -31,11 +35,17 @@ import{
 }from'@chakra-ui/icons'
 
 const UpdateInput=(values)=> {
+
+
+    const [ isInput, setIsInput ] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [userInfo,setUserInfo] = useState({
         username: '',
-        firstname: ''
+        fieldVal: ''
     })
-    const [isLoaded, setIsLoaded] = useState(false);
+    
+
+
     const handleChange = e => {
         const { name, value } = e.target;
         setUserInfo({
@@ -44,17 +54,22 @@ const UpdateInput=(values)=> {
         });
         console.log(userInfo.firstname);
       };
-    /*useEffect(()=>{
+
+
+
+    useEffect(()=>{
         console.log(values.values.firstname);
         setUserInfo({
             firstname: values.values.firstname,
             username: values.values.username
         })
     },[values.values])
+
+
     useEffect(()=>{
         console.log(userInfo.firstname);
         setIsLoaded(true)
-    },[userInfo])*/
+    },[userInfo])
 
     const changeDet = e => {
         e.preventDefault();
@@ -81,37 +96,64 @@ const UpdateInput=(values)=> {
             }
         });
     }
+
+
+
+    const onToggle = () => {
+        setIsInput(isInput => !isInput);
+    }
+
   
-    return (<>
+    return (
+    <>
+    
+    {!isInput ?
+    <Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='1'>
+        <GridItem colSpan={14} textAlign='start'>
+            <Text fontSize='sm' >{ values.values.name }</Text>
+        </GridItem>
+        
+        <GridItem colSpan={10} textAlign='start'>
+            <Text fontSize='lg' >{values.values.value }</Text>
+        </GridItem>
 
-        <Grid templateColumns='repeat(10, 1fr)' gap={4} rowGap={2}>
+        <GridItem colSpan={4} textAlign='start'>
+            <Link color='teal.500' fontSize='md' onClick={onToggle}>
+                Change
+            </Link>
+        </GridItem>
+    </Grid>
 
-        <GridItem colSpan={4} size='lg'>
+    :
+       
+    <Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='1'>
+        <GridItem colSpan={10} size='lg'>
             <FormControl>
-                <FormLabel htmlFor='name'>First Name</FormLabel>
+                <FormLabel htmlFor='name' fontSize='sm'>First Name</FormLabel>
                 <Input
-                h='2.64rem'
                 name = 'firstname'
                 type = 'text'
                 value={userInfo.firstname}  
                 autoComplete='on' 
+                size='sm'
                 onChange = {handleChange} 
-                isReadOnly={true}
-                borderWidth={0}
-                borderBottom='1px'
-                borderRadius='0px'
-                textAlign='center'
-
                 />
             </FormControl>
         </GridItem>
         
-        <GridItem colStart={5} colEnd={6}>
-            <Button size='md' type = "submit" colorScheme='teal' onClick={changeDet} top='45%'>
-                Change
+        <GridItem colSpan={2}>
+            <Button size='sm' type = "submit" colorScheme='teal' onClick={changeDet} top='45%'>
+                Confirm
             </Button>
         </GridItem>
-        </Grid>
+        <GridItem colSpan={2}>
+            <Button size='sm' variant='outline' colorScheme='teal' onClick={onToggle} top='45%'>
+                Cancel
+            </Button>
+        </GridItem>
+    </Grid>
+
+}
     </>
     )
   }
