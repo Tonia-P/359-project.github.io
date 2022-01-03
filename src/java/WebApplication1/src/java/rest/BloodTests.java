@@ -39,6 +39,8 @@ public class BloodTests {
 
     /**
      * Creates a new instance of GenericResource
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
     public BloodTests() throws SQLException, ClassNotFoundException{
         List<BloodTest> tmpList = ebtt.selectAllBloodTests();

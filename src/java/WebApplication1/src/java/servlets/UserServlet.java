@@ -30,7 +30,7 @@ import mainClasses.JSON_Converter;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser"})
 public class UserServlet extends HttpServlet {
     
     
@@ -62,6 +62,31 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response){
+        JSON_Converter jc = new JSON_Converter();
+        EditSimpleUserTable dut = new EditSimpleUserTable();
+        try {
+            String user = jc.getJSONFromAjax(request.getReader());
+            System.out.println("USER: " + user);
+            int i;
+            i = dut.deleteUserFromDatabase(user);
+            System.out.println("after EDIT");
+            response.setContentType("text/html;charset=UTF-8");
+            if(i == 1){
+                response.setStatus(200);
+            }
+            else{
+                response.setStatus(403);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private void addUser (HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException {
@@ -410,6 +435,13 @@ public class UserServlet extends HttpServlet {
                         }
                     }
                 break;
+        
+         case "/DeleteUser":
+                    {
+                        deleteUser(request, response);
+                    }
+                break;      
+      
 
 	default:
 		addUser(request, response);

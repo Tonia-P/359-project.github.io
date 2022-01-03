@@ -8,20 +8,47 @@ import {
     Td,
     Divider,
     HStack,
-    Stack
+    Stack,
+    IconButton
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
 import React from 'react';
 import $ from 'jquery';
 import LevelBadge from '../components/LevelBadge';
+import { TiDeleteOutline, TiDelete } from "react-icons/ti";
 
 
 
 const RowsDets = (info) =>{
 
-
     return(
         <Tr>
+            { <>
+            <td><IconButton aria-label='Delete user from database' _focus={{outline: '0px'}} background='transparent'  isRound='true' icon={<TiDelete size='lg'/>} _hover = {{color: 'black'}} 
+            onClick={() => {var urlEnd = 'http://localhost:8080/WebApplication1/DeleteUser';
+            var json_val = JSON.stringify(info.info.username);
+            $.ajax({
+                url: urlEnd,
+                type: "POST",
+                contentType: 'application/json',
+                data: json_val,
+                success: function (result) {
+                  console.log("Success");
+                  console.log(result);
+                    //const json = JSON.parse(result[0])
+                    //console.log(json);
+                    //console.log(result);
+                    window.location.reload();
+                    //setInfo(result)
+                },
+                error: function (result) {
+                    console.log("Fail");
+                    console.log(result.status);
+                    //var json = JSON.parse(result.responseText)
+                    //console.log(json)
+                }});}}
+            
+            ></IconButton></td>
             <Td> { info.info.user_id}{ info.info.doctor_id }</Td>
             <Td> { info.info.username }</Td>
             <Td> { info.info.email }</Td>
@@ -44,7 +71,11 @@ const RowsDets = (info) =>{
             <Td> { info.info.specialty } </Td>
             <Td> { info.info.doctor_info }</Td>
             <Td> { info.info.certified } </Td>
+            </>
+            }
         </Tr>
+
+
     )
 }
 
