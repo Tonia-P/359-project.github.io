@@ -226,6 +226,29 @@ public class EditSimpleUserTable {
     }
     
     
+    public int deleteUserFromDatabase(String username) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username +"'");
+        if(rs != null){
+            System.out.println("DELETE FROM users WHERE username = " + username);
+            stmt.executeUpdate("DELETE FROM users WHERE username =" + username);}
+        else if(rs == null){
+            rs = stmt.executeQuery("SELECT * FROM doctors WHERE username = '" + username +"'");
+            if(rs != null){
+                System.out.println("IT'S IN THE doctors");
+                stmt.executeUpdate("DELETE FROM doctors WHERE username =" + username);
+            }
+            else{
+                System.out.println("FAILED");
+                return 0;
+            }
+        }
+        System.out.println("SUCC");
+        return 1;
+    }
+    
 
     
     public void verifyLogin (SimpleUser user) throws SQLException, ClassNotFoundException{

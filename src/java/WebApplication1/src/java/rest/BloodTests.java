@@ -8,16 +8,16 @@ package rest;
 import com.google.gson.Gson;
 import database.tables.EditBloodTestTable;
 import java.sql.SQLException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ public class BloodTests {
 
     /**
      * Creates a new instance of GenericResource
+     * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
     public BloodTests() throws SQLException, ClassNotFoundException{
         List<BloodTest> tmpList = ebtt.selectAllBloodTests();

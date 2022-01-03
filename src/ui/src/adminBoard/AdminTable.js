@@ -101,6 +101,7 @@ import RowsDets from './RowsDets';
         <Table variant='striped' colorScheme='grey'>
           <Thead>
             <Tr>
+              <Th>Action</Th>
               <Th>Id</Th>
               <Th>Username</Th>
               <Th>Email</Th>
