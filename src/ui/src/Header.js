@@ -95,7 +95,7 @@ const Header = (isLogged) => {
               </MenuButton>
               <MenuList minWidth='240px'>
               <MenuItem><Link to="/dashboard">Dashboard</Link></MenuItem>
-              <MenuItem><Link to="/Profile">Profile</Link></MenuItem>
+              <MenuItem><Link to="/profile">Profile</Link></MenuItem>
               <MenuItem><Link to="/Users">User List</Link></MenuItem>
               <MenuDivider />
                 <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
