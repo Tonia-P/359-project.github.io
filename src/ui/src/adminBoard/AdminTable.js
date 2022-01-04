@@ -104,26 +104,8 @@ import RowsDets from './RowsDets';
               <Th>Action</Th>
               <Th>Id</Th>
               <Th>Username</Th>
-              <Th>Email</Th>
-              <Th>Password</Th>
-              <Th>First Name</Th>
-              <Th>Last Name</Th>
+              <Th>Name</Th>
               <Th>Date Of Birth</Th>
-              <Th>Gender</Th>
-              <Th>Social Security Number</Th>
-              <Th>Country</Th>
-              <Th>City</Th>
-              <Th>Address</Th>
-              <Th>lat</Th>
-              <Th>lon</Th>
-              <Th>Telephone</Th>
-              <Th>Height</Th>
-              <Th>Weight</Th>
-              <Th>Volunteer Blood Donor</Th>
-              <Th>Blood Type</Th>
-              <Th>Specialty</Th>
-              <Th>Doctor info</Th>
-              <Th>Certified</Th>
             </Tr>
           </Thead>
           <Tbody>
