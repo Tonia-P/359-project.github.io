@@ -106,7 +106,7 @@ const Profile=({ userInfo , submitForm })=> {
     <GridItem colSpan={12} h='20'/>
   <GridItem colSpan={1} h='10' />
 
-    <GridItem w='100%' colSpan={3} borderWidth='1px' borderRadius='3px' bg={color}  >
+    <GridItem w='100%' colSpan={3} borderWidth='1px' borderRadius='3px' bg={color} h='max-content' >
         <VStack
             align='center'
             w='100%'
@@ -126,7 +126,7 @@ const Profile=({ userInfo , submitForm })=> {
 
 
     
-        <GridItem colSpan={6}>
+        <GridItem colSpan={6} h='100%'>
 
             <Outlet/>
         

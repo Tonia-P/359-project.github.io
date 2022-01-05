@@ -24,6 +24,7 @@ import Profile from './dashboard/profile/Profile';
 import LoginPage from './landing/LoginPage';
 import AdminTable from './adminBoard/AdminTable';
 import AccountInfo from './dashboard/profile/AccountInfo';
+import AddressInfo from './dashboard/profile/AddressInfo';
 
 function App() {
 
@@ -169,7 +170,7 @@ function App() {
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 <Route path="/profile" element={<Profile userInfo={ userInfo } callback={ submitForm }/>}>
                   <Route path="account" element={<AccountInfo email = {userInfo.email} password = { userInfo.password } />} />
-                  <Route path="address" element={<> address </>} />
+                  <Route path="address" element={<AddressInfo email = {userInfo.email} password = { userInfo.password } />} />
                   <Route path="personal" element={<> personla </>} />
                   <Route path="additional" element={<> additional </>} />
                 </Route>

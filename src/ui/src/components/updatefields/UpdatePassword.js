@@ -23,6 +23,8 @@ import{
     Link,
     InputLeftElement,
     GridItem,
+    Collapse,
+    useDisclosure,
     Skeleton
 }from'@chakra-ui/react'
 
@@ -37,43 +39,13 @@ import{
 const UpdatePassword=({ password })=> {
 
 
-    const [ isInput, setIsInput ] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const { isOpen, onToggle } = useDisclosure()
     const [userInfo,setUserInfo] = useState({
-        username: '',
-        fieldVal: ''
+        password: '',
+        confirm_password: ''
     })
-    const [passCensored, setPassCensored ] = useState('*');
 
 
-    useEffect (() => {
-
-        for (var i=0; i<password.size; i++){
-            setPassCensored(passCensored+"*")
-            console.log(passCensored)
-        }
-        
-    }, [password])
-
-
-    const handlePass = () =>{
-        console.log(password);
-        for (var i=0; i<password.size; i++){
-            setPassCensored(passCensored+"*")
-            console.log(passCensored)
-        }
-        console.log(passCensored)
-        
-    }
-
-    useEffect (() => {
-
-        if(passCensored.size === password.size) setIsLoaded(true)
-        
-    }, [passCensored])
-
-
-    
 
 
     const handleChange = e => {
@@ -121,31 +93,30 @@ const UpdatePassword=({ password })=> {
 
 */
 
-    const onToggle = () => {
-        setIsInput(isInput => !isInput);
-    }
-
     
 
   
     return (
     <>
     
-    <Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='1'>
+    <Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='4'>
         <GridItem colSpan={14} textAlign='start'>
             <Text fontSize='sm' >Password</Text>
         </GridItem>
         
-        <GridItem colSpan={10} textAlign='start'>
-            {isLoaded ? <Text fontSize='lg' type='password' >{ passCensored }</Text>
-            :
-            <Text fontSize='lg' type='password' >zz.</Text>
-    }
+        <GridItem colSpan={10} textAlign='start'> 
+            <Text fontSize='lg' type='password' 
+                textShadow= '0 0 7px white'
+                color= 'transparent'
+                _hover = {{ textShadow: '0 0 0px white', color: 'white' }}
+            >
+                { password }
+            </Text>
         </GridItem>
 
         <GridItem colSpan={4} textAlign='start'>
             <Link color='teal.500' fontSize='md' onClick={onToggle}>
-                Change
+                Change password
             </Link>
         </GridItem>
     </Grid>
@@ -153,15 +124,15 @@ const UpdatePassword=({ password })=> {
 
 
 
-       
+    <Collapse in={isOpen} animateOpacity>
     <Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='1'>
         <GridItem colSpan={14} size='lg'>
             <FormControl>
                 <FormLabel htmlFor='name' fontSize='sm'>New password</FormLabel>
                 <Input
-                name = 'firstname'
-                type = 'text'
-                value={password}  
+                name = 'password'
+                type = 'password'
+                value={userInfo.password}  
                 autoComplete='on' 
                 size='sm'
                 onChange = {handleChange} 
@@ -173,9 +144,9 @@ const UpdatePassword=({ password })=> {
             <FormControl>
                 <FormLabel htmlFor='name' fontSize='sm'>Confirm password</FormLabel>
                 <Input
-                name = 'firstname'
-                type = 'text'
-                value={password}  
+                name = 'confirm_password'
+                type = 'password'
+                value={userInfo.confirm_password}  
                 autoComplete='on' 
                 size='sm'
                 onChange = {handleChange} 
@@ -183,20 +154,22 @@ const UpdatePassword=({ password })=> {
             </FormControl>
         </GridItem>
         
-        <GridItem colSpan={3} />
-        <GridItem colSpan={2}>
-            <Button size='sm' w='100%' type = "submit" colorScheme='teal'  top='45%'>
+        <GridItem colSpan={2} />
+        <GridItem colSpan={3}>
+            <Button size='sm' w='100%' type = "submit" colorScheme='teal' m='20px' >
                 Confirm
             </Button>
         </GridItem>
-        <GridItem colSpan={2} />
-        <GridItem colSpan={2}>
-            <Button size='sm' w='100%' variant='outline' colorScheme='teal' onClick={onToggle} top='45%'>
+        <GridItem colSpan={3} />
+        <GridItem colSpan={3}>
+            <Button size='sm' w='100%' variant='outline' colorScheme='teal' onClick={onToggle} m='20px' >
                 Cancel
             </Button>
         </GridItem>
-        <GridItem colSpan={3} />
+        <GridItem colSpan={2} />
     </Grid>
+
+    </Collapse>
 
     </>
     )
