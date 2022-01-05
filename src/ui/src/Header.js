@@ -94,9 +94,9 @@ const Header = (isLogged) => {
               <Avatar name={ username } size='md' src='https://bit.ly/tioluwani-kolawole' />
               </MenuButton>
               <MenuList minWidth='240px'>
-              <MenuItem><Link to="/dashboard">Dashboard</Link></MenuItem>
-              <MenuItem><Link to="/profile">Profile</Link></MenuItem>
-              <MenuItem><Link to="/Users">User List</Link></MenuItem>
+              <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
+              <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
+              <Link to="/Users"><MenuItem>User List</MenuItem></Link>
               <MenuDivider />
                 <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
                 

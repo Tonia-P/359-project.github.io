@@ -11,6 +11,7 @@ import {
     Tr,
     Th,
     Td,
+    Skeleton,
     TableCaption
 } from '@chakra-ui/react';
 import { 
@@ -64,9 +65,6 @@ import RowsDets from './RowsDets';
             success: function (result) {
               console.log("Success");
               console.log(result);
-                //const json = JSON.parse(result[0])
-                //console.log(json);
-                //console.log(result);
                 setDoctors(result);
                 //setInfo(result)
                 console.log(doctors);
@@ -104,32 +102,69 @@ import RowsDets from './RowsDets';
               <Th>Action</Th>
               <Th>Id</Th>
               <Th>Username</Th>
-              <Th>Email</Th>
-              <Th>Password</Th>
-              <Th>First Name</Th>
-              <Th>Last Name</Th>
+              <Th>Name</Th>
               <Th>Date Of Birth</Th>
-              <Th>Gender</Th>
-              <Th>Social Security Number</Th>
-              <Th>Country</Th>
-              <Th>City</Th>
-              <Th>Address</Th>
-              <Th>lat</Th>
-              <Th>lon</Th>
-              <Th>Telephone</Th>
-              <Th>Height</Th>
-              <Th>Weight</Th>
-              <Th>Volunteer Blood Donor</Th>
-              <Th>Blood Type</Th>
-              <Th>Specialty</Th>
-              <Th>Doctor info</Th>
-              <Th>Certified</Th>
             </Tr>
           </Thead>
+          {isLoaded ?
           <Tbody>
+            
             {users.map(user => <RowsDets info={user} key={user.user_id} />)}
             {doctors.map(doctor => <RowsDets info={doctor} key={doctor.doctor_id} />)}
           </Tbody>
+          :
+          <Tbody>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
+          </Tbody>
+  }
         </Table>
     )
   }

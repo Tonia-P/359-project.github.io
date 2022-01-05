@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import UpdateSelectCountry from '../../components/UpdateSelectCountry';
-import UpdateInput from '../../components/UpdateInput';
-import UpdateSelectBloodType from '../../components/UpdateSelectBloodType';
-import UpdateDisabled from '../../components/UpdateDisabled';
+import UpdateInput from '../../components/updatefields/UpdateInput';
+import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
+import SettingsTab from '../../components/SettingsTab';
 import{
     Editable,
     EditableInput, 
@@ -30,8 +29,9 @@ import{
     VStack,
     Divider,
     useColorModeValue,
-    SlideFade ,
-    useDisclosure
+    Fade, ScaleFade, Slide, SlideFade,
+    Collapse,
+    useDisclosure,
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
@@ -41,13 +41,15 @@ import{
     CloseIcon,
     EditIcon
 }from'@chakra-ui/icons'
+import { Outlet } from 'react-router-dom';
 
-const Profile=(values)=> {
+const Profile=({ userInfo , submitForm })=> {
 
-    const { isOpen, onToggle } = useDisclosure()
-
+    const { isOpen: accOpen, onToggle: accToggle } = useDisclosure({defaultIsOpen: true});
+    const { isOpen: addrOpen, onToggle: addrToggle } = useDisclosure({defaultIsOpen: false});
     const color = useColorModeValue('white', 'gray.700')
-    const [userInfo,setUserInfo] = useState({
+
+    const [info,setUserInfo] = useState({
         username: '',
         firstname: ''
     })
@@ -61,12 +63,12 @@ const Profile=(values)=> {
         console.log(userInfo.firstname);
       };
     useEffect(()=>{
-        console.log(values.values.firstname);
+        console.log(userInfo.values);
         setUserInfo({
-            firstname: values.values.firstname,
-            username: values.values.username
+            firstname: userInfo.firstname,
+            username: userInfo.username
         })
-    },[values.values])
+    },[userInfo])
     useEffect(()=>{
         console.log(userInfo.firstname);
         setIsLoaded(true)
@@ -104,42 +106,33 @@ const Profile=(values)=> {
     <GridItem colSpan={12} h='20'/>
   <GridItem colSpan={1} h='10' />
 
-    <GridItem w='100%' colSpan={3} borderWidth='1px' borderRadius='3px' bg={color}  >
+    <GridItem w='100%' colSpan={3} borderWidth='1px' borderRadius='3px' bg={color} h='max-content' >
         <VStack
-            spacing={4}
             align='center'
             w='100%'
         >
-            <Avatar my='30px' name={ values.values.username } size='xl' src='https://bit.ly/tioluwani-kolawole' />
-            <Text w='100%'> Usernamexxxxx </Text>
-            <Text w='100%'> AMKA </Text>
+            <Avatar my='30px' name={ userInfo.username } size='xl' src='https://bit.ly/tioluwani-kolawole' />
+            <Text w='100%'> { userInfo.username } </Text>
+            <Text w='100%'> { userInfo.amka } </Text>
 
             <Divider orientation='horizontal' />
-            <Button onClick={onToggle}>
-                Kappapa
-            </Button>
-        </VStack>
+            </VStack>
+            <SettingsTab label='Account Info' path = "account"/>
+            <SettingsTab label='Address Info' path = "address"/>
+            <SettingsTab label='Personal Info' path = "personal"/>
+            <SettingsTab label='Additional Info' path = "additional"/>
+        
     </GridItem>
 
 
     
-        <GridItem colSpan={6}>
-        <SlideFade  direction='bottom' in={isOpen} style={{ zIndex: 10 }}>
-        <Box borderWidth='1px' borderRadius='3px'  bg={color}>
-          <Box bg='teal.400' h='50px' p={3} textAlign='start' borderRadius='3px' >
-              <Text >Account Info</Text>
-          </Box>
-          <VStack
-                spacing={4}
-                align='center'
-                w='100%'
-            >
-                <UpdateDisabled w = '100%' values={ ['Username', 'Tonia'] } />
-                <UpdateInput w='100%'  values={{ name: 'email', value: 'csd3878@csd.uoc.gr' }}/>
-          </VStack>
-          </Box>
-          </SlideFade>
+        <GridItem colSpan={6} h='100%'>
+
+            <Outlet/>
+        
         </GridItem>
+
+        
 </Grid>
 
 
