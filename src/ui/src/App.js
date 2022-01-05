@@ -169,7 +169,7 @@ function App() {
                 </Route>
                 <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 <Route path="/profile" element={<Profile userInfo={ userInfo } callback={ submitForm }/>}>
-                  <Route path="account" element={<AccountInfo email = {userInfo.email} password = { userInfo.password } />} />
+                  <Route path="account" element={<AccountInfo username = {userInfo.username} email = {userInfo.email} password = { userInfo.password } />} />
                   <Route path="address" element={<AddressInfo email = {userInfo.email} password = { userInfo.password } />} />
                   <Route path="personal" element={<> personla </>} />
                   <Route path="additional" element={<> additional </>} />

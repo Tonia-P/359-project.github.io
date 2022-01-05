@@ -36,10 +36,13 @@ import{
     EditIcon
 }from'@chakra-ui/icons'
 
-const UpdatePassword=({ password })=> {
+const UpdatePassword=({username, password })=> {
+
+
 
 
     const { isOpen, onToggle } = useDisclosure()
+    const [isLoaded, setIsLoaded] = useState(false);
     const [userInfo,setUserInfo] = useState({
         password: '',
         confirm_password: ''
@@ -58,8 +61,15 @@ const UpdatePassword=({ password })=> {
       };
 
 
+      useEffect(()=>{
+        setUserInfo({
+            username: username
+        })
+    },[username])
 
-/*
+
+
+
     useEffect(()=>{
         console.log(userInfo.firstname);
         setIsLoaded(true)
@@ -78,6 +88,7 @@ const UpdatePassword=({ password })=> {
             data: json_vals,
             success: function (result) {
                 console.log(result);
+                onToggle();
                 //const json = JSON.parse(result.responseText)
                 //console.log(json);
                 //setUserInfo(json)
@@ -90,8 +101,6 @@ const UpdatePassword=({ password })=> {
             }
         });
     }
-
-*/
 
     
 
@@ -156,7 +165,7 @@ const UpdatePassword=({ password })=> {
         
         <GridItem colSpan={2} />
         <GridItem colSpan={3}>
-            <Button size='sm' w='100%' type = "submit" colorScheme='teal' m='20px' >
+            <Button size='sm' w='100%' type = "submit" colorScheme='teal' m='20px' onClick={changeDet}>
                 Confirm
             </Button>
         </GridItem>

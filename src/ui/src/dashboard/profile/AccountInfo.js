@@ -39,7 +39,7 @@ import $ from 'jquery';
 
 
 
-const AccountInfo = ({ email, password }) => {
+const AccountInfo = ({username, email, password }) => {
 
     const color = useColorModeValue('white', 'gray.700')
 
@@ -53,9 +53,9 @@ const AccountInfo = ({ email, password }) => {
                 align='center'
                 w='100%'
             >
-                <UpdateDisabled w = '100%' values={ ['Username', 'Tonia'] } />
-                <UpdateInput w='100%'  name= 'email' value={ email }/>
-                <UpdatePassword w='100%' password= { password } />
+                <UpdateDisabled w = '100%' values={ ['Username', username] } />
+                <UpdateInput w='100%'username={username}  name= 'email' value={ email }/>
+                <UpdatePassword w='100%' username={username} password= { password } />
           </VStack>
           </Box>
     )
