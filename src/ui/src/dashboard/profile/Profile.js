@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import UpdateInput from '../../components/updatefields/UpdateInput';
 import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
 import SettingsTab from '../../components/SettingsTab';
@@ -35,6 +35,7 @@ import{
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
+import { UserContext } from '../../contexts/UserContext';
 
 import{
     CheckIcon,
@@ -43,65 +44,14 @@ import{
 }from'@chakra-ui/icons'
 import { Outlet } from 'react-router-dom';
 
-const Profile=({ userInfo , submitForm })=> {
+const Profile=({ submitForm })=> {
 
-    const { isOpen: accOpen, onToggle: accToggle } = useDisclosure({defaultIsOpen: true});
-    const { isOpen: addrOpen, onToggle: addrToggle } = useDisclosure({defaultIsOpen: false});
+    const { userInfo } = useContext(UserContext);
     const color = useColorModeValue('white', 'gray.700')
 
-    const [info,setUserInfo] = useState({
-        username: '',
-        firstname: ''
-    })
-    const [isLoaded, setIsLoaded] = useState(false);
-    const handleChange = e => {
-        const { name, value } = e.target;
-        setUserInfo({
-          ...userInfo,
-          [name]: value
-        });
-        console.log(userInfo.firstname);
-      };
-    useEffect(()=>{
-        console.log(userInfo.values);
-        setUserInfo({
-            firstname: userInfo.firstname,
-            username: userInfo.username
-        })
-    },[userInfo])
-    useEffect(()=>{
-        console.log(userInfo.firstname);
-        setIsLoaded(true)
-    },[userInfo])
-
-    const changeDet = e => {
-        e.preventDefault();
-        var json_vals = JSON.stringify(userInfo);
-        //console.log("JSON  " + json_vals);
-
-        var urlEnd = 'http://localhost:8080/WebApplication1/UpdateUser';
-        $.ajax({
-            url: urlEnd,
-            type: "POST",
-            contentType: 'json',
-            data: json_vals,
-            success: function (result) {
-                console.log(result);
-                //const json = JSON.parse(result.responseText)
-                //console.log(json);
-                //setUserInfo(json)
-                console.log(userInfo);
-            },
-            error: function (result) {
-                console.log(result.responseText)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
-            }
-        });
-    }
-  
+    
+    
     return (<>
-    {isLoaded ? <>
 <Grid templateColumns='repeat(12, 1fr)' gap={4} w='100%' >
     <GridItem colSpan={12} h='20'/>
   <GridItem colSpan={1} h='10' />
@@ -138,8 +88,7 @@ const Profile=({ userInfo , submitForm })=> {
 
 
 
-    </>
-: <Spinner size='xl' />}
+
     </>
     )
   }

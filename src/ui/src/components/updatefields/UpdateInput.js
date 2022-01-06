@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
     FormControl,
     FormLabel,
     FormErrorMessage,
@@ -41,7 +35,6 @@ const UpdateInput=(values)=> {
     const [isLoaded, setIsLoaded] = useState(false);
     const [userInfo,setUserInfo] = useState({
         username: '',
-        fieldVal: ''
     })
     
 
@@ -52,7 +45,7 @@ const UpdateInput=(values)=> {
           ...userInfo,
           [name]: value
         });
-        console.log(userInfo.firstname);
+        console.log(userInfo);
       };
 
 
@@ -67,7 +60,7 @@ const UpdateInput=(values)=> {
 
 
     useEffect(()=>{
-        console.log(userInfo.firstname);
+        console.log(userInfo);
         setIsLoaded(true)
     },[userInfo])
 
@@ -114,7 +107,7 @@ const UpdateInput=(values)=> {
         </GridItem>
         
         <GridItem colSpan={10} textAlign='start'>
-            <Text fontSize='lg' >{values.value }</Text>
+            <Text fontSize='lg' >{ values.value }</Text>
         </GridItem>
 
         <GridItem colSpan={4} textAlign='start'>
@@ -131,11 +124,12 @@ const UpdateInput=(values)=> {
             <FormControl>
                 <FormLabel htmlFor='name' fontSize='sm'>{ values.name }</FormLabel>
                 <Input
-                name = 'firstname'
+                name = { values.name }
                 type = 'text'
-                value={values.value}  
+                defaultValue={ values.value } 
+                value={ userInfo.value }  
                 autoComplete='on' 
-                size='sm'
+                size='md'
                 onChange = {handleChange} 
                 />
             </FormControl>

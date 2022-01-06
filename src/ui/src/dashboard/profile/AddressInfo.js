@@ -78,8 +78,10 @@ const AddressInfo = ({ email, password }) => {
                 w='100%'
             >
 
-                
-            <FormControl id= 'country'>
+<Grid templateColumns='repeat(14, 1fr)' gap={4} rowGap={2} w='100%' px='4' py='1'>
+
+		<GridItem colSpan={14} textAlign='start'>
+            <FormControl id= 'country' >
                 <FormLabel>Country</FormLabel>
                 <Select 
                     //onChange={handleChange}
@@ -339,6 +341,7 @@ const AddressInfo = ({ email, password }) => {
 				<option value="ZW">Zimbabwe</option>
                 </Select>
             </FormControl>
+			</GridItem>
 
 
 
@@ -356,7 +359,6 @@ const AddressInfo = ({ email, password }) => {
                     placeholder= "City"
                     minLength="8"
                     />
-                <FormHelperText>We won't share with anyone. Promise!</FormHelperText>
             </FormControl>
 
 
@@ -372,7 +374,6 @@ const AddressInfo = ({ email, password }) => {
                     placeholder= "Address"
                     minLength="8"
                     />
-                <FormHelperText>We won't share with anyone. Promise!</FormHelperText>
             </FormControl>
 
             <Grid templateColumns='repeat(2, 1fr)' gap={6}>
@@ -423,6 +424,7 @@ const AddressInfo = ({ email, password }) => {
                 </MapContainer>
             }
 
+			</Grid>
 
           </VStack>
           </Box>

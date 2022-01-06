@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Text,
     SimpleGrid,
@@ -16,10 +16,12 @@ import {
     Icon
   } from '@chakra-ui/react';
   import $ from 'jquery';
-
+  import { UserContext } from '../contexts/UserContext';
 
   
-const Fitness = (values) => {
+const Fitness = () => {
+
+  const { userInfo } = useContext(UserContext);
 
 
     const [ isLoaded, setIsLoaded ] = useState(false);
@@ -36,19 +38,19 @@ const Fitness = (values) => {
       () => {
 
         console.log("IN FITNESS");
-        console.log(values.values)
+        console.log(userInfo)
 
         //console.log(info)
         //console.log(values.values.weight);
         console.log("put fitvals")
         setFitVals({
-          weight: values.values.weight,
-          height: values.values.height
+          weight: userInfo.weight,
+          height: userInfo.height
         });
 
         console.log(fitVals)
       },
-      [values.values]
+      [userInfo]
     );
 
     useEffect(

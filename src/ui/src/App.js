@@ -1,13 +1,9 @@
-import { useState, useEffect } from 'react';
-import React from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import $ from 'jquery';
 import {
   ChakraProvider,
   Box,
-  //Text,
-  //Link,
   VStack,
-  //Code,
   Grid,
   theme,
 } from '@chakra-ui/react';
@@ -25,6 +21,7 @@ import LoginPage from './landing/LoginPage';
 import AdminTable from './adminBoard/AdminTable';
 import AccountInfo from './dashboard/profile/AccountInfo';
 import AddressInfo from './dashboard/profile/AddressInfo';
+import { UserContext } from './contexts/UserContext';
 
 function App() {
 
@@ -56,9 +53,10 @@ function App() {
 
   });
 
+  const user = useMemo(() => ({ userInfo, setUserInfo }), [ userInfo, setUserInfo ]);
+
 
   const submitForm = (values) => {
-    
     
     console.log("USER INFO IN PAGE!!")
     console.log(values)
@@ -139,52 +137,54 @@ function App() {
 
   return (
     <ChakraProvider theme={theme}>
-      <Router>
-      <Header isLogged= {isLogged} />
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <VStack spacing={8}>
 
-
-
-
-          
-          <Routes>
-                {!isLogged ?<>
-                <Route path="/loginMenu" element={ <LoginPage/>}/>
-                <Route path="/login" element={ <LoginForm submitForm= {submitForm} />}/>
-                <Route path="/loginAdmin" element={<LoginFormAdmin submitForm = {submitForm} />} />
-                </>
-                :
-                <>
-                <Route path="/login" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
-                <Route path="/admin" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
-                </>
-                }
-                <Route path="/register" element={ <Form /> } />
-                <Route path="/dashboard" element= { <Dashboard values={ userInfo } />} />
-                <Route path="bloodtest" element= { <BloodTestMenu />} >
-                  <Route path="allbloodtests" element={<AllBloodTests />} />
-                  <Route path="new" element={<NewBloodTest />} />
-                </Route>
-                <Route path="*" element={ <div> Error 404: Page not found. </div> } />
-                <Route path="/profile" element={<Profile userInfo={ userInfo } callback={ submitForm }/>}>
-                  <Route path="account" element={<AccountInfo email = {userInfo.email} password = { userInfo.password } />} />
-                  <Route path="address" element={<AddressInfo email = {userInfo.email} password = { userInfo.password } />} />
-                  <Route path="personal" element={<> personla </>} />
-                  <Route path="additional" element={<> additional </>} />
-                </Route>
-                <Route path="/Users" element={<AdminTable />}/>
-            </Routes>
+      <UserContext.Provider value= { user }>
+        <Router>
+        <Header isLogged= {isLogged} />
+          <Box textAlign="center" fontSize="xl">
+            <Grid minH="100vh" p={3}>
+              <VStack spacing={8}>
 
 
 
 
 
-          </VStack>
-        </Grid>
-      </Box>
-      </Router>
+                <Routes>
+                    {!isLogged ?
+                    <>
+                      <Route path="/loginMenu" element={ <LoginPage/>}/>
+                      <Route path="/login" element={ <LoginForm submitForm= {submitForm} />}/>
+                      <Route path="/loginAdmin" element={<LoginFormAdmin submitForm = {submitForm} />} />
+                    </>
+                    :
+                    <>
+                      <Route path="/login" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
+                      <Route path="/admin" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
+                    </>
+                    }
+                    <Route path="/register" element={ <Form /> } />
+                    <Route path="/dashboard" element= { <Dashboard  />} />
+                    <Route path="bloodtest" element= { <BloodTestMenu />} >
+                      <Route path="allbloodtests" element={<AllBloodTests />} />
+                      <Route path="new" element={<NewBloodTest />} />
+                    </Route>
+                    <Route path="*" element={ <div> Error 404: Page not found. </div> } />
+                    <Route path="/profile" element={<Profile callback={ submitForm }/>}>
+                      <Route path="account" element={<AccountInfo email = {userInfo.email} password = { userInfo.password } />} />
+                      <Route path="address" element={<AddressInfo email = {userInfo.email} password = { userInfo.password } />} />
+                      <Route path="personal" element={<> personla </>} />
+                      <Route path="additional" element={<> additional </>} />
+                    </Route>
+                    <Route path="/Users" element={<AdminTable />}/>
+                </Routes>
+                  
+                  
+                  
+              </VStack>
+            </Grid>
+          </Box>
+        </Router>
+      </UserContext.Provider>
     </ChakraProvider>
   );
 }
