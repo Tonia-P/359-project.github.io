@@ -30,3 +30,5 @@ yarn-error.log*
 
 # etc
 src/java/WebApplication1/web/index.html
+
+src/java/WebApplication1/nbproject
