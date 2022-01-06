@@ -52,8 +52,7 @@ const Profile=({ submitForm })=> {
     
     
     return (<>
-<Grid templateColumns='repeat(12, 1fr)' gap={4} w='100%' >
-    <GridItem colSpan={12} h='20'/>
+<Grid templateColumns='repeat(12, 1fr)' gap={4} h='100%' w='100%' >
   <GridItem colSpan={1} h='10' />
 
     <GridItem w='100%' colSpan={3} borderWidth='1px' borderRadius='3px' bg={color} h='max-content' >
@@ -76,7 +75,7 @@ const Profile=({ submitForm })=> {
 
 
     
-        <GridItem colSpan={6} h='100%'>
+        <GridItem colSpan={6} >
 
             <Outlet/>
         

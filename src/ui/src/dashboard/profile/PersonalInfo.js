@@ -39,7 +39,7 @@ import $ from 'jquery';
 
 
 
-const AccountInfo = ({ email, password, username }) => {
+const PersonalInfo = ({ email, password, username }) => {
 
     const color = useColorModeValue('white', 'gray.700')
 
@@ -47,19 +47,21 @@ const AccountInfo = ({ email, password, username }) => {
     return(
         <Box borderWidth='1px' borderRadius='3px'  bg={color}>
           <Box bg='teal.400' h='50px' p={3} textAlign='start' borderRadius='3px' >
-              <Text >Account Info</Text>
+              <Text >Personal Info</Text>
           </Box>
           <VStack
                 spacing={4}
                 align='center'
                 w='100%'
             >
-                <UpdateDisabled w = '100%' name= "Username" />
-                <UpdateInput w='100%' name= 'email'/>
-                <UpdatePassword w='100%'/>
+                <UpdateDisabled w = '100%' name= "amka" />
+                <UpdateInput w='100%' name= 'firstname'/>
+                <UpdateInput w='100%' name= 'lastname'/>
+                <UpdateInput w='100%' name= 'telephone'/>
+
           </VStack>
           </Box>
     )
 }
 
-export default AccountInfo;
+export default PersonalInfo;

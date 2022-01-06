@@ -22,6 +22,7 @@ import AdminTable from './adminBoard/AdminTable';
 import AccountInfo from './dashboard/profile/AccountInfo';
 import AddressInfo from './dashboard/profile/AddressInfo';
 import { UserContext } from './contexts/UserContext';
+import PersonalInfo from './dashboard/profile/PersonalInfo';
 
 function App() {
 
@@ -170,9 +171,9 @@ function App() {
                     </Route>
                     <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                     <Route path="/profile" element={<Profile callback={ submitForm }/>}>
-                      <Route path="account" element={<AccountInfo email = {userInfo.email} password = { userInfo.password } />} />
-                      <Route path="address" element={<AddressInfo email = {userInfo.email} password = { userInfo.password } />} />
-                      <Route path="personal" element={<> personla </>} />
+                      <Route path="account" element={<AccountInfo />} />
+                      <Route path="address" element={<AddressInfo />} />
+                      <Route path="personal" element={<PersonalInfo />} />
                       <Route path="additional" element={<> additional </>} />
                     </Route>
                     <Route path="/Users" element={<AdminTable />}/>

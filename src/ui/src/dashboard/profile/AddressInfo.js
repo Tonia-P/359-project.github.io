@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import UpdateInput from '../../components/updatefields/UpdateInput';
 import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
 import SettingsTab from '../../components/SettingsTab';
@@ -6,13 +6,8 @@ import UpdatePassword from '../../components/updatefields/UpdatePassword';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';
+import { AiFillHeart } from 'react-icons/ai';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
     FormControl,
     FormLabel,
     FormErrorMessage,
@@ -34,9 +29,6 @@ import{
     VStack,
     Divider,
     useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    useDisclosure,
 }from'@chakra-ui/react'
 
 import { 
@@ -47,7 +39,8 @@ import {
 } from 'react-leaflet'
 
 import $ from 'jquery';
-import UpdateSelectCountry from '../../components/updatefields/UpdateSelectCountry';
+import { UserContext } from '../../contexts/UserContext';
+
 
 
 
@@ -56,12 +49,9 @@ const AddressInfo = ({ email, password }) => {
 
     
     const [mapReady, setMapReady] = useState(false);
-    const [tosReady, setTosReady] = useState(false);
     
-    const [lat, setLat] = useState('')
-    const [lon, setLon] = useState('')
     const [showMap, setShowMap] = useState('')
-    const [showPass, setShowPass] = useState(false)
+	const { userInfo, setUserInfo } = useContext(UserContext);
 
     
 
@@ -88,7 +78,7 @@ const AddressInfo = ({ email, password }) => {
                     //onBlur={handleMapRequest}
                     placeholder='Country' 
                     name= "country" 
-                    //value={values.country}
+                    value={userInfo.country}
                 >
                 <option value="AF">Afghanistan</option>
 				<option value="AX">Åland Islands</option>
@@ -344,7 +334,7 @@ const AddressInfo = ({ email, password }) => {
 			</GridItem>
 
 
-
+			<GridItem colSpan={7} textAlign='start'>
             <FormControl isRequired id= "city" 
             //isInvalid={errors.city}
             >
@@ -353,29 +343,32 @@ const AddressInfo = ({ email, password }) => {
                     type= "text" 
                     name= "city"
                     autoComplete= "on"
-                    //value= {values.city}
+                    value= {userInfo.city}
                     //onChange= {handleChange} 
                     //onBlur={handleMapRequest}
                     placeholder= "City"
                     minLength="8"
                     />
             </FormControl>
+			</GridItem>
 
 
+			<GridItem colSpan={7} textAlign='start'>
             <FormControl isRequired id= "address" >
                 <FormLabel>Address</FormLabel>
                 <Input 
                     type= "text" 
                     name= "address"
                     autoComplete= "on"
-                    //value= {values.address}
+                    value= {userInfo.address}
                     //onChange= {handleChange} 
                     //onBlur={handleMapRequest}
                     placeholder= "Address"
                     minLength="8"
                     />
             </FormControl>
-
+			</GridItem>
+			<GridItem colSpan={14} textAlign='center' >
             <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                 {mapReady ?
             <Button
@@ -405,24 +398,26 @@ const AddressInfo = ({ email, password }) => {
                 Get address
             </Button>
             </Grid>
-            
 
-            {showMap &&
+			</GridItem>
+            
+			<GridItem colSpan={14} textAlign='start'>
                 <MapContainer 
-                    center={[lat,lon]} 
+                    center={[ userInfo.lat,userInfo.lon ]} 
+
                     zoom={13} 
                     scrollWheelZoom={true}>
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[lat,lon]}>
+                    <Marker position={[ userInfo.lat,userInfo.lon ]} >
                       <Popup>
-                        If you live here, you gei.
+                        Your waifu is trash. <AiFillHeart/>
                       </Popup>
                     </Marker>
                 </MapContainer>
-            }
+				</GridItem>
 
 			</Grid>
 

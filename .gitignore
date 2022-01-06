@@ -32,3 +32,4 @@ yarn-error.log*
 src/java/WebApplication1/web/index.html
 
 src/java/WebApplication1/nbproject
+src/java/WebApplication1/gson-2.8.0.jar
