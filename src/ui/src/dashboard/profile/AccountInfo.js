@@ -54,8 +54,8 @@ const AccountInfo = ({ email, password, username }) => {
                 w='100%'
             >
                 <UpdateDisabled w = '100%' values={ ['Username', username] } />
-                <UpdateInput w='100%'  name= 'email' value={ email } username = { username }/>
-                <UpdatePassword w='100%' password= { password } />
+                <UpdateInput w='100%'username={username}  name= 'email' value={ email }/>
+                <UpdatePassword w='100%' username={username} password= { password } />
           </VStack>
           </Box>
     )

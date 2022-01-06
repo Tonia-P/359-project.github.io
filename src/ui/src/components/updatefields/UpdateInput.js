@@ -48,15 +48,18 @@ const UpdateInput=(values)=> {
         console.log(userInfo);
       };
 
+      const onToggle = () => {
+        setIsInput(!isInput);
+    }
+
 
 
     useEffect(()=>{
         //console.log(values.values.firstname);
         setUserInfo({
-            //firstname: values.values.firstname,
-            //username: values.values.username
+            username: values.username
         })
-    },[values.values])
+    },[values])
 
 
     useEffect(()=>{
@@ -67,7 +70,7 @@ const UpdateInput=(values)=> {
     const changeDet = e => {
         e.preventDefault();
         var json_vals = JSON.stringify(userInfo);
-        //console.log("JSON  " + json_vals);
+        console.log("JSON  " + json_vals);
 
         var urlEnd = 'http://localhost:8080/WebApplication1/UpdateUser';
         $.ajax({
@@ -77,6 +80,7 @@ const UpdateInput=(values)=> {
             data: json_vals,
             success: function (result) {
                 console.log(result);
+                onToggle();
                 //const json = JSON.parse(result.responseText)
                 //console.log(json);
                 //setUserInfo(json)
@@ -88,12 +92,6 @@ const UpdateInput=(values)=> {
                 //console.log(json)
             }
         });
-    }
-
-
-
-    const onToggle = () => {
-        setIsInput(isInput => !isInput);
     }
 
   
@@ -124,10 +122,10 @@ const UpdateInput=(values)=> {
             <FormControl>
                 <FormLabel htmlFor='name' fontSize='sm'>{ values.name }</FormLabel>
                 <Input
-                name = { values.name }
+                name = {values.name}
                 type = 'text'
-                defaultValue={ values.value } 
-                value={ userInfo.value }  
+                defultValue={values.value}
+                value={userInfo.value}  
                 autoComplete='on' 
                 size='md'
                 onChange = {handleChange} 
