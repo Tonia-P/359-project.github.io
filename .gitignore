@@ -26,6 +26,7 @@ yarn-error.log*
 /src/java/WebApplication1/build/web/WEB-INF/lib
 /src/java/WebApplication1/gson-2.8.0.jar
 /src/java/WebApplication1/javax.servlet-3.0.0.jar
+/src/java/WebApplication1/nbproject
 
 
 # etc
