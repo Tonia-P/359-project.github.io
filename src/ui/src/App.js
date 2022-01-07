@@ -23,6 +23,7 @@ import AccountInfo from './dashboard/profile/AccountInfo';
 import AddressInfo from './dashboard/profile/AddressInfo';
 import { UserContext } from './contexts/UserContext';
 import PersonalInfo from './dashboard/profile/PersonalInfo';
+import CertifyTable from './adminBoard/CertifyTable';
 
 function App() {
 
@@ -177,6 +178,7 @@ function App() {
                       <Route path="additional" element={<> additional </>} />
                     </Route>
                     <Route path="/Users" element={<AdminTable />}/>
+                    <Route path="/Certify" element={<CertifyTable />}/>
                 </Routes>
                   
                   

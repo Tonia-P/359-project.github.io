@@ -23,12 +23,13 @@ import jakarta.ws.rs.core.Response;
 import static jakarta.ws.rs.core.Response.status;
 import java.util.ArrayList;
 import mainClasses.Doctor;
+import mainClasses.JSON_Converter;
  
 /**
  *
  * @author oparc
  */
-@WebServlet(name = "DocServlet", urlPatterns = {"/DocServlet", "/AllDoctors", "/AllDoctorsArr", "/LoginDoctor", "/RegisterDoctor"})
+@WebServlet(name = "DocServlet", urlPatterns = {"/DocServlet", "/AllDoctors", "/AllDoctorsArr", "/LoginDoctor", "/RegisterDoctor", "/NotCertified", "/Certify"})
 public class DocServlet extends HttpServlet {
     
     
@@ -56,6 +57,59 @@ public class DocServlet extends HttpServlet {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void notCertified(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException, SQLException{
+            EditDoctorTable edyt = new EditDoctorTable();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try(PrintWriter out = response.getWriter()){
+            ArrayList<Doctor> docs;
+            docs = edyt.databaseToDoctorsC(0);
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(docs != null){
+                response.setStatus(200);
+                gson.toJson(docs,response.getWriter());
+            }
+            else{
+                jo.addProperty("error", "The list doesn't exist.");
+                response.setStatus(404);
+                response.getWriter().write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }            
+    }
+    
+    private void certify(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException, SQLException{
+            JSON_Converter jc = new JSON_Converter();
+            EditDoctorTable edyt = new EditDoctorTable();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try(PrintWriter out = response.getWriter()){
+            String user = jc.getJSONFromAjax(request.getReader());
+            System.out.println("USER: " + user);
+            int k = edyt.updateDoctorC(user, 1);
+            System.out.println(k);
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(k == 1){
+                System.out.println("IN SUCCESS");
+                jo.addProperty("success", "SUCCESS");
+                 response.setStatus(200);
+                 response.getWriter().write(jo.toString());
+            }
+            else{
+                jo.addProperty("error", "The list doesn't exist.");
+                response.setStatus(404);
+                response.getWriter().write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }            
     }
     
     
@@ -137,8 +191,15 @@ public class DocServlet extends HttpServlet {
                 }
             }
 		break;
+        case "/NotCertified":
+            {
+                try {
+                    notCertified(request,response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
-	
 	default:
 		listDoctors(request, response);
 		break;
@@ -157,10 +218,23 @@ public class DocServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
+        System.out.println(action);
 	switch (action) {
 	case "/AllDoctors":
 		listDoctors(request, response);
 		break;
+                
+        case "/Certify":
+            {
+                try {
+                    certify(request, response);
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(DocServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                break;
+
 	
 	default:
 		listDoctors(request, response);

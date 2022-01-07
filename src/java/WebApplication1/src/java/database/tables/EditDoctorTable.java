@@ -79,6 +79,18 @@ public class EditDoctorTable {
         String update = "UPDATE doctors SET height='" + height + "' WHERE username = '" + username + "'";
         stmt.executeUpdate(update);
     }
+    
+    public int updateDoctorC(String username, int certified) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM doctors WHERE username ='"+username+"'");
+        if(rs != null){
+            stmt.executeUpdate("UPDATE doctors SET certified='" + certified + "' WHERE username = " + username);
+            return 1;
+        }
+        return 0;
+    }
 
     public void printDoctorDetails(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
@@ -144,6 +156,28 @@ public class EditDoctorTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM doctors");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Doctor doc = gson.fromJson(json, Doctor.class);
+                doctors.add(doc);
+            }
+            return doctors;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Doctor> databaseToDoctorsC(int certified) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Doctor> doctors=new ArrayList<Doctor>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified ='" + certified + "'");
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
