@@ -1,11 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
     FormControl,
     FormLabel,
     FormErrorMessage,
@@ -33,26 +27,27 @@ import{
     CloseIcon,
     EditIcon
 }from'@chakra-ui/icons'
+import { UserContext } from '../../contexts/UserContext';
 
 const UpdateInput=(values)=> {
 
 
     const [ isInput, setIsInput ] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [userInfo,setUserInfo] = useState({
+    const [newVals,setNewVals] = useState({
         username: '',
-        fieldVal: ''
     })
     
+    const { userInfo, setUserInfo } = useContext(UserContext);
 
 
     const handleChange = e => {
         const { name, value } = e.target;
-        setUserInfo({
-          ...userInfo,
+        setNewVals({
+          ...newVals,
           [name]: value
         });
-        console.log(userInfo);
+        console.log(newVals);
       };
 
       const onToggle = () => {
@@ -63,20 +58,20 @@ const UpdateInput=(values)=> {
 
     useEffect(()=>{
         //console.log(values.values.firstname);
-        setUserInfo({
-            username: values.username
+        setNewVals({
+            username: userInfo.username
         })
-    },[values])
+    },[userInfo])
 
 
     useEffect(()=>{
-        console.log(userInfo.firstname);
+        console.log(newVals);
         setIsLoaded(true)
-    },[userInfo])
+    },[newVals])
 
     const changeDet = e => {
         e.preventDefault();
-        var json_vals = JSON.stringify(userInfo);
+        var json_vals = JSON.stringify(newVals);
         console.log("JSON  " + json_vals);
 
         var urlEnd = 'http://localhost:8080/WebApplication1/UpdateUser';
@@ -88,15 +83,12 @@ const UpdateInput=(values)=> {
             success: function (result) {
                 console.log(result);
                 onToggle();
-                //const json = JSON.parse(result.responseText)
-                //console.log(json);
-                //setUserInfo(json)
+                setUserInfo(newVals[values.name])
                 console.log(userInfo);
+
             },
             error: function (result) {
                 console.log(result.responseText)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
             }
         });
     }
@@ -112,7 +104,7 @@ const UpdateInput=(values)=> {
         </GridItem>
         
         <GridItem colSpan={10} textAlign='start'>
-            <Text fontSize='lg' >{values.value }</Text>
+            <Text fontSize='lg' >{ userInfo[values.name] }</Text>
         </GridItem>
 
         <GridItem colSpan={4} textAlign='start'>
@@ -131,11 +123,11 @@ const UpdateInput=(values)=> {
                 <Input
                 name = {values.name}
                 type = 'text'
-                defultValue={values.value}
-                value={userInfo.value}  
+                defultValue={ userInfo[values.name] }
+                value={ newVals.value }  
                 autoComplete='on' 
-                size='sm'
-                onChange = {handleChange} 
+                size='md'
+                onChange = { handleChange } 
                 />
             </FormControl>
         </GridItem>

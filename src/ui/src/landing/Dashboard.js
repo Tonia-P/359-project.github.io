@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import DocList from '../dashboard/DocList';
 import {
   Heading, Spinner, Button
@@ -13,27 +13,19 @@ import {
   Outlet
 } from 'react-router-dom'
 
-const Dashboard = (values, isLogged) => {
+import { UserContext } from '../contexts/UserContext';
 
-  const [ info, setInfo ] = useState({});
-  const [ isLoaded, setIsLoaded ] = useState(false);
 
-  useEffect(
-    () => {
-      setInfo(values.values)
-      console.log(info)
+const Dashboard = () => {
 
-      setIsLoaded(true);
-    },
-    []
-  );
-  
+
+  const { userInfo } = useContext(UserContext);
   
     return (
 
       <>
 
-      <Heading>Welcome back, { values.values.username}.</Heading>
+      <Heading>Welcome back, { userInfo.username }</Heading>
 
 
       <DocList />
@@ -42,11 +34,7 @@ const Dashboard = (values, isLogged) => {
         <Link to="/Profile">Profile</Link>
       </Button>
 
-      {isLoaded ?
-      <Fitness values={values.values} />
-      :
-      <Spinner/>
-}
+      <Fitness/>
       </>
     );
   };

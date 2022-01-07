@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Input,
     Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    Box,
     Text,
     Link,
-    InputLeftElement,
     GridItem,
     Collapse,
     useDisclosure,
@@ -29,12 +14,8 @@ import{
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
+import { UserContext } from '../../contexts/UserContext';
 
-import{
-    CheckIcon,
-    CloseIcon,
-    EditIcon
-}from'@chakra-ui/icons'
 
 const UpdatePassword=({username, password })=> {
 
@@ -43,29 +24,31 @@ const UpdatePassword=({username, password })=> {
 
     const { isOpen, onToggle } = useDisclosure()
     const [isLoaded, setIsLoaded] = useState(false);
-    const [userInfo,setUserInfo] = useState({
+    const [newVals,setNewVals] = useState({
         password: '',
         confirm_password: ''
     })
+
+    const { userInfo } = useContext(UserContext)
 
 
 
 
     const handleChange = e => {
         const { name, value } = e.target;
-        setUserInfo({
-          ...userInfo,
+        setNewVals({
+          ...newVals,
           [name]: value
         });
-        console.log(userInfo.firstname);
+        console.log(newVals);
       };
 
 
       useEffect(()=>{
-        setUserInfo({
-            username: username
+        setNewVals({
+            username: userInfo.username
         })
-    },[username])
+    },[userInfo])
 
 
 
@@ -119,7 +102,7 @@ const UpdatePassword=({username, password })=> {
                 color= 'transparent'
                 _hover = {{ textShadow: '0 0 0px white', color: 'white' }}
             >
-                { password }
+                { userInfo.password }
             </Text>
         </GridItem>
 
@@ -141,7 +124,7 @@ const UpdatePassword=({username, password })=> {
                 <Input
                 name = 'password'
                 type = 'password'
-                value={userInfo.password}  
+                value={newVals.password}  
                 autoComplete='on' 
                 size='sm'
                 onChange = {handleChange} 
@@ -155,7 +138,7 @@ const UpdatePassword=({username, password })=> {
                 <Input
                 name = 'confirm_password'
                 type = 'password'
-                value={userInfo.confirm_password}  
+                value={newVals.confirm_password}  
                 autoComplete='on' 
                 size='sm'
                 onChange = {handleChange} 
