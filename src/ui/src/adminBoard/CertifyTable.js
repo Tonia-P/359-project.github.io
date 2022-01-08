@@ -131,6 +131,13 @@ import RowsDetsCrt from './RowsDetsCrt';
             <Td><Skeleton height='40px' w='100%' /></Td>
             <Td><Skeleton height='40px' w='100%' /></Td>
             </Tr>
+            <Tr>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            <Td><Skeleton height='40px' w='100%' /></Td>
+            </Tr>
           </Tbody>
   }
         </Table>

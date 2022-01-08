@@ -10,7 +10,8 @@ import {
     HStack,
     Stack,
     IconButton,
-    useColorModeValue
+    useColorModeValue,
+    useToast
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
 import React from 'react';
@@ -65,6 +66,7 @@ const RowsDetsCrt = (info) =>{
             success: function (result) {
             console.log(result);
             window.location.reload();
+           
             },
             error: function (result) {
             console.log("Fail");

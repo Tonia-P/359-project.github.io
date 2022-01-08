@@ -40,7 +40,13 @@ import{
 import $ from 'jquery';
 import OverviewCard from './OverviewCard';
 import OverviewCardTwo from './OverviewCardTwo';
-
+import { 
+    BrowserRouter as Router, 
+    Routes, 
+    Route, 
+    Link,
+    Outlet
+} from 'react-router-dom'
 
 
 const Overview = () => {
@@ -55,9 +61,12 @@ const Overview = () => {
 
             <Heading textAlign='start' size='md' my='6'> Overview </Heading>
             <Wrap spacing='30px' w='100%' m={0}>
-                <OverviewCard/>
+
+                <Link to="/Certify">
+                <OverviewCard number = {8}/>
+                </Link>
                 <OverviewCardTwo topText="new users today" topNumber="10"/>
-                <OverviewCardTwo topText="revenue" topNumber="10080$"/>
+                <OverviewCardTwo topText="revenue" topNumber="10080$" bottomNumber="30000$"/>
 
                 </Wrap>
           </Box>

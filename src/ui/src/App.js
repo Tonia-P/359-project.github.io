@@ -23,10 +23,7 @@ import AccountInfo from './dashboard/profile/AccountInfo';
 import AddressInfo from './dashboard/profile/AddressInfo';
 import { UserContext } from './contexts/UserContext';
 import PersonalInfo from './dashboard/profile/PersonalInfo';
-<<<<<<< HEAD
 import AdminDashBoard from './adminBoard/AdminDashboard';
-=======
->>>>>>> d87e95b75131bb7ee8228c3887194d06cd06da6c
 import CertifyTable from './adminBoard/CertifyTable';
 
 function App() {

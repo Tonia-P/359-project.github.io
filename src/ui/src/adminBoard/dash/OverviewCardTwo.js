@@ -59,7 +59,7 @@ const OverviewCardTwo = ({ topText, bottomText, topNumber, bottomNumber }) => {
             className={ gradient }  
             alignSelf='flex-start' >
 
-            <Grid column='2' row='2' gap={1} w='100%'>
+            <Grid column='2' row='2' gap={2} w='100%'>
 
             <GridItem colStart={1} rowSpan={2} w='fit-content'>
             <Box 
@@ -72,7 +72,7 @@ const OverviewCardTwo = ({ topText, bottomText, topNumber, bottomNumber }) => {
                 alignItems='center'
                 bgGradient='linear(to-r, #3A8DD0, #62BFD5)'
             >
-                <FaUserCheck color={iconColor} size={65} />
+                <FaUserCheck color={iconColor} size={60} />
             </Box>
             </GridItem>
 
@@ -105,7 +105,7 @@ const OverviewCardTwo = ({ topText, bottomText, topNumber, bottomNumber }) => {
                 alignSelf='center'
 
             >
-                <Text  fontSize='lg'  color={ letterColor }  className='wrap'  > this week <Text  fontSize='2xl' w='100%' d="inline" fontWeight="bold" pt={2} >  89  </Text> </Text>
+                <Text  fontSize='md'  color={ letterColor }  className='wrap'  > this week <Text  fontSize='xl' w='100%' d="inline" fontWeight="bold" pt={2} >  { bottomNumber }  </Text> </Text>
                 
              
             </GridItem>

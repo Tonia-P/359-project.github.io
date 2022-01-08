@@ -33,7 +33,9 @@ import{
     useColorModeValue,
     Fade, ScaleFade, Slide, SlideFade,
     Collapse,
+    Circle,
     useDisclosure,
+    NumberDecrementStepper,
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
@@ -41,11 +43,14 @@ import './style.css';
 import { FaUserCheck } from "react-icons/fa";
 
 
-const OverviewCard = () => {
+const OverviewCard = ({number}) => {
 
     const gradient = useColorModeValue('box-light', 'box-dark')
     const letterColor = useColorModeValue('white', 'teal.200')
     const iconColor = useColorModeValue('white', '#2A4365')
+
+
+     
 
     return(
 
@@ -56,7 +61,17 @@ const OverviewCard = () => {
             className= { gradient }  
             alignSelf='flex-start' >
 
+
+{number !== 0 &&
+<Flex position='absolute' display='flex' w='95%' h='75%' >
+            <Circle size='25px' bg='tomato' color='white'   />
+            </Flex>
+
+}
             <Grid column='2' row='2' gap={1} w='100%'>
+
+
+
 
             <GridItem colStart={1} rowSpan={2} w='fit-content'>
             <Box 
@@ -69,7 +84,7 @@ const OverviewCard = () => {
                 alignItems='center'
                 bgGradient='linear(to-r, #3A8DD0, #62BFD5)'
             >
-                <FaUserCheck color={iconColor} size={65} />
+                <FaUserCheck color={iconColor} size={60} />
             </Box>
             </GridItem>
 
@@ -85,7 +100,7 @@ const OverviewCard = () => {
                 alignSelf='center'
 
             >
-                <Text  fontSize='3xl'  color={ letterColor } className='wrap' fontWeight="bold" > 15 <Text  fontSize='2xl' w='100%' d="inline" fontWeight="normal" pt={2} >  pending approval requests </Text> </Text>
+                <Text  fontSize='3xl'  color={ letterColor } className='wrap' fontWeight="bold" > {number === 0 ? "No" : number} <Text  fontSize='2xl' w='100%' d="inline" fontWeight="normal" pt={2} >  pending approval requests </Text> </Text>
                 
              
             </GridItem>
