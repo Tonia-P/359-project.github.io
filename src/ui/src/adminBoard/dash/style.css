@@ -1,0 +1,45 @@
+.box-dark{
+    background: 
+        linear-gradient(to left top,#1A202C, #202735) padding-box,
+        linear-gradient(to right, #3182CE, #31C4B7) border-box !important;
+    border-radius: 30px !important;
+    border: 4px solid transparent;
+    -webkit-transition: background 1s ease-in-out !important;
+    -moz-transition: background 1s ease-in-out !important;
+    -o-transition: background 1s ease-in-out !important;
+    transition: all 1s ease-in-out !important;
+}
+.box-light{
+    background: 
+        linear-gradient(to right,#3182CE, #31C4B7) padding-box,
+        linear-gradient(to right, #3182CE, #31C4B7) border-box !important;
+    border-radius: 30px !important;
+    border: 4px solid transparent;
+    -webkit-transition: background 1s ease-in-out !important;
+    -moz-transition: background 1s ease-in-out !important;
+    -o-transition: background 1s ease-in-out !important;
+    transition: all 1s ease-in-out !important;
+}
+
+
+
+.wrap{
+    white-space: normal;
+    text-align: start;
+    overflow-wrap: break-word !important; 
+    word-wrap: break-word !important;
+}
+
+.box-dark:hover{
+    background: 
+        linear-gradient(to left top, #1a202c, #0c3153 ) padding-box,
+        linear-gradient(to right, #3182CE, #31C4B7) border-box !important;
+
+  
+}
+
+.box-light:hover{
+    background: 
+        linear-gradient(to right,#2469aa, #31C4B7) padding-box,
+        linear-gradient(to right, #2469aa, #31C4B7) border-box !important;
+}

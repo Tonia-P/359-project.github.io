@@ -23,11 +23,13 @@ import AccountInfo from './dashboard/profile/AccountInfo';
 import AddressInfo from './dashboard/profile/AddressInfo';
 import { UserContext } from './contexts/UserContext';
 import PersonalInfo from './dashboard/profile/PersonalInfo';
+import AdminDashBoard from './adminBoard/AdminDashboard';
 
 function App() {
 
 
   const [isLogged, setIsLogged] = useState(false);
+  const [ isAdmin, setIsAdmin ] = useState(false);
   const [ userInfo, setUserInfo ] = useState({
     username: '',
     email: '',
@@ -66,6 +68,7 @@ function App() {
 
     if(values.username === "admin"){
       values.usertype = "admin";
+      setIsAdmin(true);
     }
 
     var cookie_user = "username = " + values.username + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
@@ -102,6 +105,8 @@ function App() {
           password: password
         }
 
+
+
         var json_vals = JSON.stringify(info);
         //console.log("JSON  " + json_vals);
     
@@ -118,6 +123,11 @@ function App() {
                 setUserInfo(json)
                 //console.log(info);
                 setIsLogged(true)
+
+                if(userInfo.username === "admin"){
+                  userInfo.usertype = "admin";
+                  setIsAdmin(true);
+                }
             },
             error: function (result) {
                 console.log(result.responseText)
@@ -148,8 +158,6 @@ function App() {
 
 
 
-
-
                 <Routes>
                     {!isLogged ?
                     <>
@@ -164,7 +172,7 @@ function App() {
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />
-                    <Route path="/dashboard" element= { <Dashboard  />} />
+                    <Route path="/dashboard" element= { userInfo.username === 'admin' ? <AdminDashBoard  /> : <Dashboard/> } />
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                       <Route path="allbloodtests" element={<AllBloodTests />} />
                       <Route path="new" element={<NewBloodTest />} />
