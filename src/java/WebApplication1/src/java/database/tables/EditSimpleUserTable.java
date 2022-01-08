@@ -228,17 +228,21 @@ public class EditSimpleUserTable {
     
     public int deleteUserFromDatabase(String username) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
+        Connection con2 = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
+        Statement stmt2 = con2.createStatement();
         ResultSet rs;
-        rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username +"'");
-        if(rs != null){
-            System.out.println("DELETE FROM users WHERE username = " + username);
+        ResultSet ds;
+        System.out.println("IN DELETE: " + username);
+        rs = stmt.executeQuery("SELECT * FROM users WHERE username = "+username);
+        if(rs.next()){
+           
             stmt.executeUpdate("DELETE FROM users WHERE username =" + username);}
-        else if(rs == null){
-            rs = stmt.executeQuery("SELECT * FROM doctors WHERE username = '" + username +"'");
-            if(rs != null){
+        else{
+            ds = stmt2.executeQuery("SELECT * FROM doctors WHERE username = "+username);
+            if(ds.next()){
                 System.out.println("IT'S IN THE doctors");
-                stmt.executeUpdate("DELETE FROM doctors WHERE username =" + username);
+                stmt2.executeUpdate("DELETE FROM doctors WHERE username =" + username);
             }
             else{
                 System.out.println("FAILED");

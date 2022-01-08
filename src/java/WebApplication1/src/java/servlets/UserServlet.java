@@ -61,6 +61,7 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
     
     private void deleteUser(HttpServletRequest request, HttpServletResponse response){
@@ -166,6 +167,7 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     
     private void listUsersArr (HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException, SQLException{
