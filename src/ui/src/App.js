@@ -25,6 +25,7 @@ import { UserContext } from './contexts/UserContext';
 import PersonalInfo from './dashboard/profile/PersonalInfo';
 import AdminDashBoard from './adminBoard/AdminDashboard';
 import CertifyTable from './adminBoard/CertifyTable';
+import Rendezvous from './rendezvous/Rendezvous';
 
 function App() {
 
@@ -187,6 +188,7 @@ function App() {
                     </Route>
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
+                    <Route path="/rendezvous" element={<Rendezvous /> } />
                 </Routes>
                   
                   
