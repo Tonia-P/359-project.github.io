@@ -7,7 +7,19 @@ package servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import database.tables.EditDoctorTable;
+import database.tables.EditRandevouzTable;
 import database.tables.EditSimpleUserTable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,16 +33,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import mainClasses.Doctor;
 import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
+import mainClasses.Randevouz;
 
 /**
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF"})
 public class UserServlet extends HttpServlet {
     
     
@@ -135,36 +151,118 @@ public class UserServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             
             
-            System.out.println("Hello Login user!");
-            
+            System.out.println("Hello Login!");
+            EditSimpleUserTable euta = new EditSimpleUserTable();
+            EditDoctorTable edt = new EditDoctorTable(); 
             response.setContentType("text/html;charset=UTF-8");
             JSON_Converter jc = new JSON_Converter();
+            
             SimpleUser u;
+            SimpleUser p;
+            Doctor d;
             String s = jc.getJSONFromAjax(request.getReader());
             System.out.println("Hello user!  Json from ajax    " + s);
             
             
-            u = eut.jsonToSimpleUser(s);
-            
-            String json = eut.databaseUserToJSON(u.getUsername(), u.getPassword());
-            if(json==null){
-                System.out.println("Hello 404!");
-                json = "{\"error\":\"The username or password is incorrect.\"}";
-                response.setStatus(403);
-                out.println(json);
-             
-             }
-            else{
-                response.setStatus(200);
-                out.println(json); 
+            u = euta.jsonToSimpleUser(s);
+            p = euta.databaseToSimpleUser(u.getUsername(), u.getPassword());
+            d = edt.jsonToDoctor(s);
+            if(p != null){
+                System.out.println("before User JSON");
+                String json = euta.databaseUserToJSON(u.getUsername(), u.getPassword());
+                if(json==null){
+                    System.out.println("Hello 404!");
+                    json = "{\"error\":\"The username or password is incorrect.\"}";
+                    response.setStatus(403);
+                    out.println(json);
+                    return;
+                }
+                else{
+                    response.setStatus(200);
+                    out.println(json);
+                    return;
+                }
             }
-                
+            
+            if(d != null){
+                System.out.println("before Doctor JSON");
+                String json2 = edt.databaseToJSON(d.getUsername(), d.getPassword());
+                if(json2==null){
+                    System.out.println("Hello 404!");
+                    json2 = "{\"error\":\"The username or password is incorrect.\"}";
+                    response.setStatus(403);
+                    out.println(json2);
+                }
+                else{
+                    response.setStatus(200);
+                    out.println(json2); 
+                }
+            }   
                 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
          
         } catch (SQLException ex) {
             Logger.getLogger(GetUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    private void randevouzToPDF(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException{
+        
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditDoctorTable edt = new EditDoctorTable();
+        EditRandevouzTable ert = new EditRandevouzTable();
+        EditSimpleUserTable eute = new EditSimpleUserTable();
+        Doctor d;
+        SimpleUser u;
+        ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();
+        
+        
+        d = edt.jsonToDoctor(s);
+        rdv = ert.databaseToRandevouzT(d.getDoctor_id());
+        
+        Document document = new Document();
+        try{
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Daily_Randevouz.pdf"));
+            document.open();
+            
+            Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+            Chunk chunk = new Chunk("Today's Randevous", font);
+            document.add(chunk);
+            
+            
+            PdfPTable table = new PdfPTable(6);
+            Stream.of("Patient Name", "Date & Time", "Price", "Doctor Info", "User Info", "Status")
+                .forEach(columnTitle -> {
+                PdfPCell header = new PdfPCell();
+                header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                header.setBorderWidth(2);
+                header.setPhrase(new Phrase(columnTitle));
+                table.addCell(header);
+            });
+            
+            for(int i = 0; i < rdv.size(); i++){
+                u = eute.databaseToSimpleUserID(rdv.get(i).getUser_id());
+                table.addCell(u.getFirstname() + " " + u.getLastname());
+                table.addCell(rdv.get(i).getDate_time());
+                table.addCell(rdv.get(i).getPrice() + "€");
+                table.addCell(rdv.get(i).getDoctor_info());
+                table.addCell(rdv.get(i).getUser_info());
+                table.addCell(rdv.get(i).getStatus());
+            }
+            
+            table.setHorizontalAlignment(Element.ALIGN_CENTER);
+            
+            document.add(table);
+            
+            document.close();
+            writer.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(FileNotFoundException e){
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     
@@ -364,6 +462,19 @@ public class UserServlet extends HttpServlet {
                 }
             }
         break;
+        
+        case "/RandevouzToPDF":
+            {
+                try {
+                    randevouzToPDF(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            
 
 	case "/LoginUser":
             {

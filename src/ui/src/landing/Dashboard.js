@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import DocList from '../dashboard/DocList';
+import $ from 'jquery';
 import {
   Heading, Spinner, Button
 } from '@chakra-ui/react';
@@ -20,7 +21,31 @@ const Dashboard = () => {
 
 
   const { userInfo } = useContext(UserContext);
-  
+
+  const doctorDT = {
+    doctor_id: '4'
+  };
+
+  const retPDF = () => {
+
+        var dets = JSON.stringify(doctorDT);
+
+        var urlEnd = 'http://localhost:8080/WebApplication1/RandevouzToPDF';
+        $.ajax({
+            url: urlEnd,
+            type: "GET",
+            contentType: 'application/json',
+            data: dets,
+            success: function (result) {
+              console.log("Success");
+            },
+            error: function (result) {
+              console.log("Fail");
+            }
+        });
+
+      }  
+
     return (
 
       <>
@@ -30,8 +55,8 @@ const Dashboard = () => {
 
       <DocList />
 
-      <Button>
-        <Link to="/Profile">Profile</Link>
+      <Button onClick={retPDF}>
+        RANDEVOUZ PDF
       </Button>
 
       <Fitness/>

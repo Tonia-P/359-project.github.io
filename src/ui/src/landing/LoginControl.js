@@ -49,7 +49,7 @@ const LoginControl = (callback) =>{
         $.ajax({
             url: urlEnd,
             type: "POST",
-            contentType: 'json',
+            contentType: 'application/json',
             data: json_vals,
             success: function (result) {
                 const json = JSON.parse(result)
