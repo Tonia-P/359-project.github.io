@@ -50,48 +50,48 @@ const Header = (isLogged) => {
 
     return (
 
-      <Box className='kappa' p={3} borderBottomWidth='2px' sx={{ position: '-webkit-sticky', /* Safari */ position: 'sticky', top: '0',}}>
-        <Grid templateColumns='repeat(12, 1fr)' align='center' >
-            <GridItem colSpan={1} h='10' justifySelf="flex-start" />
-            <GridItem colSpan={1} h='10' justifySelf="flex-start" >
-                <Logo width={ 10} />
+      <Box className='kappa' p={2} borderBottomWidth='2px'  sx={{ position: '-webkit-sticky', /* Safari */ position: 'sticky', top: '0',}}>
+        <Grid templateColumns='repeat(12, 1fr)'  align='center' h='30px'>
+            <GridItem colSpan={1} h='7' justifySelf="flex-start" />
+            <GridItem colSpan={1} h='7' justifySelf="flex-start" >
+                <Logo width={ 7} />
             </GridItem>
 
 
                 
-            <GridItem colSpan={5} h='10' justifySelf="flex-start" >
-            <Button colorScheme='teal'>
+            <GridItem colSpan={5} h='7' justifySelf="flex-start" >
+            <Button colorScheme='teal' size='sm'>
                     <Link to="/bloodtest">Blood test</Link>
                 </Button>
             </GridItem>
-            <GridItem colSpan={1} h='10' justifySelf="flex-end" >
-            <ColorModeSwitcher  justifySelf="flex-start" />
+            <GridItem colSpan={1} h='7' justifySelf="flex-end" >
+            <ColorModeSwitcher size='sm' justifySelf="flex-start" />
             </GridItem>
 
             {!isLogged.isLogged ?
 
             <>
 
-            <GridItem colSpan={1} h='10'  justifySelf="flex-end" >
+            <GridItem colSpan={1} h='7'  justifySelf="flex-end" >
                 
             <Button >
                 <Link to="/loginMenu">Login</Link>
             </Button>
             </GridItem>
 
-            <GridItem colSpan={1} h='10'  justifySelf="flex-end" >
+            <GridItem colSpan={1} h='7'  justifySelf="flex-end" >
             <Button colorScheme='teal'>
                 <Link to="/register">Join us</Link>
             </Button>
             </GridItem>
             </>
             :
-            <GridItem colSpan={2} h='10'  justifySelf="flex-end" >
+            <GridItem colSpan={2} h='7'  justifySelf="flex-end" >
                 
 
             <Menu closeOnSelect={true} direction= "rtl">
               <MenuButton  colorScheme='blue' >
-              <Avatar name={ username } size='md' src='https://bit.ly/tioluwani-kolawole' />
+              <Avatar name={ username } size='sm' src='https://bit.ly/tioluwani-kolawole' />
               </MenuButton>
               <MenuList minWidth='240px'>
               <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
