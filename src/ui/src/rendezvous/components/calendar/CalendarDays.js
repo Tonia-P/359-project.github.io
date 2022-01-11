@@ -19,6 +19,7 @@ const CalendarDays = () => {
 
     useEffect(() => {
         setAllDays(getDays());
+
     }, [selectingDate])
 
 
@@ -33,17 +34,19 @@ const CalendarDays = () => {
             i++;
 
         }
+
+        tmpp.shift();
         return tmpp;
     }
     
 
     return(
         <Grid templateColumns='repeat(7, 1fr)'  templateRows='repeat(6, 1fr)' w='100%'>
-                {allDays.map(date => <>{ allDays.indexOf(date) !==0 && 
-                    <GridItem>
-                        <CalendarTile date={date} key={date.format('DD/MM/YYYY')} />
+                {allDays.map(date =>
+                    <GridItem key={date}>
+                        <CalendarTile date={date}  />
                     </GridItem>  
-                    } </> )
+                    )
                 }
         </Grid>
     )

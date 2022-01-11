@@ -90,7 +90,7 @@ const Header = (isLogged) => {
                 
 
             <Menu closeOnSelect={true} direction= "rtl">
-              <MenuButton  colorScheme='blue' >
+              <MenuButton   >
               <Avatar name={ username } size='sm' src='https://bit.ly/tioluwani-kolawole' />
               </MenuButton>
               <MenuList minWidth='240px'>

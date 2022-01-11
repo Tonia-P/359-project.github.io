@@ -41,16 +41,14 @@ const Rendezvous = () => {
             price: '50'
         },
     ])
-
-
-    useEffect(() => {
-        console.log(allRendezvous)
-    }, [])
+    const [ selectedRendezvous, setSelectedRendezvous ] = useState({})
+ 
 
     const date = useMemo(() => ({ selectingDate, setSelectingDate, selectedDate, setSelectedDate, selectedTime, setSelectedTime }), 
     [ selectingDate, setSelectingDate, selectedDate, setSelectedDate, selectedTime, setSelectedTime ]);
 
-    const rendezvous = useMemo(() => ({ allRendezvous, setAllRendezvous }), [ allRendezvous, setAllRendezvous ]);
+    const rendezvous = useMemo(() => ({ allRendezvous, setAllRendezvous, selectedRendezvous, setSelectedRendezvous }), 
+    [ allRendezvous, setAllRendezvous, selectedRendezvous, setSelectedRendezvous ]);
 
     return(
 
@@ -69,6 +67,7 @@ const Rendezvous = () => {
                 </GridItem>
                 <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
                     {selectedDate && selectedDate.format('YYYY-MM-DDTHH:mm:ss')}
+                    {selectedRendezvous && selectedRendezvous.status}
                 </GridItem>
             </Grid>
 

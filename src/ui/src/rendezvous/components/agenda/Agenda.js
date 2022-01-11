@@ -40,10 +40,18 @@ const Agenda = () => {
 
 
     useEffect(() => {
-        setAllTimeslots(createTimeslots());
-        console.log(allRendezvous[0].date_time)
+        console.log("CHANGED")
+        setAllTimeslots( createTimeslots());
+        
+        
         
     }, [selectedDate])
+
+
+    useEffect(() =>{
+        console.log(allTimeslots)
+    }, [allTimeslots]
+    )
 
  
     const createTimeslots = () => {
@@ -53,25 +61,44 @@ const Agenda = () => {
         var tmp = mememe.hour(8);
         
         var i = 0;
+        var counter = 0;
+        var tmpp = [];
 
         while( i !== 26 ){
-            var tmpp = [...tmpp, tmp];
+
+            
+            if(allRendezvous.length > counter && allRendezvous[counter].date_time.format('HH:mm') === tmp.format('HH:mm')) {
+                console.log("if " + tmp.format('HH:mm'))
+                tmpp = [
+                    ...tmpp,
+                    {
+                        time: tmp,
+                        rend: allRendezvous[counter]
+                    }
+                ]
+                counter++;
+                console.log(counter)
+
+            }
+            else{
+                console.log("else")
+                tmpp = [
+                    ...tmpp,
+                    {
+                        time: tmp,
+                        rend: null
+                    }
+                ]
+            }
             tmp = tmp.add(30, 'minute');
             i++;
 
         }
+
         return tmpp;
 
     }
 
-    const getRend = (i) =>{
-        if(allRendezvous[0].date_time.format('HH:mm') === allTimeslots[i].format('HH:mm')){
-            var tmp = allRendezvous[0];
-            allRendezvous.shift();
-            return tmp;
-        } 
-        else return null;
-    }
 
     return(
 
@@ -79,12 +106,9 @@ const Agenda = () => {
         <Box  p={3} borderColor='gray.500' overflow='scroll' h='100%' >
             <Heading textAlign='start' py={2} mb={5} size='lg'>Agenda</Heading>
 
-
-                { allRendezvous &&
-                allTimeslots.map(timeslot =><>{ allTimeslots.indexOf(timeslot) !=0 && <AgendaSlot timeslot={ timeslot }   
-                                                                                                    rend={getRend(allTimeslots.indexOf(timeslot))}
-                                                                                                    key={timeslot} />} </> )}
-
+            {allTimeslots && allTimeslots.map(timeslot => <>{ allTimeslots.indexOf(timeslot) !==0 && <AgendaSlot timeslot={timeslot} key={timeslot.time.format('HH:mm')} /> 
+                    } </> )
+                }
             <Box h='40px'></Box>
         </Box>
         
