@@ -6,12 +6,14 @@
 package database.tables;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.Document;
 import mainClasses.Randevouz;
 import database.DB_Connection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +50,28 @@ public class EditRandevouzTable {
     }
     
     
+    public ArrayList<Randevouz> databaseToRandevouzT(int dr_id) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Randevouz rdz = gson.fromJson(json, Randevouz.class);
+                randevouz.add(rdz);
+            }
+            return randevouz;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
     
 
       
