@@ -1,40 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
-    Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    InputLeftElement,
     GridItem,
-    Box,
-    Avatar,
-    Text,
-    VStack,
-    Divider,
-    Heading,
     useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    Circle,
-    useDisclosure,
-    NumberDecrementStepper,
 }from'@chakra-ui/react'
 
-import $ from 'jquery';
 import Calendar from './components/calendar/Calendar';
 import { DateContext } from '../contexts/DateContext';
 import { RendezvousContext } from '../contexts/RendezvousContext';
@@ -43,11 +13,8 @@ import Agenda from './components/agenda/Agenda';
 import './style.css'
 
 
-const Rendezvous = ({number}) => {
+const Rendezvous = () => {
 
-    const gradient = useColorModeValue('box-light', 'box-dark')
-    const letterColor = useColorModeValue('white', 'teal.200')
-    const iconColor = useColorModeValue('white', '#2A4365')
     const leftColor = useColorModeValue('white', 'gray.700')
 
 
@@ -84,8 +51,6 @@ const Rendezvous = ({number}) => {
     [ selectingDate, setSelectingDate, selectedDate, setSelectedDate, selectedTime, setSelectedTime ]);
 
     const rendezvous = useMemo(() => ({ allRendezvous, setAllRendezvous }), [ allRendezvous, setAllRendezvous ]);
-
-
 
     return(
 

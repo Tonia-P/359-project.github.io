@@ -1,42 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import UpdateInput from '../../components/updatefields/UpdateInput';
-import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
-import SettingsTab from '../../components/SettingsTab';
-import UpdatePassword from '../../components/updatefields/UpdatePassword';
+import React from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
     Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    InputLeftElement,
     GridItem,
     Box,
-    Avatar,
     Text,
-    VStack,
-    Divider,
-    Heading,
-    useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    useDisclosure,
+    useColorModeValue
 }from'@chakra-ui/react'
 
-import $ from 'jquery';
 import './style.css';
 import { FaUserCheck } from "react-icons/fa";
 

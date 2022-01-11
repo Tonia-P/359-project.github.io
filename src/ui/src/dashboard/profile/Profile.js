@@ -1,47 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
-import UpdateInput from '../../components/updatefields/UpdateInput';
-import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
+import React, { useContext } from 'react';
 import SettingsTab from '../../components/SettingsTab';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
-    Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    InputLeftElement,
     GridItem,
-    Box,
     Avatar,
     Text,
     VStack,
     Divider,
     useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    useDisclosure,
 }from'@chakra-ui/react'
 
-import $ from 'jquery';
 import { UserContext } from '../../contexts/UserContext';
 
-import{
-    CheckIcon,
-    CloseIcon,
-    EditIcon
-}from'@chakra-ui/icons'
 import { Outlet } from 'react-router-dom';
 
 const Profile=({ submitForm })=> {

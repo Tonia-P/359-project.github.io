@@ -1,26 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
-    Grid, 
-    GridItem, 
-    Stack,
-    Button,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
     Skeleton,
-    TableCaption
 } from '@chakra-ui/react';
-import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
-    Link,
-    Outlet
-} from 'react-router-dom';
 import $ from 'jquery';
 import RowsDetsCrt from './RowsDetsCrt';
 
@@ -48,8 +35,6 @@ import RowsDetsCrt from './RowsDetsCrt';
             error: function (result) {
                 console.log("Fail");
                 console.log(result)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
 
                 setIsLoaded(false);
             }

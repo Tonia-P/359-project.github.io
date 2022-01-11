@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import $ from 'jquery';
-import { useNavigate } from 'react-router-dom';
 
 
-const UpdateControl = (callback, field, val) =>{
+const UpdateControl = (callback) =>{
 
     const [values, setValues] = useState({ });
-    const navigate = useNavigate();
     const [info, setInfo] = useState();
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);

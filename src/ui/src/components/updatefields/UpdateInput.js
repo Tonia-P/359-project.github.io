@@ -2,31 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import{
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Input,
     Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    Box,
     Text,
     Link,
-    InputLeftElement,
     GridItem,
-    Skeleton
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
 
-import{
-    CheckIcon,
-    CloseIcon,
-    EditIcon
-}from'@chakra-ui/icons'
 import { UserContext } from '../../contexts/UserContext';
 
 const UpdateInput=(values)=> {

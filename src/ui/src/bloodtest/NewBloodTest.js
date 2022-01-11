@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
 import React from 'react';
-import $ from 'jquery';
 import { 
-    Stack, 
-    Button, 
+    Stack,
     FormControl, 
     FormLabel, 
     FormHelperText,
     Input, 
-    FormErrorMessage,
-    InputGroup,
-    InputRightElement,
-    Radio,
-    HStack,
-    RadioGroup,
-    Select,
-    Grid,
-    NumberInput,
-    NumberInputField,
-    Checkbox,
-    Textarea,
-    Text
+    FormErrorMessage
 } from '@chakra-ui/react'
-import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom'
 import NewBloodTestControl from './NewBloodTestControl';
 
 
@@ -30,7 +14,7 @@ import NewBloodTestControl from './NewBloodTestControl';
 
 const NewBloodTest = () =>{
 
-    const { handleChange, handleSubmit, values, errors, setValues, isSubmitting } = NewBloodTestControl(
+    const { handleChange,  values, errors } = NewBloodTestControl(
     );
     
 

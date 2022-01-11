@@ -1,25 +1,11 @@
 import { useState, useEffect } from 'react';
 import { 
-    Grid, 
-    GridItem, 
-    Stack,
-    Button,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
-    Td,
-    TableCaption
 } from '@chakra-ui/react';
-import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
-    Link,
-    Outlet
-} from 'react-router-dom';
 import $ from 'jquery';
 import ListRow from './ListRow';
 
@@ -40,9 +26,6 @@ import ListRow from './ListRow';
             success: function (result) {
               console.log("Success");
               console.log(result);
-                //const json = JSON.parse(result[0])
-                //console.log(json);
-                //console.log(result);
                 setTests(result);
                 //setInfo(result)
                 console.log(tests);
@@ -50,9 +33,7 @@ import ListRow from './ListRow';
             },
             error: function (result) {
                 console.log("Fail");
-                console.log(result)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
+                console.log(result);
 
                 setIsLoaded(false);
             }

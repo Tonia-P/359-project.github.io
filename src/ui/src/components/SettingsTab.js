@@ -1,36 +1,11 @@
 import { useState, useEffect } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
-    Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
-    Grid,
-    Box,
-    Text,
-    InputLeftElement,
-    GridItem,
-    Skeleton
+    Button
 }from'@chakra-ui/react'
 
 import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
+    BrowserRouter as 
     Link,
-    Outlet,
     useLocation 
 } from 'react-router-dom'
 

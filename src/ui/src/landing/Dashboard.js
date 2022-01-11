@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import DocList from '../dashboard/DocList';
 import {
-  Heading, Spinner, Button
+  Heading, Button
 } from '@chakra-ui/react';
 import Fitness from '../dashboard/Fitness';
 
 import { 
-  BrowserRouter as Router, 
-  Routes, 
-  Route, 
-  Link,
-  Outlet
+  BrowserRouter as
+  Link
 } from 'react-router-dom'
 
 import { UserContext } from '../contexts/UserContext';
@@ -26,15 +23,13 @@ const Dashboard = () => {
       <>
 
       <Heading>Welcome back, { userInfo.username }</Heading>
+        <DocList />
 
+        <Button>
+          <Link to="/Profile">Profile</Link>
+        </Button>
 
-      <DocList />
-
-      <Button>
-        <Link to="/Profile">Profile</Link>
-      </Button>
-
-      <Fitness/>
+        <Fitness/>
       </>
     );
   };

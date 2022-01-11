@@ -4,11 +4,8 @@ import {
     FormControl,
     FormLabel,
     Input,
-    FormHelperText,
-    FormErrorMessage,
     InputGroup,
     Text,
-    InputRightElement,
     VStack,
     Grid
 } from '@chakra-ui/react'
@@ -22,7 +19,7 @@ import LoginControl from './LoginControl';
 
 const LoginForm = ({ submitForm }) =>{
 
-    const { handleChange, handleSubmit, values, errors, setValues, isSubmitting } = LoginControl(
+    const { handleChange, handleSubmit, values, errors, isSubmitting } = LoginControl(
         submitForm
     );
 

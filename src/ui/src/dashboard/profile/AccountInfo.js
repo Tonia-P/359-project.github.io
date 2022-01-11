@@ -1,45 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import UpdateInput from '../../components/updatefields/UpdateInput';
 import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
-import SettingsTab from '../../components/SettingsTab';
 import UpdatePassword from '../../components/updatefields/UpdatePassword';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
-    Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
-    Grid,
-    InputLeftElement,
-    GridItem,
     Box,
-    Avatar,
     Text,
     VStack,
-    Divider,
-    useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    useDisclosure,
+    useColorModeValue
 }from'@chakra-ui/react'
 
-import $ from 'jquery';
 
 
 
-const AccountInfo = ({ email, password, username }) => {
+const AccountInfo = () => {
 
     const color = useColorModeValue('white', 'gray.700')
 

@@ -1,26 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
-    Grid, 
-    GridItem, 
-    Stack,
-    Button,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    Skeleton,
-    TableCaption
+    Skeleton
 } from '@chakra-ui/react';
-import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
-    Link,
-    Outlet
-} from 'react-router-dom';
 import $ from 'jquery';
 import RowsDets from './RowsDets';
 
@@ -42,9 +29,6 @@ import RowsDets from './RowsDets';
             success: function (result) {
               console.log("Success");
               console.log(result);
-                //const json = JSON.parse(result[0])
-                //console.log(json);
-                //console.log(result);
                 setUsers(result);
                 //setInfo(result)
                 console.log(users);
@@ -52,8 +36,6 @@ import RowsDets from './RowsDets';
             error: function (result) {
                 console.log("Fail");
                 console.log(result)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
             }
         });
 
@@ -73,8 +55,6 @@ import RowsDets from './RowsDets';
             error: function (result) {
                 console.log("Fail");
                 console.log(result)
-                //var json = JSON.parse(result.responseText)
-                //console.log(json)
 
                 setIsLoaded(false);
             }

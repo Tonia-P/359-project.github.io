@@ -1,22 +1,11 @@
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
     Tr,
-    Th,
     Td,
-    Divider,
-    HStack,
-    Stack,
     IconButton,
-    useColorModeValue,
-    useToast
+    useColorModeValue
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import $ from 'jquery';
-import LevelBadge from '../components/LevelBadge';
 import {TiTickOutline, TiTimesOutline } from "react-icons/ti";
 
 
@@ -25,7 +14,6 @@ const RowsDetsCrt = (info) =>{
 
 
     const color = useColorModeValue('gray.100', 'gray.700')
-    const deleteHover = useColorModeValue('red.500', 'red.400')
     const [ isHovered, setIsHovered ] = useState(false);
     
     const deleteUser = () =>{

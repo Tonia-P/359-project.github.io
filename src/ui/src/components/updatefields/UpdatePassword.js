@@ -10,14 +10,13 @@ import{
     GridItem,
     Collapse,
     useDisclosure,
-    Skeleton
 }from'@chakra-ui/react'
 
 import $ from 'jquery';
 import { UserContext } from '../../contexts/UserContext';
 
 
-const UpdatePassword=({username, password })=> {
+const UpdatePassword=()=> {
 
 
 

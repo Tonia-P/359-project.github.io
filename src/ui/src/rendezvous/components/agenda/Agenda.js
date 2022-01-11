@@ -41,8 +41,10 @@ const Agenda = () => {
 
     useEffect(() => {
         setAllTimeslots(createTimeslots());
+        console.log(allRendezvous[0].date_time)
         
     }, [selectedDate])
+
  
     const createTimeslots = () => {
         
@@ -62,7 +64,6 @@ const Agenda = () => {
 
     }
 
-
     const getRend = (i) =>{
         if(allRendezvous[0].date_time.format('HH:mm') === allTimeslots[i].format('HH:mm')){
             var tmp = allRendezvous[0];
@@ -72,7 +73,6 @@ const Agenda = () => {
         else return null;
     }
 
-     
     return(
 
         <>
@@ -80,8 +80,9 @@ const Agenda = () => {
             <Heading textAlign='start' py={2} mb={5} size='lg'>Agenda</Heading>
 
 
-                { allTimeslots.map(timeslot =><>{ allTimeslots.indexOf(timeslot) !=0 && <AgendaSlot timeslot={ timeslot } 
-                                                                                                    rend={getRend(allTimeslots.indexOf(timeslot))}  
+                { allRendezvous &&
+                allTimeslots.map(timeslot =><>{ allTimeslots.indexOf(timeslot) !=0 && <AgendaSlot timeslot={ timeslot }   
+                                                                                                    rend={getRend(allTimeslots.indexOf(timeslot))}
                                                                                                     key={timeslot} />} </> )}
 
             <Box h='40px'></Box>

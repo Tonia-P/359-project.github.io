@@ -47,7 +47,6 @@ const AgendaSlot = ({ timeslot, rend }) => {
     const { allRendezvous } = useContext(RendezvousContext);
 
     useEffect(() => {
-        console.log(rend)
     }, [])
 
     const handleClick = () =>{

@@ -1,21 +1,14 @@
-import { useState, useEffect } from 'react';
 import { 
-    Grid, 
-    GridItem, 
+    Grid,
     Stack,
     Button,
-    useBoolean
     
 } from '@chakra-ui/react'
 import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
+    BrowserRouter as 
     Link,
     Outlet
-} from 'react-router-dom'
-import AllBloodTests from './AllBloodTests'
-import $ from 'jquery';
+} from 'react-router-dom';
 
 
 const BloodTestMenu = () =>{

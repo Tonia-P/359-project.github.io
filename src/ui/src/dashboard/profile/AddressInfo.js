@@ -1,8 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import UpdateInput from '../../components/updatefields/UpdateInput';
-import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
-import SettingsTab from '../../components/SettingsTab';
-import UpdatePassword from '../../components/updatefields/UpdatePassword';
+import React, { useState, useContext } from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';
@@ -10,24 +6,14 @@ import { AiFillHeart } from 'react-icons/ai';
 import{
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Input,
     Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
     Grid,
-    InputLeftElement,
     GridItem,
     Box,
-    Avatar,
     Select,
     Text,
     VStack,
-    Divider,
     useColorModeValue,
 }from'@chakra-ui/react'
 
@@ -38,7 +24,6 @@ import {
     Popup
 } from 'react-leaflet'
 
-import $ from 'jquery';
 import { UserContext } from '../../contexts/UserContext';
 
 

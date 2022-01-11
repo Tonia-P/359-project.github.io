@@ -16,7 +16,6 @@ const NewBloodTestControl = (callback) =>{
         vitamin_d3: '',
         vitamin_b12: ''
     })
-    const navigate = useNavigate();
   
     const [info, setInfo] = useState();
 

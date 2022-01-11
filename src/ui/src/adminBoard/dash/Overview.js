@@ -1,39 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import UpdateInput from '../../components/updatefields/UpdateInput';
-import UpdateDisabled from '../../components/updatefields/UpdateDisabled';
-import SettingsTab from '../../components/SettingsTab';
-import UpdatePassword from '../../components/updatefields/UpdatePassword';
+import React from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
-    Button,
-    Spinner,
-    Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
-    Grid,
-    InputLeftElement,
-    GridItem,
     Box,
-    Avatar,
-    Text,
-    VStack,
-    Divider,
     Heading,
     useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    useDisclosure,
     Wrap
 }from'@chakra-ui/react'
 
@@ -41,17 +10,11 @@ import $ from 'jquery';
 import OverviewCard from './OverviewCard';
 import OverviewCardTwo from './OverviewCardTwo';
 import { 
-    BrowserRouter as Router, 
-    Routes, 
-    Route, 
-    Link,
-    Outlet
+    BrowserRouter as Link
 } from 'react-router-dom'
 
 
 const Overview = () => {
-
-    const color = useColorModeValue('white', 'gray.700')
 
 
     return(

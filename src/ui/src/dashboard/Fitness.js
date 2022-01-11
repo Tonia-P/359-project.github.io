@@ -1,21 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
     Text,
-    SimpleGrid,
     Spinner,
-    Editable,
-    EditablePreview,
-    EditableInput,
     Box,
     FormControl,
     FormLabel,
     Divider,
     Input,
     Button,
-    Grid,
-    Icon
+    Grid
   } from '@chakra-ui/react';
-  import $ from 'jquery';
   import { UserContext } from '../contexts/UserContext';
 
   

@@ -1,18 +1,8 @@
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
     Tr,
-    Th,
     Td,
-    Divider,
-    HStack,
-    Stack
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react';
 import React from 'react';
-import $ from 'jquery';
 import LevelBadge from '../components/LevelBadge';
 
 
