@@ -6,10 +6,7 @@ import {
 } from '@chakra-ui/react';
 import Fitness from '../dashboard/Fitness';
 
-import { 
-  BrowserRouter as
-  Link
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import { UserContext } from '../contexts/UserContext';
 

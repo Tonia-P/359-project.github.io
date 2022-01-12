@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react'
 
 
-import { Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 const LoginPage = (isLogged, callback) => {
 

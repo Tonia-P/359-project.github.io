@@ -4,11 +4,7 @@ import {
     Button,
     
 } from '@chakra-ui/react'
-import { 
-    BrowserRouter as 
-    Link,
-    Outlet
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Outlet } from 'react-router-dom'
 
 
 const BloodTestMenu = () =>{

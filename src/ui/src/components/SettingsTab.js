@@ -3,11 +3,7 @@ import{
     Button
 }from'@chakra-ui/react'
 
-import { 
-    BrowserRouter as 
-    Link,
-    useLocation 
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 
 
 const SettingsTab = (data) =>{

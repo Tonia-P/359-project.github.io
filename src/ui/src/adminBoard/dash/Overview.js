@@ -6,9 +6,7 @@ import{
 }from'@chakra-ui/react';
 import OverviewCard from './OverviewCard';
 import OverviewCardTwo from './OverviewCardTwo';
-import { 
-    BrowserRouter as Link
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 
 const Overview = () => {
