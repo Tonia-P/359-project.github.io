@@ -50,14 +50,17 @@ public class EditRandevouzTable {
     }
     
     
-    public ArrayList<Randevouz> databaseToRandevouzT(int dr_id) throws SQLException, ClassNotFoundException{
+    public ArrayList<Randevouz> databaseToRandevouzT(int dr_id, String date_time) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
         ResultSet rs;
         
+        String bf = date_time + " 00:00";
+        String af = date_time + " 23:59";
+        
         try{
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "'");
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "' AND date_time BETWEEN '" + bf + "' AND '" + af + "'");
             while(rs.next()){
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();

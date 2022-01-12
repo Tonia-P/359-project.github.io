@@ -25,9 +25,10 @@ const Dashboard = () => {
         var dets = JSON.stringify(doctorDT);
 
         var urlEnd = 'http://localhost:8080/WebApplication1/RandevouzToPDF';
+        console.log(dets);
         $.ajax({
             url: urlEnd,
-            type: "GET",
+            type: "POST",
             contentType: 'application/json',
             data: dets,
             success: function (result) {

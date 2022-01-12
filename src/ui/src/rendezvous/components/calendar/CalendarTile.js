@@ -5,17 +5,51 @@ import{
     Circle,
 }from'@chakra-ui/react'
 import { DateContext } from '../../../contexts/DateContext';
+import { RendezvousContext } from '../../../contexts/RendezvousContext';
+import { UserContext } from '../../../contexts/UserContext';
 
 import dayjs from 'dayjs';
+import $ from 'jquery';
 
 
 const CalendarTile = ({ date }) => {
 
-    const { selectingDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
+    const { selectingDate, selectedDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
+    const { setAllRendezvous } = useContext(RendezvousContext);
+    const { userInfo } = useContext(UserContext);
+    const RandVals = {
+        doctor_id: userInfo.doctor_id,
+        date_time: selectedDate.format('YYYY-MM-DD')
+    } 
+
+    const getRendevous = () => {
+        var dets = JSON.stringify(RandVals);
+        console.log(dets);
+        var urlEnd = 'http://localhost:8080/WebApplication1/AllRendevous'
+        $.ajax({
+            url: urlEnd,
+            type: "POST",
+            contentType: 'application/json',
+            data: dets,
+            success: function (result) {
+              var json = JSON.parse(result)
+              console.log(result);
+              console.log(json);
+              setAllRendezvous(json);
+              console.log("Success");
+            },
+            error: function (result) {
+              console.log("Fail");
+            }
+        });
+    }
+
+
 
     const handleClick = () =>{
         setSelectingDate(date.hour(8).minute(30));
         setSelectedDate(date.hour(8).minute(30));
+        getRendevous();
     }
 
     return(
