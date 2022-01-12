@@ -4,7 +4,7 @@ import {
     IconButton,
     useColorModeValue
 } from '@chakra-ui/react'
-import React, { useState } from 'react';
+import React from 'react';
 import $ from 'jquery';
 import {TiTickOutline, TiTimesOutline } from "react-icons/ti";
 
@@ -14,7 +14,6 @@ const RowsDetsCrt = (info) =>{
 
 
     const color = useColorModeValue('gray.100', 'gray.700')
-    const [ isHovered, setIsHovered ] = useState(false);
     
     const deleteUser = () =>{
 
@@ -68,12 +67,6 @@ const RowsDetsCrt = (info) =>{
     return(
         <Tr 
             _hover = {{background: color}} 
-            onMouseEnter={() => {
-                setIsHovered(true)
-            }}
-            onMouseLeave={() => {
-                setIsHovered(false)
-            }}
             h='65px'
         >
             <Td>

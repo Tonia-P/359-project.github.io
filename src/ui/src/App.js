@@ -4,12 +4,11 @@ import {
   ChakraProvider,
   Box,
   VStack,
-  Grid,
   theme,
 } from '@chakra-ui/react';
 import Form from './register/Form';
 import Header from './Header';
-import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LoginForm from './landing/LoginForm';
 import LoginFormAdmin from './landing/LoginFormAdmin';
 import Dashboard from './landing/Dashboard';
@@ -31,7 +30,6 @@ function App() {
 
 
   const [isLogged, setIsLogged] = useState(false);
-  const [ isAdmin, setIsAdmin ] = useState(false);
   const [ userInfo, setUserInfo ] = useState({
     username: '',
     email: '',
@@ -70,7 +68,6 @@ function App() {
 
     if(values.username === "admin"){
       values.usertype = "admin";
-      setIsAdmin(true);
     }
 
     var cookie_user = "username = " + values.username + "; expires=Thu, 18 Dec 2022 12:00:00 UTC; path=/";
@@ -93,7 +90,6 @@ function App() {
 
     
     () => {
-      //document.cookie = "username=John Smith; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
       let username = read_cookie('username');
       let password = read_cookie('password');
 
@@ -110,7 +106,6 @@ function App() {
 
 
         var json_vals = JSON.stringify(info);
-        //console.log("JSON  " + json_vals);
     
         var urlEnd = 'http://localhost:8080/WebApplication1/LoginUser';
         $.ajax({
@@ -123,12 +118,10 @@ function App() {
                 const json = JSON.parse(result)
                 console.log(result);
                 setUserInfo(json)
-                //console.log(info);
                 setIsLogged(true)
 
                 if(userInfo.username === "admin"){
                   userInfo.usertype = "admin";
-                  setIsAdmin(true);
                 }
             },
             error: function (result) {

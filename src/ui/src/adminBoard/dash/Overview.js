@@ -2,11 +2,8 @@ import React from 'react';
 import{
     Box,
     Heading,
-    useColorModeValue,
     Wrap
-}from'@chakra-ui/react'
-
-import $ from 'jquery';
+}from'@chakra-ui/react';
 import OverviewCard from './OverviewCard';
 import OverviewCardTwo from './OverviewCardTwo';
 import { 

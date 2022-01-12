@@ -6,13 +6,12 @@ import{
 
 import AgendaSlot from './AgendaSlot';
 import { DateContext  } from '../../../contexts/DateContext';
-import { RendezvousContext  } from '../../../contexts/RendezvousContext';
 import dayjs from 'dayjs';
 
 const Agenda = () => {
 
      
-    const { selectedDate,  selectedTime, setSelectedTime } = useContext(DateContext);
+    const { selectedDate } = useContext(DateContext);
     const [ allRendezvous, setAllRendezvous ] = useState([
         {
             status: 'free',
@@ -40,18 +39,11 @@ const Agenda = () => {
 
 
     useEffect(() => {
-        console.log("CHANGED")
         setAllTimeslots( createTimeslots());
-        
-        
-        
+    
+
     }, [selectedDate])
 
-
-    useEffect(() =>{
-        console.log(allTimeslots)
-    }, [allTimeslots]
-    )
 
  
     const createTimeslots = () => {
@@ -68,7 +60,6 @@ const Agenda = () => {
 
             
             if(allRendezvous.length > counter && allRendezvous[counter].date_time.format('HH:mm') === tmp.format('HH:mm')) {
-                console.log("if " + tmp.format('HH:mm'))
                 tmpp = [
                     ...tmpp,
                     {
@@ -77,11 +68,9 @@ const Agenda = () => {
                     }
                 ]
                 counter++;
-                console.log(counter)
 
             }
             else{
-                console.log("else")
                 tmpp = [
                     ...tmpp,
                     {
@@ -106,8 +95,8 @@ const Agenda = () => {
         <Box  p={3} borderColor='gray.500' overflow='scroll' h='100%' >
             <Heading textAlign='start' py={2} mb={5} size='lg'>Agenda</Heading>
 
-            {allTimeslots && allTimeslots.map(timeslot => <>{ allTimeslots.indexOf(timeslot) !==0 && <AgendaSlot timeslot={timeslot} key={timeslot.time.format('HH:mm')} /> 
-                    } </> )
+            {allTimeslots && allTimeslots.map(timeslot => allTimeslots.indexOf(timeslot) !==0 && <AgendaSlot timeslot={timeslot} key={timeslot.time.format('HH:mm')} /> 
+                    )
                 }
             <Box h='40px'></Box>
         </Box>

@@ -46,11 +46,6 @@ const AgendaSlot = ({ timeslot, rend }) => {
     const { selectedDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
     const { selectedRendezvous, setSelectedRendezvous } = useContext(RendezvousContext);
 
-    useEffect(() => {
-        if(timeslot.rend)
-        console.log(timeslot.rend.date_time.format('YYYY/MM/DD') + " - " + timeslot.time.format('HH:mm'))
-    }, [rend, timeslot])
-
     const handleClick = () =>{
         setSelectingDate(timeslot.time);
         setSelectedDate(timeslot.time);

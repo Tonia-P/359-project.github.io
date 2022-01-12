@@ -14,8 +14,8 @@ const CalendarTile = ({ date }) => {
     const { selectingDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
 
     const handleClick = () =>{
-        setSelectingDate(date);
-        setSelectedDate(date);
+        setSelectingDate(date.hour(8).minute(30));
+        setSelectedDate(date.hour(8).minute(30));
     }
 
     return(

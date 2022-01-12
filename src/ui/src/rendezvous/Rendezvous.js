@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import{
     Grid,
     GridItem,
@@ -54,24 +54,24 @@ const Rendezvous = () => {
 
         <>
         <DateContext.Provider value= { date }>
-        <RendezvousContext.Provider value= { rendezvous }>
-
-            <Grid templateColumns='repeat(5, 1fr)' display='flex' h='100%' position='fixed' w='100%' p={0}>
-                <GridItem background={leftColor} h='100%' w='80%' colSpan={1} display='flex' justifyContent='center'>
-                <Calendar />
-                </GridItem>
-
-
-                <GridItem  h='100%' w='100%' colSpan={1}>
-                    {selectedDate && <Agenda/> }
-                </GridItem>
-                <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
-                    {selectedDate && selectedDate.format('YYYY-MM-DDTHH:mm:ss')}
-                    {selectedRendezvous && selectedRendezvous.status}
-                </GridItem>
-            </Grid>
-
-        </RendezvousContext.Provider>
+            <RendezvousContext.Provider value= { rendezvous }>
+        
+                <Grid templateColumns='repeat(5, 1fr)' display='flex' h='100%' position='fixed' w='100%' p={0}>
+                    <GridItem background={leftColor} h='100%' w='80%' colSpan={1} display='flex' justifyContent='center'>
+                    <Calendar />
+                    </GridItem>
+        
+        
+                    <GridItem  h='100%' w='100%' colSpan={1}>
+                        {selectedDate && <Agenda/> }
+                    </GridItem>
+                    <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
+                        {selectedDate && selectedDate.format('YYYY-MM-DDTHH:mm:ss')}
+                        {selectedRendezvous && selectedRendezvous.status}
+                    </GridItem>
+                </Grid>
+        
+            </RendezvousContext.Provider>
         </DateContext.Provider>
         
 
