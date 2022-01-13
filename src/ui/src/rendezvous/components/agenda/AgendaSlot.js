@@ -1,50 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import{
-    Editable,
-    EditableInput, 
-    EditablePreview,
-    useEditableControls,
-    ButtonGroup,
-    IconButton,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
     Button,
-    Spinner,
     Flex,
-    InputRightElement,
-    InputGroup,
-    Stack,
-    Grid,
-    InputLeftElement,
-    GridItem,
-    Box,
     Avatar,
     Text,
+    Box,
     VStack,
-    Divider,
-    Heading,
-    useColorModeValue,
-    Fade, ScaleFade, Slide, SlideFade,
-    Collapse,
-    Circle,
-    useDisclosure,
-    NumberDecrementStepper,
-    LinkBox,
-    LinkOverlay,
+    useColorModeValue
 }from'@chakra-ui/react'
-import dayjs from 'dayjs';
 
-import $ from 'jquery';
 import { DateContext } from '../../../contexts/DateContext';
 import { RendezvousContext } from '../../../contexts/RendezvousContext';
 
 const AgendaSlot = ({ timeslot, rend }) => {
 
-    const { selectedDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
-    const { selectedRendezvous, setSelectedRendezvous } = useContext(RendezvousContext);
+    const { setSelectingDate, setSelectedDate } = useContext(DateContext);
+    const { setSelectedRendezvous } = useContext(RendezvousContext);
+    const emptyColor = useColorModeValue('gray.200', 'gray.600')
+    const selectedColor = useColorModeValue('purple.500', 'purple.300')
+    const freeColor = useColorModeValue('blue.500', 'blue.300')
 
     const handleClick = () =>{
         setSelectingDate(timeslot.time);
@@ -63,30 +37,41 @@ const AgendaSlot = ({ timeslot, rend }) => {
     }
 
 
-
-
-
     return(
         <Button 
             w='100%' 
             justifyContent='start' 
             background='transparent' 
-            p={2} h='50px' 
+            p={1} 
+            h='60px' 
             border='1px' 
-            borderColor='gray.600' 
+            borderColor='transparent' 
             my={1}
             borderRadius={4}
             onClick={handleClick}
         >
 
-            <Flex justifyItems='start' h='40px' alignItems='center' >
-                <Text fontSize='lg' w='60px' pr={1} fontWeight='bold' borderRight='2px'> {timeslot && timeslot.time.format('HH:mm')} </Text>
+            <Flex justifyItems='start' h='45px' alignItems='center' >
+                <Text fontSize='lg' w='60px' h='50px' pr={4} display='flex' alignItems='center' fontWeight='bold'> {timeslot && timeslot.time.format('HH:mm')} </Text>
 
-                <Avatar name='Kola Tioluwani' ml={2} size='xs' src='https://bit.ly/tioluwani-kolawole' />
+                <Box
+                    w='6px' 
+                    h='47px' 
+                    mr={3}
+                    background={
+                        (timeslot.rend && timeslot.rend.status === 'selected' && selectedColor) ||
+                        (timeslot.rend && timeslot.rend.status === 'free' && freeColor) ||
+                        (!timeslot.rend  && emptyColor)
+                    } 
+                    borderRadius='10px'
+                />
 
-                <Text fontSize='lg'  pl={2} fontWeight='bold' >
-                {timeslot.rend ? timeslot.rend.status : "Add slot"}
-                </Text>
+                {timeslot.rend && timeslot.rend.status !== 'free' && <Avatar name='Kola Tioluwani'  size='sm' src='https://bit.ly/tioluwani-kolawole' />}
+
+
+                    <Text fontSize='md'  pl={2} fontWeight='bold' >
+                        {timeslot.rend ? timeslot.rend.status : "+Add slot"}
+                    </Text>
 
             </Flex>
 

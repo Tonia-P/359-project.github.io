@@ -59,7 +59,7 @@ const CalendarHeader = () => {
 <>
         <Flex w='100%' alignItems='center'>
         
-        <Text fontSize='2xl' fontWeight="bold">
+        <Text fontSize='2xl' fontWeight="bold" colorScheme='teal'>
         {selectingDate.format('MMMM') + ", " + selectingDate.format('YYYY')}
         </Text>
         <Spacer/>

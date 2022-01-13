@@ -27,8 +27,11 @@ const CalendarTile = ({ date }) => {
                 "solid" : date.format('DD/MM/YYYY') === dayjs().format('DD/MM/YYYY') ? 
                 "outline" : 'ghost'
             }
+
+
+            borderRadius='50px'
             onClick={handleClick}
-            h='35px'
+            h='40px'
 
         >
             <Flex 
