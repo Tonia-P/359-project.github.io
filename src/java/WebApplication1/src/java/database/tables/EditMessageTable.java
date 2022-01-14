@@ -12,10 +12,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mainClasses.BloodTest;
 import mainClasses.Message;
+import mainClasses.Randevouz;
 
 /**
  *
@@ -57,6 +59,31 @@ public class EditMessageTable {
             Message bt = gson.fromJson(json, Message.class);
             return bt;
         } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+     public ArrayList<Message> databaseToMessages(ArrayList<Randevouz> rdv) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> messages = new ArrayList<Message>();
+        ResultSet rs;
+        
+        try{
+            for(int i = 0; i < rdv.size(); i++){
+                rs = stmt.executeQuery("SELECT * FROM message WHERE user_id ='" + rdv.get(i).getUser_id() + "'");
+                while(rs.next()){
+                    String json = DB_Connection.getResultsToJSON(rs);
+                    Gson gson = new Gson();
+                    Message rdz = gson.fromJson(json, Message.class);
+                    messages.add(rdz);
+                }
+            }
+            return messages;
+        }
+        catch(Exception e){
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }

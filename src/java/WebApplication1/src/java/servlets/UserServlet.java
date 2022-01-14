@@ -20,6 +20,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import database.tables.EditDoctorTable;
+import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
 import database.tables.EditSimpleUserTable;
 import java.io.IOException;
@@ -41,13 +42,14 @@ import java.util.stream.Stream;
 import mainClasses.Doctor;
 import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
+import mainClasses.Message;
 import mainClasses.Randevouz;
 
 /**
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages"})
 public class UserServlet extends HttpServlet {
     
     
@@ -80,6 +82,45 @@ public class UserServlet extends HttpServlet {
     }
     
 
+    
+    private void getAllMessages(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException{
+        
+        /* Reminder that we need to pass doctor_id to the srvlet so we can return
+           only the doctor's patient's messages, 
+           and to make it so it only retuns one instance of each user.*/
+        
+        
+        
+        
+        ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();
+        ArrayList<Message> mss = new ArrayList<Message>();
+        EditRandevouzTable ert = new EditRandevouzTable();
+        EditMessageTable emt = new EditMessageTable();
+        try(PrintWriter out = response.getWriter()) {
+            rdv = ert.databaseToRandevouzComplete("completed");
+            if(rdv != null){
+                mss = emt.databaseToMessages(rdv);
+                if(mss != null){
+                    String json = new Gson().toJson(mss);
+                    System.out.println("JSON = " + json);
+                    out.println(json);
+                    response.setStatus(200);
+                
+                }
+                else{
+                    response.setStatus(404);
+                }
+            }
+            else{
+                response.setStatus(404);
+            }  
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private void deleteUser(HttpServletRequest request, HttpServletResponse response){
         JSON_Converter jc = new JSON_Converter();
@@ -515,6 +556,9 @@ public class UserServlet extends HttpServlet {
                 }
             }
         break;
+        case "/getMessages":
+            getAllMessages(request, response);
+            break;
 	case "/LoginUser":
             {
                 try {

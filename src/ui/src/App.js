@@ -25,6 +25,7 @@ import PersonalInfo from './dashboard/profile/PersonalInfo';
 import AdminDashBoard from './adminBoard/AdminDashboard';
 import CertifyTable from './adminBoard/CertifyTable';
 import Rendezvous from './rendezvous/Rendezvous';
+import Messages from './Messages/Messages';
 
 function App() {
 
@@ -181,6 +182,7 @@ function App() {
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
                     <Route path="/rendezvous" element={<Rendezvous /> } />
+                    <Route path="/messages" element={<Messages />} />
                 </Routes>
                   
                   

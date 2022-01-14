@@ -76,6 +76,29 @@ public class EditRandevouzTable {
         return null;
     }
     
+    public ArrayList<Randevouz> databaseToRandevouzComplete(String completed) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE status ='" + completed + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Randevouz rdz = gson.fromJson(json, Randevouz.class);
+                randevouz.add(rdz);
+            }
+            return randevouz;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
 
       
      public Randevouz jsonToRandevouz(String json) {
