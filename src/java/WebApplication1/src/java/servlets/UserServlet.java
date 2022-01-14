@@ -14,6 +14,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -46,7 +47,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous"})
 public class UserServlet extends HttpServlet {
     
     
@@ -209,28 +210,40 @@ public class UserServlet extends HttpServlet {
     
     
     private void randevouzToPDF(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException{
-        
+        System.out.println("IN FUNC");
         JSON_Converter jc = new JSON_Converter();
+        System.out.println("MAKING JSON");
+        //System.out.println("JSON = "+jc.getJSONFromAjax(request.getReader()) );
         String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("TO STRING");
+        System.out.println("STRING = " + s);
         EditDoctorTable edt = new EditDoctorTable();
         EditRandevouzTable ert = new EditRandevouzTable();
         EditSimpleUserTable eute = new EditSimpleUserTable();
         Doctor d;
+        Randevouz r;
         SimpleUser u;
         ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();
         
-        
-        d = edt.jsonToDoctor(s);
-        rdv = ert.databaseToRandevouzT(d.getDoctor_id());
-        
+        System.out.println("MAKING DOC");
+        r = ert.jsonToRandevouz(s);
+        System.out.println("GETTING RANDEVOUZ");
+        rdv = ert.databaseToRandevouzT(r.getDoctor_id(), r.getDate_time());   
+        System.out.println("CREATING DOCUMENT");
         Document document = new Document();
         try{
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Daily_Randevouz.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\admin\\Desktop\\client\\359-project.github.io\\src\\java\\WebApplication1\\Daily_Randevouz.pdf"));
             document.open();
             
             Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
             Chunk chunk = new Chunk("Today's Randevous", font);
-            document.add(chunk);
+            Phrase pr = new Phrase();
+            pr.add(chunk);
+            Paragraph para = new Paragraph();
+            para.add(pr);
+            para.setAlignment(Element.ALIGN_CENTER);
+            document.add(para);
+            document.add(new Paragraph("\n"));
             
             
             PdfPTable table = new PdfPTable(6);
@@ -259,8 +272,48 @@ public class UserServlet extends HttpServlet {
             
             document.close();
             writer.close();
+            
+            if(!document.isOpen()){
+                response.setStatus(200);
+            }
+            else{
+                response.setStatus(405);
+            }
         } catch (DocumentException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(FileNotFoundException e){
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
+    
+    
+    private void allRendevous(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException{
+        System.out.println("IN FUNC allRendevous");
+        JSON_Converter jc = new JSON_Converter();
+        System.out.println("MAKING JSON");
+        //System.out.println("JSON = "+jc.getJSONFromAjax(request.getReader()) );
+        String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("TO STRING");
+        System.out.println("STRING = " + s);
+        EditRandevouzTable ert = new EditRandevouzTable();
+      
+        Randevouz r = ert.jsonToRandevouz(s);
+        ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();  
+        try(PrintWriter out = response.getWriter()){
+            System.out.println("GETTING RANDEVOUZ");
+            rdv = ert.databaseToRandevouzT(r.getDoctor_id(), r.getDate_time()); 
+            
+            if(rdv != null){
+                String json = new Gson().toJson(rdv);
+                System.out.println("JSON = " + json);
+                out.println(json);
+                response.setStatus(200);
+                
+            }
+            else{
+                response.setStatus(405);
+            }
         }catch(FileNotFoundException e){
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -462,20 +515,6 @@ public class UserServlet extends HttpServlet {
                 }
             }
         break;
-        
-        case "/RandevouzToPDF":
-            {
-                try {
-                    randevouzToPDF(request, response);
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            
-
 	case "/LoginUser":
             {
                 try {
@@ -494,7 +533,6 @@ public class UserServlet extends HttpServlet {
                 }
             }
 		break;
-
 	default:
 		listUsers(request, response);
 		break;
@@ -527,6 +565,27 @@ public class UserServlet extends HttpServlet {
                        }
                    }
 		break;
+                
+        case "/AllRendevous":
+            {
+                try {
+                    allRendevous(request, response);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+		break;
+                
+        case "/RandevouzToPDF":
+            {
+                try {
+                    System.out.println("IN FUNC CALL");
+                    randevouzToPDF(request, response);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        break;        
                 
         case "/LoginAdmin":
                    {
