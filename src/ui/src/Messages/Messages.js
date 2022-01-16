@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { 
     Table,
     Thead,
@@ -10,21 +10,29 @@ import {
 } from '@chakra-ui/react';
 import $ from 'jquery';
 import MessageRows from './MessageRows';
+import { UserContext } from '../contexts/UserContext';
 
   const Messages = () =>{
 
     const [ messages, setMessages ] = useState([]);
     const [ isLoaded, setIsLoaded ] = useState(false);
-
+    const { userInfo } = useContext(UserContext);
 
     useEffect (
     () => {
+        const docVals = {
+          doctor_id: userInfo.doctor_id
+        }
         var urlEnd2 = 'http://localhost:8080/WebApplication1/getMessages';
+        var dets = JSON.stringify(docVals);
         $.ajax({
             url: urlEnd2,
-            type: "GET",
+            type: "POST",
             contentType: 'application/json',
+            data: dets,
             success: function (result) {
+              console.log(userInfo);
+              console.log(userInfo.doctor_id);
               console.log("Success");
               var json = JSON.parse(result);
               console.log(result);
@@ -41,9 +49,6 @@ import MessageRows from './MessageRows';
     }
     ,
     []);
-
-
-   
 
 
 

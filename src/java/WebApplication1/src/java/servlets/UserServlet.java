@@ -92,13 +92,18 @@ public class UserServlet extends HttpServlet {
         
         
         
-        
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
         ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();
         ArrayList<Message> mss = new ArrayList<Message>();
         EditRandevouzTable ert = new EditRandevouzTable();
         EditMessageTable emt = new EditMessageTable();
+        EditDoctorTable edt = new EditDoctorTable();
+        Doctor d = edt.jsonToDoctor(s);
+        System.out.println("PRIN TO TRY");
+        System.out.println(d.getDoctor_id());
         try(PrintWriter out = response.getWriter()) {
-            rdv = ert.databaseToRandevouzComplete("completed");
+            rdv = ert.databaseToRandevouzComplete("completed", d.getDoctor_id());
             if(rdv != null){
                 mss = emt.databaseToMessages(rdv);
                 if(mss != null){
@@ -556,9 +561,6 @@ public class UserServlet extends HttpServlet {
                 }
             }
         break;
-        case "/getMessages":
-            getAllMessages(request, response);
-            break;
 	case "/LoginUser":
             {
                 try {
@@ -596,6 +598,7 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
        	String action = request.getServletPath();
          System.out.println("in doPost");
+         System.out.println(action);
 	switch (action) {
 	case "/RegisterUser":
 		addUser(request, response);
@@ -609,6 +612,10 @@ public class UserServlet extends HttpServlet {
                        }
                    }
 		break;
+             
+        case "/getMessages":
+            getAllMessages(request, response);
+            break;        
                 
         case "/AllRendevous":
             {

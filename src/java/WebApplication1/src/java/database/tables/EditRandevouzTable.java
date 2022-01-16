@@ -76,14 +76,14 @@ public class EditRandevouzTable {
         return null;
     }
     
-    public ArrayList<Randevouz> databaseToRandevouzComplete(String completed) throws SQLException, ClassNotFoundException{
+    public ArrayList<Randevouz> databaseToRandevouzComplete(String completed, int doctor_id) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
         ResultSet rs;
         
         try{
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE status ='" + completed + "'");
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + doctor_id + "' AND status = '" + completed +"'");
             while(rs.next()){
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();

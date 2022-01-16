@@ -164,6 +164,7 @@ function App() {
                     <>
                       <Route path="/login" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
                       <Route path="/admin" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
+                      <Route path="/messages" element={<Messages />} />
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />
@@ -182,7 +183,6 @@ function App() {
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
                     <Route path="/rendezvous" element={<Rendezvous /> } />
-                    <Route path="/messages" element={<Messages />} />
                 </Routes>
                   
                   
