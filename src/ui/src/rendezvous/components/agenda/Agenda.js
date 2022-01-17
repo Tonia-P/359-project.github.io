@@ -6,51 +6,27 @@ import{
 
 import AgendaSlot from './AgendaSlot';
 import { DateContext  } from '../../../contexts/DateContext';
+import { RendezvousContext  } from '../../../contexts/RendezvousContext';
 import dayjs from 'dayjs';
 
 const Agenda = () => {
 
      
     const { selectedDate } = useContext(DateContext);
-    const [ allRendezvous, setAllRendezvous ] = useState([
-        {
-            status: 'free',
-            user_id: '0',
-            date_time: dayjs('2022-01-12 11:00:00', 'YYYY-MM-DD HH:mm:ss'),
-            price: '50'
-        },
-        {
-            status: 'selected',
-            user_id: '0',
-            date_time: dayjs('2022-01-12 15:00:00', 'YYYY-MM-DD HH:mm:ss'),
-            price: '50'
-        },
-        {
-            status: 'selected',
-            user_id: '0',
-            date_time: dayjs('2022-01-12 16:00:00', 'YYYY-MM-DD HH:mm:ss'),
-            price: '50'
-        },
-    ])
+    const { allRendezvous} = useContext(RendezvousContext)
 
     const [ allTimeslots, setAllTimeslots ] = useState([]);
     const mememe = selectedDate.startOf('day');
 
 
 
-    useEffect(() => {
-        setAllTimeslots( createTimeslots());
-    
-
-    }, [selectedDate])
-
-
  
     const createTimeslots = () => {
         
-
-
         var tmp = mememe.hour(8);
+
+        console.log('In create timeslots - all rends: ')
+        console.log(allRendezvous)
         
         var i = 0;
         var counter = 0;
@@ -59,7 +35,7 @@ const Agenda = () => {
         while( i !== 26 ){
 
             
-            if(allRendezvous.length > counter && allRendezvous[counter].date_time.format('HH:mm') === tmp.format('HH:mm')) {
+            if(allRendezvous && allRendezvous.length > counter && allRendezvous[counter].date_time.format('HH:mm') === tmp.format('HH:mm')) {
                 tmpp = [
                     ...tmpp,
                     {
@@ -75,7 +51,9 @@ const Agenda = () => {
                     ...tmpp,
                     {
                         time: tmp,
-                        rend: null
+                        rend: {
+                            status: 'empty'
+                        }
                     }
                 ]
             }
@@ -87,6 +65,17 @@ const Agenda = () => {
         return tmpp;
 
     }
+
+
+    
+
+    useEffect(() => {
+        console.log("Recreate timeslots.")
+        setAllTimeslots(createTimeslots());
+    
+
+    }, [allRendezvous])
+
 
 
     return(

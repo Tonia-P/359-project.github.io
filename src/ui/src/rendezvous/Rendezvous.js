@@ -55,7 +55,12 @@ const Rendezvous = () => {
                     <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
                         {selectedDate && selectedDate.format('YYYY-MM-DDTHH:mm:ss')}
                         {selectedRendezvous && selectedRendezvous.status}
+                        <Divider></Divider>
+                        {allRendezvous.map(item => {
+          return <li>{item[0]}</li>;
+        })}
                     </GridItem>
+                    
                 </Grid>
         
             </RendezvousContext.Provider>

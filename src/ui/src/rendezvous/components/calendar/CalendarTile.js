@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import{
     Button,
     Flex,
@@ -15,16 +15,22 @@ import $ from 'jquery';
 const CalendarTile = ({ date }) => {
 
     const { selectingDate, selectedDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
-    const { setAllRendezvous } = useContext(RendezvousContext);
+    const { allRendezvous, setAllRendezvous } = useContext(RendezvousContext);
     const { userInfo } = useContext(UserContext);
-    const RandVals = {
-        doctor_id: userInfo.doctor_id,
-        date_time: selectedDate.format('YYYY-MM-DD')
-    } 
+    
 
     const getRendevous = () => {
+        const RandVals = {
+            doctor_id: userInfo.doctor_id,
+            date_time: date.hour(8).minute(30).format('YYYY-MM-DD')
+        } 
+        var returnee = [];
+
+        console.log('in getRends - rendVals')
+        console.log(RandVals);
+
         var dets = JSON.stringify(RandVals);
-        console.log(dets);
+
         var urlEnd = 'http://localhost:8080/WebApplication1/AllRendevous'
         $.ajax({
             url: urlEnd,
@@ -32,24 +38,63 @@ const CalendarTile = ({ date }) => {
             contentType: 'application/json',
             data: dets,
             success: function (result) {
-              var json = JSON.parse(result)
-              console.log(result);
-              console.log(json);
-              setAllRendezvous(json);
-              console.log("Success");
+                var json = JSON.parse(result)
+                //setAllRendezvous(json)
+                console.log("in request - json: ")
+                console.log(json)
+                //console.log(result)
+                console.log("Success");
+
+
+                returnee = dontGetFormattedRends(json)
+                console.log('neeewwwww')
+                console.log(returnee)
+                return returnee;
+              
             },
             error: function (result) {
               console.log("Fail");
             }
         });
+        return returnee;
+
+    }
+
+    const dontGetFormattedRends = (array) => {
+        if (array.length === 0) return [];
+        var newArray= []
+        for (let r of array){
+            newArray =[
+                ...newArray,
+                {
+                date_time: dayjs(r.date_time),
+                status: r.status,
+                randevouz_id: r.randevouz_id,
+                price: r.price,
+                doctor_info: r.doctor_info,
+                user_info:r.userinfo
+            }
+        ]
+        }
+        //console.log('In dont format - new array: ')
+        //console.log(newArray)
+        return newArray;
+        
     }
 
 
 
     const handleClick = () =>{
+
+        console.log("--------------CLICK------------")
+
         setSelectingDate(date.hour(8).minute(30));
         setSelectedDate(date.hour(8).minute(30));
-        getRendevous();
+        //getRendevous();
+        console.log('In handle click - new selected: ' + selectedDate.format('YYYY/MM/DD'))
+        
+        setAllRendezvous(getRendevous)
+        //console.log(allRendezvous);
     }
 
     return(
