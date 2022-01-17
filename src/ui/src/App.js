@@ -26,6 +26,7 @@ import AdminDashBoard from './adminBoard/AdminDashboard';
 import CertifyTable from './adminBoard/CertifyTable';
 import Rendezvous from './rendezvous/Rendezvous';
 import Messages from './Messages/Messages';
+import AllMessages from './Messages/AllMessages';
 
 function App() {
 
@@ -165,6 +166,7 @@ function App() {
                       <Route path="/login" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
                       <Route path="/admin" element={ <> Yo, you are already logged in, {userInfo.username} </> } />
                       <Route path="/messages" element={<Messages />} />
+                      <Route path="/allMessages" element={<AllMessages />} />
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />

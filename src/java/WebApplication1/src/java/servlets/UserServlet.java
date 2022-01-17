@@ -49,7 +49,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages"})
 public class UserServlet extends HttpServlet {
     
     
@@ -81,6 +81,59 @@ public class UserServlet extends HttpServlet {
         }
     }
     
+    private void allMessages(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException{
+        System.out.println("IN ALL MESSAGES");
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditRandevouzTable ert = new EditRandevouzTable();
+        EditMessageTable emt = new EditMessageTable();
+        EditDoctorTable edt = new EditDoctorTable();
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        Doctor d;
+        SimpleUser u;
+        Randevouz temp;
+        ArrayList<Message> mss = new ArrayList<Message>();
+        
+        d = edt.jsonToDoctor(s);
+        
+        System.out.println("DETS: " + d.getDoctor_id() + ", " + d.getUsername());
+        
+        try(PrintWriter out = response.getWriter()){
+            u = esut.databaseToSimpleUserU(d.getUsername());
+            if(u != null){
+                System.out.println("DETS2: " + u.getUser_id());
+                temp = ert.databaseToRandevouzM(d.getDoctor_id(), u.getUser_id());
+                if(temp != null){
+                    System.out.println("DETS3: .." + temp.getDoctor_id() + ", " + temp.getUser_id() + "..");
+                    mss = emt.databaseToAllMessages(temp.getDoctor_id(), temp.getUser_id());
+                    if(mss != null){
+                        String json = new Gson().toJson(mss);
+                        System.out.println("JSON = " + json);
+                        out.println(json);
+                        response.setStatus(200);
+                    }
+                    else{
+                        response.setStatus(404);
+                    }
+                }
+                else{
+                    response.setStatus(404);
+                }
+            }
+            else{
+                response.setStatus(404);
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
 
     
     private void getAllMessages(HttpServletRequest request, HttpServletResponse response)
@@ -100,15 +153,12 @@ public class UserServlet extends HttpServlet {
         EditMessageTable emt = new EditMessageTable();
         EditDoctorTable edt = new EditDoctorTable();
         Doctor d = edt.jsonToDoctor(s);
-        System.out.println("PRIN TO TRY");
-        System.out.println(d.getDoctor_id());
         try(PrintWriter out = response.getWriter()) {
             rdv = ert.databaseToRandevouzComplete("completed", d.getDoctor_id());
             if(rdv != null){
                 mss = emt.databaseToMessages(rdv);
                 if(mss != null){
                     String json = new Gson().toJson(mss);
-                    System.out.println("JSON = " + json);
                     out.println(json);
                     response.setStatus(200);
                 
@@ -617,6 +667,10 @@ public class UserServlet extends HttpServlet {
             getAllMessages(request, response);
             break;        
                 
+        case "/AllMessages":
+            allMessages(request, response);
+            break;  
+            
         case "/AllRendevous":
             {
                 try {

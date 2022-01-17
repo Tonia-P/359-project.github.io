@@ -65,6 +65,29 @@ public class EditMessageTable {
         return null;
     }
     
+    public ArrayList<Message> databaseToAllMessages(int doctor_id, int user_id) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> ms = new ArrayList<Message>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id ='" + doctor_id + "' AND user_id = '" + user_id + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Message mess = gson.fromJson(json, Message.class);
+                ms.add(mess);
+            }
+            return ms;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
      public ArrayList<Message> databaseToMessages(ArrayList<Randevouz> rdv) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

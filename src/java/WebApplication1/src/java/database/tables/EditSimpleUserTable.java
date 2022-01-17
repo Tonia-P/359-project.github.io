@@ -192,14 +192,18 @@ public class EditSimpleUserTable {
     public SimpleUser databaseToSimpleUserU(String username) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-
+        System.out.println("IN DatabaseToSimpleUserU");
+        System.out.println("USERNAME: " + username);
         ResultSet rs;
         try {
+            System.out.println("Before entering DB");
             rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username +"'");
+            System.out.println("After entering DB");
             rs.next();
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
+            System.out.println(user);
             return user;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -207,6 +211,8 @@ public class EditSimpleUserTable {
         }
         return null;
     }
+    
+    
     
     public SimpleUser databaseToSimpleUserID(int user_id) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();
