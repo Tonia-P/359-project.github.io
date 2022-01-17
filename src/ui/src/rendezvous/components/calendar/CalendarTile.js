@@ -17,19 +17,18 @@ const CalendarTile = ({ date }) => {
     const { selectingDate, selectedDate, setSelectingDate, setSelectedDate } = useContext(DateContext);
     const { allRendezvous, setAllRendezvous } = useContext(RendezvousContext);
     const { userInfo } = useContext(UserContext);
-    
 
     const getRendevous = () => {
         const RandVals = {
             doctor_id: userInfo.doctor_id,
             date_time: date.hour(8).minute(30).format('YYYY-MM-DD')
         } 
-        var returnee = [];
 
         console.log('in getRends - rendVals')
         console.log(RandVals);
 
         var dets = JSON.stringify(RandVals);
+        var returnee = [];
 
         var urlEnd = 'http://localhost:8080/WebApplication1/AllRendevous'
         $.ajax({
@@ -49,14 +48,13 @@ const CalendarTile = ({ date }) => {
                 returnee = dontGetFormattedRends(json)
                 console.log('neeewwwww')
                 console.log(returnee)
-                return returnee;
+                setAllRendezvous(returnee);
               
             },
             error: function (result) {
               console.log("Fail");
             }
         });
-        return returnee;
 
     }
 
@@ -93,8 +91,8 @@ const CalendarTile = ({ date }) => {
         //getRendevous();
         console.log('In handle click - new selected: ' + selectedDate.format('YYYY/MM/DD'))
         
-        setAllRendezvous(getRendevous)
-        //console.log(allRendezvous);
+        getRendevous(); 
+        
     }
 
     return(

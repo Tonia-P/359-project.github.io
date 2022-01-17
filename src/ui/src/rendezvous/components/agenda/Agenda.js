@@ -62,6 +62,8 @@ const Agenda = () => {
 
         }
 
+        console.log(tmpp);
+
         return tmpp;
 
     }
@@ -71,10 +73,11 @@ const Agenda = () => {
 
     useEffect(() => {
         console.log("Recreate timeslots.")
+        console.log(allRendezvous);
         setAllTimeslots(createTimeslots());
     
 
-    }, [allRendezvous])
+    }, [allRendezvous]);
 
 
 
