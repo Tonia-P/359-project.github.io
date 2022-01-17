@@ -12,10 +12,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mainClasses.BloodTest;
 import mainClasses.Message;
+import mainClasses.Randevouz;
 
 /**
  *
@@ -57,6 +59,93 @@ public class EditMessageTable {
             Message bt = gson.fromJson(json, Message.class);
             return bt;
         } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Message> databaseToAllMessages(int doctor_id, int user_id) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> ms = new ArrayList<Message>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id ='" + doctor_id + "' AND user_id = '" + user_id + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Message mess = gson.fromJson(json, Message.class);
+                ms.add(mess);
+            }
+            return ms;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+     public ArrayList<Message> databaseToMessages(ArrayList<Randevouz> rdv) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> messages = new ArrayList<Message>();
+        ArrayList<Message> ret = new ArrayList<Message>();
+        ResultSet rs;
+        int p = 1;
+        int o = 0;
+        int f = 0;
+        
+        System.out.println("Size = " + rdv.size());
+        
+        try{
+            for(int i = 0; i < rdv.size(); i++){
+                rs = stmt.executeQuery("SELECT * FROM message WHERE user_id ='" + rdv.get(i).getUser_id() + "'");
+                while(rs.next()){
+                    String json = DB_Connection.getResultsToJSON(rs);
+                    Gson gson = new Gson();
+                    Message rdz = gson.fromJson(json, Message.class);
+                    messages.add(rdz);
+                }
+            }
+            System.out.println("MESSAGE SIZE = " + messages.size());
+            String pso = new Gson().toJson(messages);
+            System.out.println("Randevouz LIST: " + pso);
+            
+            for(int i = 0; i < messages.size(); i++){
+                if(!ret.isEmpty()){
+                    for(int j = 0; j < ret.size(); j++){
+                        if(messages.get(i).getUser_id() == ret.get(j).getUser_id()){
+                            if(messages.get(i).getMessage_id() > ret.get(j).getMessage_id()){
+                                
+                                o = j;
+                                f = 1;
+                            }
+                            else{
+                               p = 0; 
+                            }
+                        }
+                    }
+                    if(p == 1){
+                        if(f == 1){
+                            ret.set(o, messages.get(i));
+                        }
+                        else{
+                            ret.add(messages.get(i));
+                        }
+                    }
+                }
+                else{
+                    ret.add(messages.get(i));
+                }
+                p = 1;
+            }
+            
+            return ret;
+        }
+        catch(Exception e){
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }
