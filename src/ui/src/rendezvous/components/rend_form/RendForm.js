@@ -6,7 +6,8 @@ import{
     Icon,
     Divider,
     Button,
-    HStack
+    HStack,
+    Textarea
 }from'@chakra-ui/react'
 
 import { DateContext  } from '../../../contexts/DateContext';
@@ -18,13 +19,14 @@ const RendForm = () => {
 
      
     const { selectedDate } = useContext(DateContext);
-    const { allRendezvous} = useContext(RendezvousContext)
+    const { selectedRendezvous } = useContext(RendezvousContext)
+    const [ isAdd, setIsAdd ] = useState(false)
 
-    const [ allTimeslots, setAllTimeslots ] = useState([]);
-    const mememe = selectedDate.startOf('day');
+
+
     var relativeTime = require('dayjs/plugin/relativeTime')
-dayjs.extend(relativeTime)
-var fromNow = selectedDate.fromNow()
+    dayjs.extend(relativeTime)
+    var fromNow = selectedDate.fromNow()
 
 
     useEffect(() => {
@@ -33,37 +35,50 @@ var fromNow = selectedDate.fromNow()
         
     }, [selectedDate])
 
+    useEffect(() =>{
+        if(selectedRendezvous.status === 'empty') setIsAdd(true)
+        else setIsAdd(false)
+    }, [selectedRendezvous])
+
 
     return(
 
         <>
         <Box  p={3} borderColor='gray.500' overflow='scroll' h='100%' >
-            <Heading textAlign='center' py={2} mb={5} size='md'>Add slot</Heading>
+            <Heading textAlign='center' py={2} mb={5} size='md'>
+                {isAdd ? 'Add slot' : 'Edit slot' } 
+            </Heading>
 
-            <HStack my={2}>
+            <HStack my={3}>
                 <Icon as={BsCalendar} />
-                <Text>{selectedDate.format('dddd D, YYYY')}</Text>
+                <Text fontSize='lg'>{selectedDate.format('dddd D, YYYY')}</Text>
             </HStack>
 
 
-            <HStack my={2} display='flex' alignItems='baseline'>
-                <Icon as={BsFillClockFill} />
-                <Text>{selectedDate.format('HH:mm')}</Text>
-                <Text fontSize='sm'>{'(' + fromNow + ')'}</Text>
+            <HStack my={3} display='flex' alignItems='baseline'>
+                <Icon as={BsFillClockFill} height='20px'/>
+                <Text fontSize='lg'>{selectedDate.format('HH:mm')}</Text>
+                <Text fontSize='xs'>{'(' + fromNow + ')'}</Text>
             </HStack>
 
             <Divider/>
-            <HStack my={2} display='flex' alignItems='baseline'>
-                <Text>Status: </Text>
+            <HStack my={3} display='flex' alignItems='baseline'>
+                <Text fontSize='lg'>Status: {selectedRendezvous.status} </Text>
             </HStack>
 
-            <HStack my={2} display='flex' alignItems='baseline'>
-                <Text>Doctor notes: </Text>
+            <HStack my={2} mt={4} display='flex' alignItems='baseline'>
+                <Text fontSize='lg'>Add note </Text>
             </HStack>
 
+            <Textarea
+                placeholder='Here is a sample placeholder'
+                size='sm'
+                resize='none'
+            />
+
 
             <HStack my={2} display='flex' alignItems='baseline'>
-                <Text>Patient notes: </Text>
+                <Text fontSize='lg'>Patient notes: </Text>
             </HStack>
 
             <Button>Add slot</Button>

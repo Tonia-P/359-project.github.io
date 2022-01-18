@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,10 +74,14 @@ public class EditRandevouzTable {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
+        ArrayList<String> tmp = new ArrayList<String>();
+        ArrayList<Randevouz> ret = new ArrayList<Randevouz>();
         ResultSet rs;
-        
+        int j = 0;
+        int o = 0;
         String bf = date_time + " 00:00";
         String af = date_time + " 23:59";
+        
         
         try{
             rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "' AND date_time BETWEEN '" + bf + "' AND '" + af + "'");
@@ -86,7 +91,22 @@ public class EditRandevouzTable {
                 Randevouz rdz = gson.fromJson(json, Randevouz.class);
                 randevouz.add(rdz);
             }
-            return randevouz;
+            for(int i = 0; i < randevouz.size(); i++){
+                tmp.add(randevouz.get(i).getDate_time());
+            }
+            Collections.sort(tmp);
+            while(j < randevouz.size()){
+                if(!randevouz.get(o).getDate_time().equals(tmp.get(j))){
+                    o++;
+                }
+                else{
+                    ret.add(randevouz.get(o));
+                    o = 0;
+                    j++;
+                }
+            }
+            
+            return ret;
         }
         catch(Exception e){
             System.err.println("Got an exception! ");

@@ -22,7 +22,10 @@ const Rendezvous = () => {
 
 
     const [ selectingDate, setSelectingDate] = useState(dayjs() );
-    const [ selectedDate, setSelectedDate ] = useState( dayjs().minute(Math.floor(dayjs().minute())) );
+    const [ selectedDate, setSelectedDate ] = useState( ()=>{
+        if(dayjs().minute() <30) return dayjs().minute(30);
+        else return dayjs().add(1, 'hour').minute(0);
+    });
     const [ selectedTime, setSelectedTime ] = useState(dayjs('2019-01-25') );
     const [ allRendezvous, setAllRendezvous ] = useState([{
         date_time: dayjs(dayjs()),
