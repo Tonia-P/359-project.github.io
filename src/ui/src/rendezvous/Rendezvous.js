@@ -13,6 +13,7 @@ import { RendezvousContext } from '../contexts/RendezvousContext';
 import dayjs from 'dayjs'
 import Agenda from './components/agenda/Agenda';
 import './style.css'
+import RendForm from './components/rend_form/RendForm';
 
 
 const Rendezvous = () => {
@@ -23,7 +24,12 @@ const Rendezvous = () => {
     const [ selectingDate, setSelectingDate] = useState(dayjs() );
     const [ selectedDate, setSelectedDate ] = useState( dayjs().minute(Math.floor(dayjs().minute())) );
     const [ selectedTime, setSelectedTime ] = useState(dayjs('2019-01-25') );
-    const [ allRendezvous, setAllRendezvous ] = useState([])
+    const [ allRendezvous, setAllRendezvous ] = useState([{
+        date_time: dayjs(dayjs()),
+        rend: {
+            status: 'selected'
+        }
+    }])
     const [ selectedRendezvous, setSelectedRendezvous ] = useState({})
  
 
@@ -53,12 +59,7 @@ const Rendezvous = () => {
                         {selectedDate && <Agenda/> }
                     </GridItem>
                     <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
-                        {selectedDate && selectedDate.format('YYYY-MM-DDTHH:mm:ss')}
-                        {selectedRendezvous && selectedRendezvous.status}
-                        <Divider></Divider>
-                        {allRendezvous.map(item => {
-          return <li>{item[0]}</li>;
-        })}
+                        <RendForm/>
                     </GridItem>
                     
                 </Grid>

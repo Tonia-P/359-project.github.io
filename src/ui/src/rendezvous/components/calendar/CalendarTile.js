@@ -60,6 +60,12 @@ const CalendarTile = ({ date }) => {
 
     }
 
+
+    useEffect(() => {
+        console.log("I hate my life (after setAllRends")
+            console.log(allRendezvous)
+    }, [allRendezvous])
+
     const dontGetFormattedRends = (array) => {
         if (array.length === 0) return [];
         var newArray= []
@@ -93,8 +99,8 @@ const CalendarTile = ({ date }) => {
         //getRendevous();
         console.log('In handle click - new selected: ' + selectedDate.format('YYYY/MM/DD'))
         
-        setAllRendezvous(getRendevous)
-        //console.log(allRendezvous);
+        setAllRendezvous(getRendevous())
+        console.log(allRendezvous);
     }
 
     return(

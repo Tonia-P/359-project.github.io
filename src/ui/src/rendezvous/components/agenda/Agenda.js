@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import{
     Box,
     Heading,
+    Button,
 }from'@chakra-ui/react'
+import {AiFillFilePdf} from 'react-icons/ai';
 
 import AgendaSlot from './AgendaSlot';
 import { DateContext  } from '../../../contexts/DateContext';
@@ -82,7 +84,8 @@ const Agenda = () => {
 
         <>
         <Box  p={3} borderColor='gray.500' overflow='scroll' h='100%' >
-            <Heading textAlign='start' py={2} mb={5} size='lg'>Agenda</Heading>
+            <Heading textAlign='center' py={2} mb={5} size='md'>{selectedDate.format('dddd D, YYYY')}</Heading>
+            <Button colorScheme='red'   leftIcon={<AiFillFilePdf />} size='sm' variant='outline'>PDF </Button>
 
             {allTimeslots && allTimeslots.map(timeslot => allTimeslots.indexOf(timeslot) !==0 && <AgendaSlot timeslot={timeslot} key={timeslot.time.format('HH:mm')} /> 
                     )
