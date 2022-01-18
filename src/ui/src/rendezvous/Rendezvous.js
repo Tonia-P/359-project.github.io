@@ -33,7 +33,7 @@ const Rendezvous = () => {
             status: 'selected'
         }
     }])
-    const [ selectedRendezvous, setSelectedRendezvous ] = useState({})
+    const [ selectedRendezvous, setSelectedRendezvous ] = useState()
  
 
     const date = useMemo(() => ({ selectingDate, setSelectingDate, selectedDate, setSelectedDate, selectedTime, setSelectedTime }), 
@@ -62,7 +62,9 @@ const Rendezvous = () => {
                         {selectedDate && <Agenda/> }
                     </GridItem>
                     <GridItem  h='100%' w='100%' colSpan={1} borderLeft='1px' borderColor='gray.500'>
+                        {selectedRendezvous &&
                         <RendForm/>
+}
                     </GridItem>
                     
                 </Grid>

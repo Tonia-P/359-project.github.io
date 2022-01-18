@@ -72,7 +72,7 @@ const CalendarTile = ({ date }) => {
                 randevouz_id: r.randevouz_id,
                 price: r.price,
                 doctor_info: r.doctor_info,
-                user_info:r.userinfo
+                user_info:r.user_info
             }
         ]
         }
