@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import mainClasses.Randevouz;
 import java.util.List;
 import java.util.ArrayList;
+import mainClasses.Message;
 import servlets.GetUser;
 
 /**
@@ -183,6 +184,123 @@ public class EditSimpleUserTable {
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
             return user;
         } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<Message> databaseToMessages(ArrayList<Randevouz> rdv) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> messages = new ArrayList<Message>();
+        ArrayList<Message> ret = new ArrayList<Message>();
+        ResultSet rs;
+        int p = 1;
+        int o = 0;
+        int f = 0;
+        
+        System.out.println("Size = " + rdv.size());
+        
+        try{
+            for(int i = 0; i < rdv.size(); i++){
+                rs = stmt.executeQuery("SELECT * FROM message WHERE user_id ='" + rdv.get(i).getUser_id() + "'");
+                while(rs.next()){
+                    String json = DB_Connection.getResultsToJSON(rs);
+                    Gson gson = new Gson();
+                    Message rdz = gson.fromJson(json, Message.class);
+                    messages.add(rdz);
+                }
+            }
+            System.out.println("MESSAGE SIZE = " + messages.size());
+            String pso = new Gson().toJson(messages);
+            System.out.println("Randevouz LIST: " + pso);
+            
+            for(int i = 0; i < messages.size(); i++){
+                if(!ret.isEmpty()){
+                    for(int j = 0; j < ret.size(); j++){
+                        if(messages.get(i).getUser_id() == ret.get(j).getUser_id()){
+                            if(messages.get(i).getMessage_id() > ret.get(j).getMessage_id()){
+                                
+                                o = j;
+                                f = 1;
+                            }
+                            else{
+                               p = 0; 
+                            }
+                        }
+                    }
+                    if(p == 1){
+                        if(f == 1){
+                            ret.set(o, messages.get(i));
+                        }
+                        else{
+                            ret.add(messages.get(i));
+                        }
+                    }
+                }
+                else{
+                    ret.add(messages.get(i));
+                }
+                p = 1;
+            }
+            
+            return ret;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public ArrayList<SimpleUser> databaseToUsernames(ArrayList<Randevouz> rdv) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<SimpleUser> user = new ArrayList<SimpleUser>();
+        ArrayList<SimpleUser> ret = new ArrayList<SimpleUser>();
+        ResultSet rs;
+        int p = 1;
+        int o = 0;
+        int f = 0;
+        
+        System.out.println("Size = " + rdv.size());
+        
+        try{
+            for(int i = 0; i < rdv.size(); i++){
+                rs = stmt.executeQuery("SELECT * FROM users WHERE user_id ='" + rdv.get(i).getUser_id() + "'");
+                while(rs.next()){
+                    String json = DB_Connection.getResultsToJSON(rs);
+                    Gson gson = new Gson();
+                    SimpleUser rdz = gson.fromJson(json, SimpleUser.class);
+                    user.add(rdz);
+                }
+            }        
+            
+            System.out.println("MESSAGE SIZE = " + user.size());
+            String pso = new Gson().toJson(user);
+            System.out.println("Randevouz LIST: " + pso);
+            
+            for(int i = 0; i < user.size(); i++){
+                if(!ret.isEmpty()){
+                    for(int j = 0; j < ret.size(); j++){
+                        if(user.get(i).getUser_id() == ret.get(j).getUser_id()){
+                            p = 0; 
+                        }
+                    }
+                    if(p == 1){
+                        ret.add(user.get(i));
+                    }
+                }
+                else{
+                    ret.add(user.get(i));
+                }
+                p = 1;
+            }
+            
+            return ret;
+        }
+        catch(Exception e){
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
         }

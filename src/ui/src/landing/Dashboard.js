@@ -20,11 +20,11 @@ const Dashboard = () => {
     doctor_id: '4'
   };
 
-  const retPDF = () => {
+  const getUsernames = () => {
 
         var dets = JSON.stringify(doctorDT);
 
-        var urlEnd = 'http://localhost:8080/WebApplication1/RandevouzToPDF';
+        var urlEnd = 'http://localhost:8080/WebApplication1/RendevousToUsers';
         console.log(dets);
         $.ajax({
             url: urlEnd,
@@ -32,6 +32,8 @@ const Dashboard = () => {
             contentType: 'application/json',
             data: dets,
             success: function (result) {
+              var ret = JSON.parse(result);
+              console.log(ret);
               console.log("Success");
             },
             error: function (result) {
@@ -54,8 +56,8 @@ const Dashboard = () => {
 
       <DocList />
 
-      <Button onClick={retPDF}>
-        RANDEVOUZ PDF
+      <Button onClick={getUsernames}>
+        GET USERNAMES
       </Button>
 
       <Fitness/>

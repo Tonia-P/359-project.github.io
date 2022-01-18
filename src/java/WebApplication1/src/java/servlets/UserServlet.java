@@ -49,7 +49,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers"})
 public class UserServlet extends HttpServlet {
     
     
@@ -415,6 +415,43 @@ public class UserServlet extends HttpServlet {
         }
     }
     
+    private void allRendevousUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException{
+        System.out.println("IN FUNC allRendevous");
+        JSON_Converter jc = new JSON_Converter();
+        System.out.println("MAKING JSON");
+        //System.out.println("JSON = "+jc.getJSONFromAjax(request.getReader()) );
+        String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("TO STRING");
+        System.out.println("STRING = " + s);
+        EditRandevouzTable ert = new EditRandevouzTable();
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        ArrayList<SimpleUser> sp = new ArrayList<SimpleUser>();
+        Randevouz r = ert.jsonToRandevouz(s);
+        ArrayList<Randevouz> rdv = new ArrayList<Randevouz>();  
+        try(PrintWriter out = response.getWriter()){
+            System.out.println("GETTING RANDEVOUZ");
+            rdv = ert.databaseToRandevouzComplete("completed", r.getDoctor_id());
+            
+            if(rdv != null){
+                sp = esut.databaseToUsernames(rdv);
+                if(sp != null){
+                    String json = new Gson().toJson(sp);
+                    System.out.println("JSON = " + json);
+                    out.println(json);
+                    response.setStatus(200);
+                }
+                else{
+                    response.setStatus(404);
+                }   
+            }
+            else{
+                response.setStatus(405);
+            }
+        }catch(FileNotFoundException e){
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
     
     private void listUsersArr (HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException, SQLException{
@@ -670,6 +707,16 @@ public class UserServlet extends HttpServlet {
         case "/AllMessages":
             allMessages(request, response);
             break;  
+            
+        case "/RendevousToUsers":
+                   {
+                       try {
+                           allRendevousUsers(request, response);
+                       } catch (SQLException | ClassNotFoundException ex) {
+                           Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }
+            break;
             
         case "/AllRendevous":
             {
