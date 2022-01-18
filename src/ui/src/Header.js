@@ -95,6 +95,7 @@ const Header = (isLogged) => {
               <Link to="/Users"><MenuItem>User List</MenuItem></Link>
               <Link to="/Certify"><MenuItem>Certify Doctors</MenuItem></Link>
               <Link to="/Messages"><MenuItem>Messages</MenuItem></Link>
+              <Link to="/Rendezvous"><MenuItem>Rendezvous</MenuItem></Link>
               <MenuDivider />
                 <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
                 

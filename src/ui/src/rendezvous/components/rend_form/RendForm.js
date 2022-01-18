@@ -20,6 +20,7 @@ import { RendezvousContext  } from '../../../contexts/RendezvousContext';
 import { UserContext  } from '../../../contexts/UserContext';
 import dayjs from 'dayjs';
 import { BsCalendar, BsFillClockFill } from "react-icons/bs";
+import $ from 'jquery';
 
 const RendForm = () => {
 
@@ -29,6 +30,42 @@ const RendForm = () => {
     const { userInfo } = useContext(UserContext)
     const [ isAdd, setIsAdd ] = useState(false)
     const [ isFuture, setIsFuture ] = useState(false)
+    const[ price, setPrice] = useState({
+        value: 0
+    });
+    const[info, setInfo] = useState({
+        text: ""
+    });
+
+    const addSlot = () => {
+        const vals = {
+            doctor_id: userInfo.doctor_id,
+            user_id: "-1",
+            date_time: selectedDate.format("YYYY-MM-DD HH:mm:ss"),
+            price: price,
+            doctor_info: info,
+            user_info: "-2",
+            status: selectedRendezvous.status
+        }
+        var json_vl = JSON.stringify(vals);
+
+        var urlEnd = 'http://localhost:8080/WebApplication1/AddSlot';
+        $.ajax({
+            url: urlEnd,
+            type: "POST",
+            contentType: 'application/json',
+            data: json_vl,
+            success: function (result) {
+                const json = JSON.parse(result)
+                console.log(json);
+                console.log("SUCCESS")
+                
+            },
+            error: function (result) {
+                console.log("FAIL")
+            }
+        });
+    }
 
 
 
@@ -95,9 +132,11 @@ const RendForm = () => {
                             <Text fontSize='lg'>Add note </Text>
                         </HStack>
 
-                        <Textarea
+                        <Input
                             size='sm'
+                            type='text'
                             resize='none'
+                            onChange={e => setInfo(e.target.value)}
                         />
 
                         <HStack my={2} mt={4} display='flex' alignItems='baseline'>
@@ -111,7 +150,7 @@ const RendForm = () => {
                               fontSize='1.2em'
                               children='$'
                             />
-                            <Input  placeholder='Enter price' />
+                            <Input  placeholder='Enter price' onChange={e => setPrice(e.target.value)} />
                         </InputGroup>
                     </>
 
@@ -139,7 +178,7 @@ const RendForm = () => {
         }           
 
         {isAdd && !isFuture &&  <Text mt={3}>Cannot add slots for past dates (unless you own a time machine)</Text>}
-        {isAdd && isFuture  &&  <Button mt={3}>Add slot</Button>}
+        {isAdd && isFuture  &&  <Button mt={3} onClick={addSlot}>Add slot</Button>}
         {!isAdd &&  
             <Flex justifyContent='center' w='100%'>
                 <Button mt={3} mr={2} border='2px' background='transparent' borderColor='green.300' color='green.400'>Mark as done</Button>

@@ -49,7 +49,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot"})
 public class UserServlet extends HttpServlet {
     
     
@@ -132,6 +132,31 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    private void addSlot(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditRandevouzTable ert = new EditRandevouzTable();
+        Randevouz r,g;
+        try(PrintWriter out = response.getWriter()){
+            ert.addRandevouzFromJSON(s);
+            r = ert.jsonToRandevouz(s);
+            g = ert.databaseToRandevouzD(r.getDate_time());
+            if(g != null){
+                String json = new Gson().toJson(g);
+                out.println(json);
+                response.setStatus(200);
+            }
+            else{
+                response.setStatus(403);
+            }   
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 
@@ -709,13 +734,15 @@ public class UserServlet extends HttpServlet {
             break;  
             
         case "/RendevousToUsers":
-                   {
-                       try {
-                           allRendevousUsers(request, response);
-                       } catch (SQLException | ClassNotFoundException ex) {
-                           Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                   }
+            try {
+                allRendevousUsers(request, response);
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            break;
+            
+        case "/AddSlot":
+            addSlot(request, response);
             break;
             
         case "/AllRendevous":
