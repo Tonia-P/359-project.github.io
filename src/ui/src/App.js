@@ -27,6 +27,7 @@ import CertifyTable from './adminBoard/CertifyTable';
 import Rendezvous from './rendezvous/Rendezvous';
 import Messages from './Messages/Messages';
 import AllMessages from './Messages/AllMessages';
+import FindDoctor from './find_doctor/FindDoctor';
 
 function App() {
 
@@ -185,6 +186,7 @@ function App() {
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
                     <Route path="/rendezvous" element={<Rendezvous /> } />
+                    <Route path="/find_doctor" element={<FindDoctor /> } />
                 </Routes>
                   
                   

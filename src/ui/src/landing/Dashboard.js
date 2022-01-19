@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import DocList from '../dashboard/DocList';
 import $ from 'jquery';
 import {
   Heading, Button
@@ -48,13 +47,11 @@ const Dashboard = () => {
       <>
 
       <Heading>Welcome back, { userInfo.username }</Heading>
-        <DocList />
+     
 
         <Button>
           <Link to="/Profile">Profile</Link>
         </Button>
-
-      <DocList />
 
       <Button onClick={getUsernames}>
         GET USERNAMES
