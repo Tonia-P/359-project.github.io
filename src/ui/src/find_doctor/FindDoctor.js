@@ -18,12 +18,12 @@ import { UserContext } from '../contexts/UserContext';
 const FindDoctor = () => {
 
     const [ allDoctors, setAllDoctors ] = useState([]);
-    const [ selectedDoc, setSelectedDoc ] = useState([]);
+    const [ selectedDoctor, setSelectedDoctor ] = useState({});
     const [ isLoaded, setIsLoaded ] = useState(false)
     const { userInfo } = useContext(UserContext);
 
-    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoc, setSelectedDoc }), 
-    [ allDoctors, setAllDoctors, selectedDoc, setSelectedDoc ]);
+    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor }), 
+    [ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor ]);
 
     useEffect(
         () => {
@@ -55,9 +55,9 @@ const FindDoctor = () => {
     return(
 
 <MapContext.Provider value= { doctor }>
-        <HStack h='100%' position='fixed' w='100%'>
+        <HStack h='100%' position='fixed' w='100%' display='flex' alignItems='flex-start'>
 
-            <VStack w='300px' background='gray.600' h='100%'>
+            <VStack w='300px' background='' h='100%'>
                 <DocList/>
             </VStack>
 

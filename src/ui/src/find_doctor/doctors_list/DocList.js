@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
     Text,
     SimpleGrid,
-    Spinner
+    Spinner,
+    Box,
+    VStack
   } from '@chakra-ui/react';
   import DocRow from './DocRow';
   import $ from 'jquery';
@@ -12,8 +14,8 @@ import {
 
 const DocList = (values, isLogged) => {
 
-    const [ doctors, setDoctors ] = useState([]);
-    const [ isLoaded, setIsLoaded ] = useState(false);
+
+
 
     const { allDoctors } = useContext(MapContext)
 
@@ -22,12 +24,16 @@ const DocList = (values, isLogged) => {
 
         <>
 
-        <Text>All doctors</Text>
+
+        <Box background='gray.800' w='100%' h='60px' display='flex' alignItems='center' justifyContent='center'>
+          <Text >All doctors</Text>
+        </Box>
 
        
-        <SimpleGrid columns={[2, 3, 4]}  spacing='20px'>
-            {allDoctors.map(doctor => <DocRow values={doctor} key={doctor.doctor_id} />)}
-         </SimpleGrid>
+        <VStack  spacing='0px' overflow='scroll'>
+            {allDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)}
+            <Box h='100px'></Box>
+         </VStack>
         
 
 
