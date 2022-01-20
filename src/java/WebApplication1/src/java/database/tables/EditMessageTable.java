@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import mainClasses.BloodTest;
 import mainClasses.Message;
 import mainClasses.Randevouz;
+import mainClasses.SimpleUser;
 
 /**
  *
@@ -93,6 +94,8 @@ public class EditMessageTable {
         Statement stmt = con.createStatement();
         ArrayList<Message> messages = new ArrayList<Message>();
         ArrayList<Message> ret = new ArrayList<Message>();
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        SimpleUser us;
         ResultSet rs;
         int p = 1;
         int o = 0;
@@ -107,6 +110,8 @@ public class EditMessageTable {
                     String json = DB_Connection.getResultsToJSON(rs);
                     Gson gson = new Gson();
                     Message rdz = gson.fromJson(json, Message.class);
+                    us = esut.databaseToSimpleUserID(rdz.getUser_id());
+                    rdz.setUsername(us.getUsername());
                     messages.add(rdz);
                 }
             }
