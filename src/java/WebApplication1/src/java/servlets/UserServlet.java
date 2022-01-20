@@ -98,6 +98,7 @@ public class UserServlet extends HttpServlet {
         Doctor d;
         SimpleUser u;
         Randevouz temp;
+        Message m;
         ArrayList<Message> mss = new ArrayList<Message>();
         
         d = edt.jsonToDoctor(s);
@@ -105,7 +106,8 @@ public class UserServlet extends HttpServlet {
         System.out.println("DETS: " + d.getDoctor_id() + ", " + d.getUsername());
         
         try(PrintWriter out = response.getWriter()){
-            u = esut.databaseToSimpleUserU(d.getUsername());
+            m = emt.databaseToMessageS(d.getDoctor_id(), d.getUsername());
+            u = esut.databaseToSimpleUserID(m.getUser_id());
             if(u != null){
                 System.out.println("DETS2: " + u.getUser_id());
                 temp = ert.databaseToRandevouzM(d.getDoctor_id(), u.getUser_id());
