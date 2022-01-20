@@ -179,6 +179,7 @@ public class UserServlet extends HttpServlet {
         EditDoctorTable edt = new EditDoctorTable();
         Doctor d = edt.jsonToDoctor(s);
         try(PrintWriter out = response.getWriter()) {
+            System.out.println(d.getDoctor_id());
             rdv = ert.databaseToRandevouzComplete("completed", d.getDoctor_id());
             if(rdv != null){
                 mss = emt.databaseToMessages(rdv);

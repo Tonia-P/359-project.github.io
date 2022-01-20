@@ -105,7 +105,7 @@ public class EditMessageTable {
         
         try{
             for(int i = 0; i < rdv.size(); i++){
-                rs = stmt.executeQuery("SELECT * FROM message WHERE user_id ='" + rdv.get(i).getUser_id() + "'");
+                rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id ='" + rdv.get(i).getDoctor_id() +"' AND user_id ='" + rdv.get(i).getUser_id() + "'");
                 while(rs.next()){
                     String json = DB_Connection.getResultsToJSON(rs);
                     Gson gson = new Gson();
