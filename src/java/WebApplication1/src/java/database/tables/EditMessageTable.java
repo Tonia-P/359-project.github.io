@@ -149,7 +149,7 @@ public class EditMessageTable {
             }
             
             String sap = new Gson().toJson(ret);
-            System.out.println("Randevouz LIST: " + sap);
+            System.out.println("Message LIST: " + sap);
             
             return ret;
         }
