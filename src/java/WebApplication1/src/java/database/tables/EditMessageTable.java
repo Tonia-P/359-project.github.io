@@ -148,6 +148,9 @@ public class EditMessageTable {
                 p = 1;
             }
             
+            String sap = new Gson().toJson(ret);
+            System.out.println("Message LIST: " + sap);
+            
             return ret;
         }
         catch(Exception e){

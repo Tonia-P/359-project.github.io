@@ -42,7 +42,7 @@ const MessageRows = (info) =>{
             $.ajax({
                 url: urlEnd2,
                 type: "POST",
-                contentType: 'application/json',
+                contentType: 'application/pdf',
                 data: dets,
                 success: function (result) {
                     console.log(info.info.sender);
