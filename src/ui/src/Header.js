@@ -46,7 +46,7 @@ const Header = (isLogged) => {
 
     return (
 
-      <Box className='kappa' p={2} borderBottomWidth='2px'  sx={{ position: '-webkit-sticky', /* Safari */ position: 'sticky', top: '0',}}>
+      <Box className='kappa' p={2} borderBottomWidth='0px'  sx={{ position: '-webkit-sticky', /* Safari */ position: 'sticky', top: '0',}}>
         <Grid templateColumns='repeat(12, 1fr)'  align='center' h='30px'>
             <GridItem colSpan={1} h='7' justifySelf="flex-start" />
             <GridItem colSpan={1} h='7' justifySelf="flex-start" >
