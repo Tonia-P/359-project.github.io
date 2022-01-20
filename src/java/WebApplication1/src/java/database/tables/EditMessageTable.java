@@ -120,9 +120,15 @@ public class EditMessageTable {
             System.out.println("Randevouz LIST: " + pso);
             
             for(int i = 0; i < messages.size(); i++){
+                System.out.println("---------" + "I: " + i + "---------");
                 if(!ret.isEmpty()){
                     for(int j = 0; j < ret.size(); j++){
+                        System.out.println("---------" + "J: " + j + "---------");
+                        System.out.println("User ID: " + messages.get(i).getUser_id());
+                        System.out.println("User ID 2: " + ret.get(j).getUser_id());
                         if(messages.get(i).getUser_id() == ret.get(j).getUser_id()){
+                            System.out.println("MESSAGE ID: " + messages.get(i).getMessage_id());
+                            System.out.println("MESSAGE ID 2: " + ret.get(j).getMessage_id());
                             if(messages.get(i).getMessage_id() > ret.get(j).getMessage_id()){
                                 
                                 o = j;
@@ -136,6 +142,7 @@ public class EditMessageTable {
                     if(p == 1){
                         if(f == 1){
                             ret.set(o, messages.get(i));
+                            f= 0;
                         }
                         else{
                             ret.add(messages.get(i));
