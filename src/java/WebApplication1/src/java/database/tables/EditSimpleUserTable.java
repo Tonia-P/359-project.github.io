@@ -321,7 +321,6 @@ public class EditSimpleUserTable {
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
-            System.out.println(user);
             return user;
         } catch (Exception e) {
             System.err.println("Got an exception! ");
