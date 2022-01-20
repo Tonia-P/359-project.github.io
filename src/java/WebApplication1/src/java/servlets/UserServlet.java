@@ -35,8 +35,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 import mainClasses.Doctor;
@@ -44,6 +48,7 @@ import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
 import mainClasses.Message;
 import mainClasses.Randevouz;
+
 
 /**
  *
@@ -395,8 +400,29 @@ public class UserServlet extends HttpServlet {
             document.close();
             writer.close();
             
-            if(!document.isOpen()){
+            File file = new File("C:\\Users\\admin\\Desktop\\client\\359-project.github.io\\src\\java\\WebApplication1\\Daily_Randevouz.pdf");
+            FileInputStream in = null;
+            OutputStream os = null;
+            
+            if(file.exists()){
+                System.out.println(response.getBufferSize());
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+                os = response.getOutputStream();
+                in = new FileInputStream(file);
+                byte[] buf = new byte[response.getBufferSize()];
+                int byt = -1;
+                while((byt = in.read(buf)) != -1){
+                    os.write(buf, 0, byt);
+                }
                 response.setStatus(200);
+                if(in != null){
+                    in.close();
+                }
+                os.flush();
+                if(os != null){
+                    os.close();
+                }
             }
             else{
                 response.setStatus(405);
