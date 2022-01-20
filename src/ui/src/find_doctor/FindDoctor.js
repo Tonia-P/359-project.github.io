@@ -57,7 +57,7 @@ const FindDoctor = () => {
 <MapContext.Provider value= { doctor }>
         <HStack h='100%' position='fixed' w='100%' display='flex' alignItems='flex-start'>
 
-            <VStack w='300px' background='' h='100%'>
+            <VStack w='400px' background='' h='100%'>
                 <DocList/>
             </VStack>
 

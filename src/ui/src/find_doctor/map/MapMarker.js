@@ -7,6 +7,7 @@ import React, { useState, useEffect, useContext, useRef, useCallback } from 'rea
     VStack,
     Divider,
     Heading,
+    Flex,
     Icon,
     Button
   } from '@chakra-ui/react';
@@ -26,7 +27,8 @@ import './mapStyle.css'
 
 
 import { AiFillCar } from 'react-icons/ai';
-
+import { FaRoad, FaMapMarkedAlt } from 'react-icons/fa';
+import { ImLocation } from 'react-icons/im';
 
 
 
@@ -66,13 +68,22 @@ const MapMarker = ({ doctor, map }) => {
           <Marker position={position} ref={circleRef}>
             <Popup>
                 <VStack display='flex'>
-                    <Heading fontSize='md'>{doctor.username}</Heading>
+                    <Heading fontSize='md' isTruncated>{doctor.firstname + ' ' + doctor.lastname }</Heading>
 
                     <Divider/>
 
-                    <Icon as={AiFillCar} w={6} h={6} />
-
-                    <Divider/>
+                    <Flex justifyContent='space-between' w='100%' h='30px' alignItems='center'>
+                        <Icon as={AiFillCar} w={7} h={7} />
+                        <Text fontWeight='bold' fontSize='md'>5km</Text>
+                    </Flex>
+                    <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
+                        <Icon as={FaRoad} w={7} h={7} />
+                        <Text fontWeight='bold' fontSize='md'>3km</Text>
+                    </Flex>
+                    <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
+                        <Icon as={FaMapMarkedAlt} color='white' w={7} h={7} mr={3}/>
+                        <Text fontWeight='bold' fontSize='md'>{doctor.address}</Text>
+                    </Flex>
 
                     <Button colorScheme='teal'>Book</Button>
                 </VStack>
