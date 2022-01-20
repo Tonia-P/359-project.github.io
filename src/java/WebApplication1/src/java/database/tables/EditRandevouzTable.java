@@ -140,6 +140,8 @@ public class EditRandevouzTable {
         ArrayList<Randevouz> randevouz = new ArrayList<Randevouz>();
         ResultSet rs;
         
+        System.out.println("STATUS: " + completed + ", DOCTOR_ID: " + doctor_id);
+        
         try{
             rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + doctor_id + "' AND status = '" + completed +"'");
             while(rs.next()){
@@ -148,6 +150,7 @@ public class EditRandevouzTable {
                 Randevouz rdz = gson.fromJson(json, Randevouz.class);
                 randevouz.add(rdz);
             }
+            System.out.println(randevouz);
             return randevouz;
         }
         catch(Exception e){

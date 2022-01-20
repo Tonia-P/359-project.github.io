@@ -12,8 +12,16 @@ package mainClasses;
 public class Message {
 
     int message_id,doctor_id, user_id;
-    String bloodtype;
-
+    String bloodtype, username;
+    
+    public String getUsername(){
+        return username;
+    } 
+    
+    public void setUsername(String user){
+        username = user;
+    }
+    
     public String getBloodtype() {
         return bloodtype;
     }

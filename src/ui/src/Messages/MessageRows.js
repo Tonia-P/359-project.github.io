@@ -87,7 +87,7 @@ const MessageRows = (info) =>{
                     <Grid templateRows='repeat(2, 1fr)' pl={2}>
                         <GridItem rowSpan={1} isTruncated>
                             <Flex w='100%' justifyContent='space-between' alignItems='baseline'>
-                                <Text isTruncated>{info.info.sender}</Text>
+                                <Text isTruncated>{info.info.username}</Text>
 
                                 <Text fontSize='xs' fontWeight='100'>{betterTime && betterTime.fromNow()}</Text>
 
