@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 
   import { MapContext } from '../../contexts/MapContext'
   import {
-    Spinner
+    Spinner,
+    Button
   } from '@chakra-ui/react';
   import 'leaflet/dist/leaflet.css';
   import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
@@ -17,6 +18,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import L from "leaflet";
 import { UserContext } from '../../contexts/UserContext';
 import './mapStyle.css'
+import MapMarker from './MapMarker';
 require("leaflet-providers");
 
 
@@ -28,6 +30,8 @@ const Map = () => {
     
 
     const { userInfo } = useContext(UserContext)
+
+    const { allDoctors } = useContext(MapContext)
     
 
 
@@ -44,11 +48,7 @@ const Map = () => {
             subdomains='abcd'
     
           />
-          <Marker position={position}>
-            <Popup>
-              {userInfo.lat + "  " + userInfo.lon}
-            </Popup>
-          </Marker>
+          {allDoctors.map(doctor => <MapMarker doctor={doctor} key={doctor.doctor_id} />)}
         </MapContainer>
 
 

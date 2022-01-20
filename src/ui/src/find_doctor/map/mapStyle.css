@@ -1,7 +1,11 @@
 .leaflet-container{
     border: 0px;
-    border-radius: 0px;
-    height: 100%;
-    width: 100%;
+    border-radius: 10px;
+    
+    height: 90%;
+    margin-top: 10px !important;
+    margin-left: 0px !important;
+    margin-right: 15px !important;
+    width: 95%;
 
 }
