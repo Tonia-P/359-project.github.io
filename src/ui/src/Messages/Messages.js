@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { 
     Table,
     Thead,
@@ -10,20 +10,29 @@ import {
     Grid,
     GridItem,
     useColorModeValue,
+    HStack,
     Divider,
     Box,
     VStack,
     Heading
 } from '@chakra-ui/react';
 import $ from 'jquery';
-import MessageRows from './MessageRows';
+import Chat from './chat/Chat'
+import MessageRows from './all_messages/MessageRows';
 import { UserContext } from '../contexts/UserContext';
+import { MessagesContext } from '../contexts/MessagesContext';
 
   const Messages = () =>{
 
     const [ messages, setMessages ] = useState([]);
     const [ isLoaded, setIsLoaded ] = useState(false);
+    const [ allMessages, setAllMessages ] = useState([]);
     const { userInfo } = useContext(UserContext);
+
+
+    const message = useMemo(() => ({ allMessages, setAllMessages }), 
+    [ allMessages, setAllMessages ]);
+
 
     useEffect (
     () => {
@@ -62,28 +71,26 @@ import { UserContext } from '../contexts/UserContext';
     return(
         
 
-      <Box  w='90%' position='fixed' h='90%' mt={2} borderRadius='10px'>
-        <Grid background={leftColor} borderRadius='10px' templateColumns='repeat(10, 1fr)' h='100%'  w='100%' p={0}  >
-          <GridItem borderRight='1px' borderColor='gray.600' h='100%' colSpan={3} display='flex' justifyContent='center'>
-                        <VStack w='100%' mt={3}>
+      <MessagesContext.Provider value = { message }>
+      <Box  w='90%' position='fixed' background='gray.700' h='90%' mt={2} borderRadius='10px'>
+        <HStack  borderRadius='10px' templateColumns='repeat(10, 1fr)' h='98%'  w='100%' p={0}  >
+                        <VStack w='400px' h='100%' mt={3} overflow='auto' overflow-x='hidden'>
                             <Heading fontSize='lg' >All messages</Heading>
                             <Divider />
             
-            {messages.map(message => <MessageRows info={message} key={message.sender} />)}
+                            {messages.map(message => <MessageRows info={message} key={message.sender} />)}
          
                         
                         </VStack>
-                    </GridItem>
 
 
-                    <GridItem  h='100%'  colSpan={7} display='flex' justifyContent='center'>
-                        <VStack>
-                    
-                        <Divider />
+                        <VStack h='100%' w='100%'>
+                          {allMessages[0] && <Chat /> }
                         </VStack>
-                    </GridItem>
-        </Grid>
+        </HStack>
         </Box>
+
+        </MessagesContext.Provider>
     )
   }
   export default Messages;

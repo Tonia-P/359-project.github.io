@@ -25,12 +25,12 @@ const DocList = (values, isLogged) => {
         <>
 
 
-        <Box background='gray.800' w='100%' h='60px' display='flex' alignItems='center' justifyContent='center'>
+        <Box background='transparent' backdropBlur={4} zIndex='2' w='100%' h='60px' display='flex' alignItems='center' justifyContent='center'>
           <Text >All doctors</Text>
         </Box>
 
        
-        <VStack  spacing='0px' overflow='scroll'>
+        <VStack  spacing='0px' overflow-y='scroll'>
             {allDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)}
             <Box h='100px'></Box>
          </VStack>
