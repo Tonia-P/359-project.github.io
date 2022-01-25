@@ -38,7 +38,7 @@ const MapMarker = ({ doctor, map }) => {
     
 
     const { userInfo } = useContext(UserContext)
-    const { selectedDoctor, setSelectedDoctor } = useContext(MapContext)
+    const { selectedDoctor, setSelectedDoctor, setIsBooking } = useContext(MapContext)
     const circleRef = useRef()
 
 
@@ -62,30 +62,40 @@ const MapMarker = ({ doctor, map }) => {
             map.setView([doctor.lat,  doctor.lon ], 15)
         }
       }, [selectedDoctor]);
+
+
+      const handleClick = () =>{
+
+        setSelectedDoctor(doctor);
+      }
+
+
     
         
     return(
-          <Marker position={position} ref={circleRef}>
+          <Marker position={position} eventHandlers={{ click: handleClick }} ref={circleRef}>
             <Popup>
                 <VStack display='flex'>
                     <Heading fontSize='md' isTruncated>{doctor.firstname + ' ' + doctor.lastname }</Heading>
 
                     <Divider/>
 
-                    <Flex justifyContent='space-between' w='100%' h='30px' alignItems='center'>
-                        <Icon as={AiFillCar} w={7} h={7} />
-                        <Text fontWeight='bold' fontSize='md'>5km</Text>
-                    </Flex>
-                    <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
-                        <Icon as={FaRoad} w={7} h={7} />
-                        <Text fontWeight='bold' fontSize='md'>3km</Text>
-                    </Flex>
                     <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
                         <Icon as={FaMapMarkedAlt} color='white' w={7} h={7} mr={3}/>
                         <Text fontWeight='bold' fontSize='md'>{doctor.address}</Text>
                     </Flex>
 
-                    <Button colorScheme='teal'>Book</Button>
+                    <Flex justifyContent='space-between' w='100%' h='30px' alignItems='center'>
+                        <Icon as={AiFillCar} w={7} h={7} />
+                        <Text fontWeight='bold' fontSize='md'>{ doctor.duration + ' seconds' }</Text>
+                    </Flex>
+                    <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
+                        <Icon as={FaRoad} w={7} h={7} />
+                        <Text fontWeight='bold' fontSize='md'>{ doctor.distance/100 + ' km' }</Text>
+                    </Flex>
+                    
+
+                    <Button colorScheme='teal' onClick={() => setIsBooking(true)}>Book</Button>
                 </VStack>
               
 

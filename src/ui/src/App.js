@@ -58,7 +58,7 @@ function App() {
 
   });
 
-  const user = useMemo(() => ({ userInfo, setUserInfo }), [ userInfo, setUserInfo ]);
+  const user = useMemo(() => ({ userInfo, setUserInfo, isLogged }), [ userInfo, setUserInfo, isLogged ]);
 
 
   const submitForm = (values) => {

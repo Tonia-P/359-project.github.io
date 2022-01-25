@@ -10,6 +10,7 @@ import{
 
 import dayjs from 'dayjs'
 import DocList from './doctors_list/DocList';
+import BookForm from './book_form/BookForm'
 import Map from './map/Map';
 import { MapContext } from '../contexts/MapContext'
 import $ from 'jquery'
@@ -19,14 +20,21 @@ const FindDoctor = () => {
 
     const [ allDoctors, setAllDoctors ] = useState([]);
     const [ selectedDoctor, setSelectedDoctor ] = useState({});
+    const [ isDocLoaded, setIsDocLoaded ] = useState(false)
     const [ isLoaded, setIsLoaded ] = useState(false)
-    const { userInfo } = useContext(UserContext);
+    const { userInfo, isLogged } = useContext(UserContext);
 
-    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor }), 
-    [ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor ]);
+    const [ isBooking, setIsBooking ] = useState(false)
+
+    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking }), 
+    [ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking ]);
 
     useEffect(
+
         () => {
+
+
+
     
           var urlEnd = 'http://localhost:8080/WebApplication1/AllDoctors';
             $.ajax({
@@ -38,7 +46,10 @@ const FindDoctor = () => {
                     setAllDoctors(json);
                     console.log(allDoctors)
                     //if (!Array.isArray(allDoctors)) return 'results are not array'
-                    setIsLoaded(true);
+
+                    
+
+                    setIsDocLoaded(true);
                 },
                 error: function (result) {
                     console.log(result.responseText)
@@ -46,11 +57,57 @@ const FindDoctor = () => {
                     console.log(json)
                 }
             });
+
+
+
     
             
         },
         []
       );
+
+
+      useEffect(() => {
+
+        if(isLogged && isDocLoaded){
+          var data= '';
+        allDoctors.map((doc) => data = data + doc.lat + ',' + doc.lon + ';')
+                    console.log(data)
+
+                    console.log("https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins="+ userInfo.lat + ',' + userInfo.lon + '&destinations=' + data);
+
+                    fetch("https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins=" + data + '&destinations=' + userInfo.lat + ',' + userInfo.lon , {
+                    	"method": "GET",
+                    	"headers": {
+                    		"x-rapidapi-host": "trueway-matrix.p.rapidapi.com",
+                    		"x-rapidapi-key": "36fc04be0cmsh6b954fe89f7caa4p174e39jsn1c14d11d8a9f"
+                    	}
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("1. Success!")
+                        console.log(data);
+                        var mapping = []
+                        var i = 0;
+
+                        console.log(data.distances)
+                        console.log(data.distances[0])
+                        console.log(data.distances[0][0])
+
+                        allDoctors.map(doc => {mapping[i]= {...doc, distance: data.distances[i][0], duration: data.durations[i][0]}; i++ })
+                        setAllDoctors(mapping)
+
+                        console.log(allDoctors)
+                        console.log(mapping)
+                        
+                      })
+                    .catch(err => {
+                    	console.error(err);
+                    });
+                }
+
+      }, [isDocLoaded, isLogged]);
+      
 
     return(
 
@@ -58,7 +115,7 @@ const FindDoctor = () => {
         <HStack h='100%' position='fixed' w='100%' display='flex' alignItems='flex-start'>
 
             <VStack w='400px' background='' h='100%'>
-                <DocList/>
+                {isBooking ? <BookForm /> : <DocList/> }
             </VStack>
 
             {userInfo.lat !==0 && <Map />}
