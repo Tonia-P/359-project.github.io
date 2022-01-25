@@ -9,6 +9,7 @@ import {
   import DocRow from './DocRow';
   import $ from 'jquery';
   import { MapContext } from '../../contexts/MapContext'
+import DocFilter from './DocFilter';
 
 
 
@@ -28,6 +29,8 @@ const DocList = (values, isLogged) => {
         <Box background='transparent' backdropBlur={4} zIndex='2' w='100%' h='60px' display='flex' alignItems='center' justifyContent='center'>
           <Text >All doctors</Text>
         </Box>
+
+        <DocFilter/>
 
        
         <VStack  spacing='0px' overflow-y='scroll'>

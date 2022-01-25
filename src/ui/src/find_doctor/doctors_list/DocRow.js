@@ -28,7 +28,6 @@ const DocRow = ({ doctor }) => {
     setSelectedDoctor(doctor);
   }
   
-
   
     return (
       <Button w='100%' onClick={handleClick} _hover={{background: 'gray.900'}} background='transparent' h='100px' minH='100px'>

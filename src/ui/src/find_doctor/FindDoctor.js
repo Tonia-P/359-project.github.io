@@ -20,14 +20,15 @@ const FindDoctor = () => {
 
     const [ allDoctors, setAllDoctors ] = useState([]);
     const [ selectedDoctor, setSelectedDoctor ] = useState({});
+    const [ filteredDoctors, setFilteredDoctors ] = useState({});
     const [ isDocLoaded, setIsDocLoaded ] = useState(false)
     const [ isLoaded, setIsLoaded ] = useState(false)
     const { userInfo, isLogged } = useContext(UserContext);
 
     const [ isBooking, setIsBooking ] = useState(false)
 
-    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking }), 
-    [ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking ]);
+    const doctor = useMemo(() => ({ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking, filteredDoctors, setFilteredDoctors }), 
+    [ allDoctors, setAllDoctors, selectedDoctor, setSelectedDoctor, isBooking, setIsBooking, filteredDoctors, setFilteredDoctors ]);
 
     useEffect(
 
@@ -69,6 +70,8 @@ const FindDoctor = () => {
 
       useEffect(() => {
 
+        
+
         if(isLogged && isDocLoaded){
           var data= '';
         allDoctors.map((doc) => data = data + doc.lat + ',' + doc.lon + ';')
@@ -96,6 +99,7 @@ const FindDoctor = () => {
 
                         allDoctors.map(doc => {mapping[i]= {...doc, distance: data.distances[i][0], duration: data.durations[i][0]}; i++ })
                         setAllDoctors(mapping)
+                        setFilteredDoctors(mapping)
 
                         console.log(allDoctors)
                         console.log(mapping)
@@ -105,6 +109,7 @@ const FindDoctor = () => {
                     	console.error(err);
                     });
                 }
+                else if (isLogged === 0) setFilteredDoctors([])
 
       }, [isDocLoaded, isLogged]);
       
