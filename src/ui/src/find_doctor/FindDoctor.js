@@ -20,7 +20,7 @@ const FindDoctor = () => {
 
     const [ allDoctors, setAllDoctors ] = useState([]);
     const [ selectedDoctor, setSelectedDoctor ] = useState({});
-    const [ filteredDoctors, setFilteredDoctors ] = useState({});
+    const [ filteredDoctors, setFilteredDoctors ] = useState([]);
     const [ isDocLoaded, setIsDocLoaded ] = useState(false)
     const [ isLoaded, setIsLoaded ] = useState(false)
     const { userInfo, isLogged } = useContext(UserContext);

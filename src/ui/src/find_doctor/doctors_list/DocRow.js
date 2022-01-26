@@ -38,7 +38,7 @@ const DocRow = ({ doctor }) => {
                     <Grid templateRows='repeat(2, 1fr)' pl={2}>
                         <GridItem rowSpan={1} isTruncated>
                             <Flex w='100%' justifyContent='space-between' alignItems='baseline'>
-                                <Text isTruncated>{doctor.firstname + " " + doctor.lastname}</Text>
+                                <Text isTruncated>{doctor.lastname + " " + doctor.firstname}</Text>
 
 
                             </Flex>

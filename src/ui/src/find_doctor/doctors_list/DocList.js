@@ -18,7 +18,7 @@ const DocList = (values, isLogged) => {
 
 
 
-    const { allDoctors } = useContext(MapContext)
+    const { filteredDoctors } = useContext(MapContext)
 
   
     return (
@@ -34,7 +34,7 @@ const DocList = (values, isLogged) => {
 
        
         <VStack  spacing='0px' overflow-y='scroll'>
-            {allDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)}
+            {filteredDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)}
             <Box h='100px'></Box>
          </VStack>
         

@@ -12,6 +12,8 @@ import {
     MenuList,
     MenuItem,
     MenuDivider,
+    MenuOptionGroup,
+    MenuItemOption,
     Icon
   } from '@chakra-ui/react';
   import DocRow from './DocRow';
@@ -19,7 +21,7 @@ import {
   import $ from 'jquery';
   import { BsFilter } from 'react-icons/bs';
   import { MapContext } from '../../contexts/MapContext'
-
+  import { AiFillCar } from 'react-icons/ai';
 
 
 const DocFilter = () => {
@@ -29,18 +31,36 @@ const DocFilter = () => {
 
     const { allDoctors, filteredDoctors, setFilteredDoctors } = useContext(MapContext)
 
-  
+
+    const sortArray = type => {
+      const docs = [...filteredDoctors]
+      const types = {
+        distance: 'distance',
+        duration: 'duration',
+        lname: 'lname',
+      };
+      const sortProperty = types[type];
+      console.log(type)
+      var sorted = docs.sort((a, b) => a[sortProperty] - b[sortProperty]);
+      if(sortProperty == 'lname') {
+        console.log('lllllll')
+        sorted = docs.sort((a, b) => (a.lname > b.lname) ? 1 : -1);
+      }
+      console.log(sorted);
+      setFilteredDoctors(sorted);
+    };
+
+
     return (
 
         <HStack gap={0}>
 
 
-            <Input placeholder='Basic usage' />
+            <Input placeholder='Search' />
 
-            <Button p={0} ml={0}> <SearchIcon h={5} w={5} /> </Button>
 
             
-            <Menu direction='rtl' zIndex={100}  placement='right'>
+            <Menu direction='rtl' zIndex={100}  placement='right' offset='[50,0]' >
   <MenuButton
     p={2}
     pb={1}
@@ -50,16 +70,18 @@ const DocFilter = () => {
     borderWidth='1px'
     
     
-    _hover={{ bg: 'gray.400' }}
-    _expanded={{ bg: 'blue.400' }}
+    _hover={{ bg: 'teal.700' }}
+    _expanded={{ bg: 'teal.500' }}
     _focus={{ boxShadow: 'outline' }}
   >
     <Icon as={BsFilter} h={5} w={5} />
   </MenuButton>
   <MenuList zIndex={100}>
-      <Text pl={3} textAlign='start'>Sort by:</Text>
-    <MenuItem _hover={{ bg: 'teal.400' }}>New File</MenuItem>
-    <MenuItem _hover={{ bg: 'teal.400' }}>New Window</MenuItem>
+    <MenuOptionGroup onChange={(e) => sortArray(e)} defaultValue='lname' title='Sort by' textAlign='start' type='radio'>
+      <MenuItemOption fontSize='md' value='lname'>Alphabeticaly</MenuItemOption>
+      <MenuItemOption fontSize='md' value='distance'>Distance</MenuItemOption>
+      <MenuItemOption fontSize='md' value='duration'>Duration</MenuItemOption>
+    </MenuOptionGroup>
   </MenuList>
 </Menu>
 
