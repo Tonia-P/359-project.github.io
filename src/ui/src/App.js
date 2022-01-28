@@ -27,6 +27,7 @@ import CertifyTable from './adminBoard/CertifyTable';
 import Rendezvous from './rendezvous/Rendezvous';
 import Messages from './Messages/Messages';
 import FindDoctor from './find_doctor/FindDoctor';
+import DashboardDoctor from './dashboard/DashboardDoctor';
 
 function App() {
 
@@ -170,7 +171,7 @@ function App() {
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />
-                    <Route path="/dashboard" element= { userInfo.username === 'admin' ? <AdminDashBoard  /> : <Dashboard/> } />
+                    <Route path="/dashboard" element= { userInfo.username === 'admin' ? <AdminDashBoard  /> : <DashboardDoctor/> } />
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                       <Route path="allbloodtests" element={<AllBloodTests />} />
                       <Route path="new" element={<NewBloodTest />} />
