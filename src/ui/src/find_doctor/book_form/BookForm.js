@@ -21,12 +21,14 @@ const DocList = (values, isLogged) => {
   const [color, setColor] = useState('')
 
   const [flag, setFlag] = useState(false);
+  const [temp, setTemp] = useState('');
 
     const { selectedDoctor, setIsBooking } = useContext(MapContext)
     const selectedUser = useContext(UserContext)
     const [dateVals, setDateVals] = useState({
       doctor_id: selectedDoctor.doctor_id,
-      date_time: ''
+      date_time: '',
+      temp: 0
     })
     const { rendezvouDet, setRendezvouDet} = useState({
       user_id: selectedUser.user_id,
@@ -52,10 +54,17 @@ const DocList = (values, isLogged) => {
 
     const getOpenSlots = e => {
 
+      console.log(e.target.value);
+
       const { name, value } = e.target;
       setDateVals({
         ...dateVals,
         [name]: value
+      });
+      console.log(dateVals);
+
+      setDateVals({
+        temp: 1
       });
       console.log(dateVals);
 
@@ -64,7 +73,7 @@ const DocList = (values, isLogged) => {
 
       $.ajax({
         url: urlEnd,
-        type: "GET",
+        type: "POST",
         contentType: 'json',
         data: det,
         success: function (result) {

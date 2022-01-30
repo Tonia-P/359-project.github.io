@@ -19,6 +19,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import database.tables.EditBloodTestTable;
 import database.tables.EditDoctorTable;
 import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
@@ -43,6 +44,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+import mainClasses.BloodTest;
 import mainClasses.Doctor;
 import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
@@ -54,7 +56,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests"})
 public class UserServlet extends HttpServlet {
     
     
@@ -728,6 +730,37 @@ public class UserServlet extends HttpServlet {
      */
     
     
+    private void amkaToBloodtests(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        BloodTest bt;
+        ArrayList<BloodTest> b = new ArrayList<BloodTest>();
+        EditBloodTestTable ebtt = new EditBloodTestTable();
+        bt = ebtt.jsonToBloodTest(s);
+        try(PrintWriter out = response.getWriter()){
+            b = ebtt.databaseToBloodTest(bt.getAmka());
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(b != null){
+                response.setStatus(200);
+                gson.toJson(b,response.getWriter());
+            }
+            else{
+                response.setStatus(404);
+                jo.addProperty("error", "Blood Tests Not Found");
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -792,9 +825,6 @@ public class UserServlet extends HttpServlet {
                 }
             }
 		break;
-        case "/GetOpenSlots":
-            getOpenSlots(request, response);
-            break;
 	default:
 		listUsers(request, response);
 		break;
@@ -900,6 +930,14 @@ public class UserServlet extends HttpServlet {
          case "/GetUserFromId":
              getUserFromID(request, response);
              break;
+             
+         case "/GetOpenSlots":
+            getOpenSlots(request, response);
+            break;
+            
+         case "/AmkaToBloodtests":
+            amkaToBloodtests(request, response);
+            break;
 
 	default:
 		addUser(request, response);
