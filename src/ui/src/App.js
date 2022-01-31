@@ -171,7 +171,7 @@ function App() {
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />
-                    <Route path="/dashboard" element= { userInfo.username === 'admin' ? <AdminDashBoard  /> : <DashboardDoctor/> } />
+                    <Route path="/dashboard" element= {isLogged ? (userInfo.username === 'admin' ? <AdminDashBoard  /> :  <DashboardDoctor/> ) : <div> Error 404: Page not found. </div>} />
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                       <Route path="allbloodtests" element={<AllBloodTests />} />
                       <Route path="new" element={<NewBloodTest />} />
@@ -183,6 +183,7 @@ function App() {
                       <Route path="personal" element={<PersonalInfo />} />
                       <Route path="additional" element={<> additional </>} />
                     </Route>
+                    <Route path="patient/:user_id" element={<>AAAAAAAAAA</>} />
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
                     <Route path="/rendezvous" element={<Rendezvous /> } />

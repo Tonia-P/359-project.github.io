@@ -46,7 +46,6 @@ const CalendarTile = ({ date }) => {
 
 
                 returnee = dontGetFormattedRends(json)
-                console.log('neeewwwww')
                 console.log(returnee)
                 setAllRendezvous(returnee);
               
