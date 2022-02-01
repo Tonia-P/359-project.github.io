@@ -23,6 +23,7 @@ import {
   import { TiMessages } from 'react-icons/ti';
 import Rendezvous from './rends/Rendezvous';
 import PatientsTab from './patients/PatientsTab';
+import BloodDonation from './blood_donation/BloodDonation';
   
 const DashboardDoctor = () => {
 
@@ -93,7 +94,9 @@ const DashboardDoctor = () => {
 
                 <GridItem rowSpan={5} colSpan={4} bg='darkblue' />
 
-                <GridItem rowSpan={2} colSpan={9} bg='tomato' />
+                <GridItem rowSpan={2} colSpan={9} >
+                    <BloodDonation/>
+                    </GridItem>
               
             </Grid>
 

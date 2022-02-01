@@ -28,6 +28,8 @@ import Rendezvous from './rendezvous/Rendezvous';
 import Messages from './Messages/Messages';
 import FindDoctor from './find_doctor/FindDoctor';
 import DashboardDoctor from './dashboard/DashboardDoctor';
+import SubmitBloodTest from './bloodtest/SubmitBloodTest';
+import DashboardUser from './dashboard/DashboardUser';
 
 function App() {
 
@@ -171,7 +173,7 @@ function App() {
                     </>
                     }
                     <Route path="/register" element={ <Form /> } />
-                    <Route path="/dashboard" element= {isLogged ? (userInfo.username === 'admin' ? <AdminDashBoard  /> :  <DashboardDoctor/> ) : <div> Error 404: Page not found. </div>} />
+                    <Route path="/dashboard" element= {isLogged ? (userInfo.username === 'admin' ? <AdminDashBoard  /> : userInfo.specialty ? <DashboardDoctor/> : <DashboardUser/> ) : <div> Error 404: Page not found. </div>} />
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                       <Route path="allbloodtests" element={<AllBloodTests />} />
                       <Route path="new" element={<NewBloodTest />} />
@@ -183,6 +185,7 @@ function App() {
                       <Route path="personal" element={<PersonalInfo />} />
                       <Route path="additional" element={<> additional </>} />
                     </Route>
+                    <Route path='/newBloodTest/:user_id' element={<SubmitBloodTest /> }/>
                     <Route path="patient/:user_id" element={<>AAAAAAAAAA</>} />
                     <Route path="/Users" element={<AdminTable />}/>
                     <Route path="/Certify" element={<CertifyTable />}/>
