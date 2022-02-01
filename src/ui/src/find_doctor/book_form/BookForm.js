@@ -1,52 +1,64 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
     Box,
     Link,
     FormControl,
     Input,
     Button,
-    form,
+    Flex,
+    Text,
+    FormLabel,
     VStack
   } from '@chakra-ui/react';
   import $ from 'jquery';
   import { MapContext } from '../../contexts/MapContext'
   import { UserContext } from '../../contexts/UserContext'
   import dayjs from 'dayjs'
+  import { RendezvousContext } from '../../contexts/RendezvousContext';
+  import { DateContext } from '../../contexts/DateContext';
+import BookFormHeader from './BookFormHeader';
+import BookFormRendList from './BookFormRendList';
 
 
 const DocList = (values, isLogged) => {
 
-  const [responseMessage, setResponseMessage] = useState('');
 
-  const [color, setColor] = useState('')
-
-  const [flag, setFlag] = useState(false);
-  const [temp, setTemp] = useState('');
 
     const { selectedDoctor, setIsBooking } = useContext(MapContext)
-    const selectedUser = useContext(UserContext)
-    const [dateVals, setDateVals] = useState({
-      doctor_id: selectedDoctor.doctor_id,
-      date_time: '',
-      temp: 0
-    })
+    const { userInfo } = useContext(UserContext)
+
+
     const { rendezvouDet, setRendezvouDet} = useState({
-      user_id: selectedUser.user_id,
+      user_id: userInfo.user_id,
       user_info: '',
       doctor_id: selectedDoctor.doctor_id,
       date_time: ''
     })
-    const [openSlots, setOpenSlots] = useState([]);
+    const [ selectedDate, setSelectedDate ] = useState(dayjs())
+    const [ selectedRendezvous, setSelectedRendezvous ] = useState({})
+    const [ allRendezvous, setAllRendezvous ] = useState([])
+    const [ isNext, setIsNext ] = useState(false)
 
+    const rendezvous = useMemo(() => ({ allRendezvous, setAllRendezvous, selectedRendezvous, setSelectedRendezvous }), 
+    [ allRendezvous, setAllRendezvous, selectedRendezvous, setSelectedRendezvous ]);
+
+    const date = useMemo(() => ({ selectedDate, setSelectedDate, }), 
+    [ selectedDate, setSelectedDate ]);
 
     const handleChange = e => {
       const { name, value } = e.target;
-      setRendezvouDet({
-        ...rendezvouDet,
+      setSelectedRendezvous({
+        ...selectedRendezvous,
         [name]: value
       });
-      console.log(rendezvouDet);
+      console.log(selectedRendezvous);
     };
+
+
+    useEffect(() => {
+      setSelectedRendezvous({})
+    }, [selectedDoctor, selectedDate]);
+    
 
     const handleCancel = () => {
       setIsBooking(false)
@@ -56,20 +68,8 @@ const DocList = (values, isLogged) => {
 
       console.log(e.target.value);
 
-      const { name, value } = e.target;
-      setDateVals({
-        ...dateVals,
-        [name]: value
-      });
-      console.log(dateVals);
-
-      setDateVals({
-        temp: 1
-      });
-      console.log(dateVals);
-
       var urlEnd = 'http://localhost:8080/WebApplication1/GetOpenSlots';
-      var det = JSON.stringify(dateVals);
+      var det = JSON.stringify(rendezvouDet);
 
       $.ajax({
         url: urlEnd,
@@ -78,15 +78,11 @@ const DocList = (values, isLogged) => {
         data: det,
         success: function (result) {
           console.log("SUCCESS")
-          setOpenSlots(result);
-          setFlag(true)
-          setResponseMessage('');
+          console.log(result)
+          setAllRendezvous(result);
         },
         error: function (result) {
           console.log("FAIL")
-          setFlag(false);
-          setColor('red');
-          setResponseMessage("There aren't any open slots for the slected date. </t>Please select another date.");
         }
     });
     }
@@ -104,114 +100,84 @@ const DocList = (values, isLogged) => {
         data: dets,
         success: function (result) {
           console.log("SUCCESS")
-          setColor('green')
-          setResponseMessage('The appointment was </t> booked successfully');
         },
         error: function (result) {
           console.log("FAIL");
-          setColor('red');
-          setResponseMessage('Something went wrong while we were booking your appointment.');
         }
     });
 
 
     }  
 
+
+    const handleNext = () =>{
+      setSelectedRendezvous({
+        ...selectedRendezvous,
+        date_time: dayjs(selectedRendezvous.date_time).subtract(4, 'day').format('YYYY-MM-DD')
+      })
+      setIsNext(true)
+    }
   
     return (
+        <DateContext.Provider value= { date }>
+        <RendezvousContext.Provider value= { rendezvous }>
 
-        <>
+{!isNext ?
+          <Flex h='100%' w='100%' flexDirection='column' justifyContent='space-between'>
+            <VStack>
+          <Link color='teal.500' onClick={handleCancel} w='100%' fontSize='md' textAlign='start' h='50px' >
+              {'<'} Cancel booking
+          </Link>
+          <BookFormHeader/>
+
+          <BookFormRendList/>
+          </VStack>
+
+          { Object.entries(selectedRendezvous).length === 0 ?
+          <Button isDisabled >Next</Button>
+          :
+          <Button  onClick={handleNext}>Next</Button>
+          }
 
 
-<Link color='teal.500' onClick={handleCancel} href='#' w='100%' textAlign='start' h='50px' >
-    {'<'} Cancel booking
-  </Link>
-  { flag && <form method= "POST" onSubmit={handleSubmit} noValidate>
-        <VStack  spacing='0px' overflow-y='scroll'>
-            { selectedDoctor.username}
-            <Box h='100px'></Box>
-            <FormControl isRequired id= "birthdate">
-                <Input 
-                    type= "date" 
-                    name= "date_time"
-                    autoComplete= "on"
-                    min={dayjs().format('YYYY-MM-DD')}
-                    value= {dateVals.date_time}
-                    placeholder= {dayjs().format('YYYY-MM-DD')}
-                    minLength="3"
-                    maxLength= "30"
-                    onChange={getOpenSlots}
-                    />
-            </FormControl>
-            <FormControl isRequired id="openSlots">
-            <select name="date_time">
-                {openSlots.map(slot => <option key={slot.randevouz_id} value={slot.randevouz_id}>{slot.date_time}</option>)}
-              
-              </select>
-            </FormControl>
-            <FormControl isRequired id= "user_info">
-                <Input 
-                    type= "text" 
-                    name= "user_info"
-                    autoComplete= "on"
-                    placeholder= "Write something you want to let the doctor know beforehand."
-                    onChange={handleChange}
-                    />
-            </FormControl>
-            
-                <Button
-                mt={2}
-                colorScheme="teal"
-                type="submit"
-                isDisabled>
-                  Submit
-                  </Button>
-                  <h2 style={{color: color}}>{responseMessage}</h2>
-         </VStack>
-         </form>
+          </Flex>
+          :
+          <Flex h='100%' w='100%' flexDirection='column' justifyContent='space-between'>
+            <VStack>
+          <Link color='teal.500' onClick={handleCancel} w='100%' textAlign='start' fontSize='md' h='50px' >
+              {'<'} Cancel booking
+          </Link>
+          <FormControl  id= "doctor_info" >
+                    <FormLabel>Doctor note</FormLabel>
+                    <Input 
+                        type= "text" 
+                        name= "doctor_info"
+                        isReadOnly
+                        autoComplete= "on"
+                        value= {selectedRendezvous.doctor_info}
+                        onChange= {handleChange} 
+                        />
+                </FormControl>
+          <FormControl  id= "user_info" >
+                    <FormLabel>Patient info</FormLabel>
+                    <Input 
+                        type= "text" 
+                        name= "user_info"
+                        autoComplete= "on"
+                        value= {selectedRendezvous.user_info}
+                        onChange= {handleChange} 
+                        placeholder= "Leave a note"
+                        />
+                </FormControl>
 
-    }
-    {!flag && <form method= "POST" onSubmit={handleSubmit} noValidate>
-        <VStack  spacing='0px' overflow-y='scroll'>
-            { selectedDoctor.username}
-            <Box h='100px'></Box>
-            <FormControl isRequired id= "birthdate">
-                <Input 
-                    type= "date" 
-                    name= "birthdate"
-                    autoComplete= "on"
-                    min={dayjs().format('YYYY-MM-DD')}
-                    value= {values.birthdate}
-                    placeholder= "birthdate"
-                    minLength="3"
-                    maxLength= "30"
-                    onChange={getOpenSlots}
-                    />
-            </FormControl>
-            <FormControl isRequired id= "user_info">
-                <Input 
-                    type= "text" 
-                    name= "user_info"
-                    autoComplete= "on"
-                    placeholder= "Write something you want to let the doctor know beforehand."
-                    onChange={handleChange}
-                    />
-            </FormControl>
-            
-                <Button
-                mt={2}
-                colorScheme="teal"
-                type="submit"
-                isDisabled>
-                  Submit
-                  </Button>
-                  <h2 style={{color: color}}>{responseMessage}</h2>
-         </VStack>
-         </form>
+          </VStack>
 
-    }
+          <Button colorScheme='teal'>Submit</Button>
+          </Flex>
+}
 
-        </>
+        </RendezvousContext.Provider>
+        </DateContext.Provider>
 
     );
   };

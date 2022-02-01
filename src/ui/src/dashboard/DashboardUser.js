@@ -50,14 +50,14 @@ const DashboardUser = () => {
             >
               
                 <GridItem rowSpan={3} colSpan={3} >
-                <Link to="/rendezvous">
-                    <Button background='purple.400' colorScheme='purple' p={[3,3,3,3,5]} h='85%' w='100%' overflow='hidden'>
+                <Link to={`/newBloodTest/${userInfo.user_id}`}>
+                    <Button background='green.400' colorScheme='green' p={[3,3,3,3,5]} h='85%' w='100%' overflow='hidden'>
                         
-                        <Icon as={GiBookCover} position='absolute' color='purple.200' h={[100,100,100,100,200]} w={[100,100,100,100,200]} left='60%' top='50%' zIndex='1' />
+                        <Icon as={GiBookCover} position='absolute' color='green.200' h={[100,100,100,100,200]} w={[100,100,100,100,200]} left='60%' top='50%' zIndex='1' />
 
                         <VStack h='100%' w='100%' textAlign='start' display='flex' alignItems='flex-start' zIndex='2'>
-                        <Heading fontSize={['lg', 'lg', 'lg', 'lg', '3xl']} color='white'> Agenda </Heading>
-                        <Text fontSize={['sm', 'sm', 'sm', 'sm', 'lg']} color='white'> Create, check or cancel <br/> rendezvous with <br/> patients. </Text>
+                        <Heading fontSize={['lg', 'lg', 'lg', 'lg', '3xl']} color='white'> New blood test </Heading>
+                        <Text fontSize={['sm', 'sm', 'sm', 'sm', 'lg']} color='white'> Submit new <br/> blood test <br/> results. </Text>
                         </VStack>
                     </Button>
                     </Link>
@@ -65,14 +65,14 @@ const DashboardUser = () => {
                 </GridItem>
 
                 <GridItem rowSpan={3} colSpan={3} >
-                <Link to="/rendezvous">
-                    <Button background='blue.400' colorScheme='blue' p={[3,3,3,3,5]} h='85%' w='100%' overflow='hidden'>
+                <Link to="/find_doctor">
+                    <Button background='cyan.400' colorScheme='cyan' p={[3,3,3,3,5]} h='85%' w='100%' overflow='hidden'>
                         
-                        <Icon as={BsFillPersonLinesFill} position='absolute' color='blue.200' h={[100,100,100,100,150]} w={[100,100,100,100,150]} left='60%' top='40%' zIndex='1' />
+                        <Icon as={BsFillPersonLinesFill} position='absolute' color='cyan.200' h={[100,100,100,100,150]} w={[100,100,100,100,150]} left='60%' top='40%' zIndex='1' />
 
                         <VStack h='100%' w='100%' textAlign='start' display='flex' alignItems='flex-start' zIndex='2'>
-                        <Heading fontSize={['lg', 'lg', 'lg', 'lg', '3xl']} color='white'> Patients </Heading>
-                        <Text fontSize={['sm', 'sm', 'sm', 'sm', 'lg']} color='white'> List of all your patients </Text>
+                        <Heading fontSize={['lg', 'lg', 'lg', 'lg', '3xl']} color='white'> Doctors </Heading>
+                        <Text fontSize={['sm', 'sm', 'sm', 'sm', 'lg']} color='white'> Find a doctor <br/> near you. </Text>
                         </VStack>
                     </Button>
                     </Link>

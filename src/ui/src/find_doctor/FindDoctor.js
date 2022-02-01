@@ -117,7 +117,7 @@ const FindDoctor = () => {
     return(
 
 <MapContext.Provider value= { doctor }>
-        <HStack h='100%' position='fixed' w='100%' display='flex' alignItems='flex-start'>
+        <HStack h='90vh' position='fixed' w='100%' display='flex' alignItems='flex-start'>
 
             <VStack w='400px' background='' h='100%'>
                 {isBooking ? <BookForm /> : <DocList/> }

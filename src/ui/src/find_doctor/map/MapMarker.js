@@ -70,6 +70,10 @@ const MapMarker = ({ doctor, map }) => {
       }
 
 
+      const handleBook = () =>{
+        setIsBooking(true)
+      }
+
     
         
     return(
@@ -95,7 +99,7 @@ const MapMarker = ({ doctor, map }) => {
                     </Flex>
                     
 
-                    <Button colorScheme='teal' onClick={() => setIsBooking(true)}>Book</Button>
+                    <Button colorScheme='teal' onClick={handleBook}>Book</Button>
                 </VStack>
               
 
