@@ -24,6 +24,7 @@ import database.tables.EditDoctorTable;
 import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
 import database.tables.EditSimpleUserTable;
+import database.tables.EditTreatmentTable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -50,18 +51,48 @@ import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
 import mainClasses.Message;
 import mainClasses.Randevouz;
+import mainClasses.Treatment;
 
 
 /**
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests", "/GetUserTreatments"})
 public class UserServlet extends HttpServlet {
     
     
     EditSimpleUserTable eut = new EditSimpleUserTable();
     //SimpleUser su = eut.databaseToSimpleUser(username, password);
+    
+    
+    private void getUserTreatments(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditTreatmentTable ett = new EditTreatmentTable();
+        ArrayList<Treatment> at = new ArrayList<Treatment>();
+        Treatment t;
+        
+        t = ett.jsonToTreatment(s);
+        try(PrintWriter out = response.getWriter()){
+            at = ett.databaseToTreatmentID(t.getUser_id());
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(at != null){
+                response.setStatus(200);
+                gson.toJson(at,response.getWriter());
+            }
+            else{
+                response.setStatus(404);
+                jo.addProperty("error", "Blood Tests Not Found");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
     
     private void listUsers (HttpServletRequest request, HttpServletResponse response) 
@@ -246,7 +277,7 @@ public class UserServlet extends HttpServlet {
         ArrayList<Randevouz> ret = new ArrayList<Randevouz>();
         try(PrintWriter out = response.getWriter()){
             r = ert.jsonToRandevouz(s);
-            ret = ert.databaseToRandevouzT(r.getDoctor_id(), r.getDate_time());
+            ret = ert.databaseToRandevouzFREE(r.getDoctor_id(), r.getDate_time());
             if(ret != null){
                 String json = new Gson().toJson(ret);
                     out.println(json);
@@ -938,6 +969,10 @@ public class UserServlet extends HttpServlet {
          case "/AmkaToBloodtests":
             amkaToBloodtests(request, response);
             break;
+            
+         case "/GetUserTreatments":
+             getUserTreatments(request, response);
+             break;
 
 	default:
 		addUser(request, response);
