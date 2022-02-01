@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mainClasses.Randevouz;
 
 /**
  *
@@ -72,6 +73,31 @@ public class EditBloodTestTable {
         }
         return null;
     } 
+   
+   public ArrayList<BloodTest> databaseToBloodTest(String amka) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<BloodTest> ret = new ArrayList<BloodTest>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka ='" + amka +"'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                BloodTest bt = gson.fromJson(json, BloodTest.class);
+                ret.add(bt);
+            }
+            System.out.println(ret);
+            return ret;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
     
      public BloodTest databaseToBloodTest(String amka,String date) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();

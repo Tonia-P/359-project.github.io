@@ -19,6 +19,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import database.tables.EditBloodTestTable;
 import database.tables.EditDoctorTable;
 import database.tables.EditMessageTable;
 import database.tables.EditRandevouzTable;
@@ -43,6 +44,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+import mainClasses.BloodTest;
 import mainClasses.Doctor;
 import mainClasses.SimpleUser;
 import mainClasses.JSON_Converter;
@@ -54,7 +56,7 @@ import mainClasses.Randevouz;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests"})
 public class UserServlet extends HttpServlet {
     
     
@@ -233,6 +235,33 @@ public class UserServlet extends HttpServlet {
         } catch (IOException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void getOpenSlots(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("VALS: " + s);
+        Randevouz r;
+        EditRandevouzTable ert = new EditRandevouzTable();
+        ArrayList<Randevouz> ret = new ArrayList<Randevouz>();
+        try(PrintWriter out = response.getWriter()){
+            r = ert.jsonToRandevouz(s);
+            ret = ert.databaseToRandevouzT(r.getDoctor_id(), r.getDate_time());
+            if(ret != null){
+                String json = new Gson().toJson(ret);
+                    out.println(json);
+                    response.setStatus(200);
+            }
+            else{
+                response.setStatus(404);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
     private void addUser (HttpServletRequest request, HttpServletResponse response) 
@@ -506,6 +535,51 @@ public class UserServlet extends HttpServlet {
         }
     }
     
+    private void getUserFromID(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        SimpleUser u, us;
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        u = esut.jsonToSimpleUser(s);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        JsonObject jo = new JsonObject();
+        try(PrintWriter out = response.getWriter()){
+            us = esut.databaseToSimpleUserID(u.getUser_id());
+            if(us != null){
+                jo.addProperty("user_id", us.getUser_id());
+                jo.addProperty("user_name", us.getUsername());
+                jo.addProperty("password", us.getPassword());
+                jo.addProperty("email", us.getEmail());
+                jo.addProperty("firstname", us.getFirstname());
+                jo.addProperty("lastname", us.getLastname());
+                jo.addProperty("birthdate", us.getBirthdate());
+                jo.addProperty("address", us.getAddress());
+                jo.addProperty("amka", us.getAmka());
+                jo.addProperty("city", us.getCity());
+                jo.addProperty("country", us.getCountry());
+                jo.addProperty("gender", us.getGender());
+                jo.addProperty("telephone", us.getTelephone());
+                jo.addProperty("blooddonnor", us.getBlooddonor());
+                jo.addProperty("bloodtype", us.getBloodtype());
+                jo.addProperty("height", us.getHeight());
+                jo.addProperty("weight", us.getWeight());
+                jo.addProperty("lat", us.getLat());
+                jo.addProperty("lon", us.getLon());
+                response.setStatus(200);
+                out.write(jo.toString());
+            }
+            else{
+                response.setStatus(404);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     private void listUsersArr (HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException, SQLException{
@@ -654,6 +728,37 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
+    private void amkaToBloodtests(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        BloodTest bt;
+        ArrayList<BloodTest> b = new ArrayList<BloodTest>();
+        EditBloodTestTable ebtt = new EditBloodTestTable();
+        bt = ebtt.jsonToBloodTest(s);
+        try(PrintWriter out = response.getWriter()){
+            b = ebtt.databaseToBloodTest(bt.getAmka());
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            if(b != null){
+                response.setStatus(200);
+                gson.toJson(b,response.getWriter());
+            }
+            else{
+                response.setStatus(404);
+                jo.addProperty("error", "Blood Tests Not Found");
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
     
     
     
@@ -822,6 +927,17 @@ public class UserServlet extends HttpServlet {
                     }
                 break;      
       
+         case "/GetUserFromId":
+             getUserFromID(request, response);
+             break;
+             
+         case "/GetOpenSlots":
+            getOpenSlots(request, response);
+            break;
+            
+         case "/AmkaToBloodtests":
+            amkaToBloodtests(request, response);
+            break;
 
 	default:
 		addUser(request, response);

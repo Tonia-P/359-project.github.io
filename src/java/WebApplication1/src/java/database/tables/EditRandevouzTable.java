@@ -160,6 +160,33 @@ public class EditRandevouzTable {
         return null;
     }
     
+    public ArrayList<String> databaseToRandevouzDate(String doctor_id, String date_time) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<String> dates = new ArrayList<String>();
+        ResultSet rs;
+        
+        String bf = date_time + " 00:00:00";
+        String af = date_time + " 23:59:59";
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + doctor_id + "' AND date_time BETWEEN '" + bf +"' AND '" + af + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Randevouz rdz = gson.fromJson(json, Randevouz.class);
+                dates.add(rdz.getDate_time());
+            }
+            System.out.println(dates);
+            return dates;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
 
       
      public Randevouz jsonToRandevouz(String json) {
