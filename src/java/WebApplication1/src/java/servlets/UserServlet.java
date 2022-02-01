@@ -58,12 +58,78 @@ import mainClasses.Treatment;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests", "/GetUserTreatments"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests", "/GetUserTreatments", "/InsertBloodTest", "/InsertTreatment"})
 public class UserServlet extends HttpServlet {
     
     
     EditSimpleUserTable eut = new EditSimpleUserTable();
     //SimpleUser su = eut.databaseToSimpleUser(username, password);
+    
+    private void insertBloodTest(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditBloodTestTable ebtt = new EditBloodTestTable();
+        BloodTest b, temp;
+        try(PrintWriter out = response.getWriter()){
+            ebtt.addBloodTestFromJSON(s);
+            b = ebtt.jsonToBloodTest(s);
+            temp = ebtt.databaseToBloodTest(b.getAmka(), b.getTest_date());
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            if(temp!= null){
+                response.setStatus(200);
+                jo.addProperty("success", "SUCCESS!");
+                out.write(jo.toString());
+            }
+            else{
+                response.setStatus(404);
+                jo.addProperty("fail", "FAIL!");
+                out.write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    private void insertTreatment(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditTreatmentTable ett = new EditTreatmentTable();
+        Treatment t, temp;
+        try(PrintWriter out = response.getWriter()){
+            ett.addTreatmentFromJSON(s);
+            t = ett.jsonToTreatment(s);
+            temp = ett.databaseToTreatmentI(t.getUser_id(), t.getDoctor_id(), t.getStart_date());
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            if(temp!= null){
+                response.setStatus(200);
+                jo.addProperty("success", "SUCCESS!");
+                out.write(jo.toString());
+            }
+            else{
+                response.setStatus(404);
+                jo.addProperty("fail", "FAIL!");
+                out.write(jo.toString());
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
     
     
     private void getUserTreatments(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -972,6 +1038,14 @@ public class UserServlet extends HttpServlet {
             
          case "/GetUserTreatments":
              getUserTreatments(request, response);
+             break;
+             
+         case "/InsertBloodTest":
+             insertBloodTest(request, response);
+             break;
+             
+         case "/InsertTreatment":
+             insertTreatment(request, response);
              break;
 
 	default:
