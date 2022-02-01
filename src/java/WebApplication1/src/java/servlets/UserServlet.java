@@ -58,12 +58,149 @@ import mainClasses.Treatment;
  *
  * @author oparc
  */
-@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests", "/GetUserTreatments", "/InsertBloodTest", "/InsertTreatment"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/UserServlet", "/RegisterUser", "/ListUsersArr", "/LoginUser", "/LoginAdmin", "/AllUsers", "/UpdateUser", "/DeleteUser", "/RandevouzToPDF", "/AllRendevous", "/getMessages", "/AllMessages", "/RendevousToUsers", "/AddSlot", "/GetOpenSlots", "/GetUserFromId", "/AmkaToBloodtests", "/GetUserTreatments", "/InsertBloodTest", "/InsertTreatment", "/BloodDonationMessage", "/BookAppointment"})
 public class UserServlet extends HttpServlet {
     
     
     EditSimpleUserTable eut = new EditSimpleUserTable();
     //SimpleUser su = eut.databaseToSimpleUser(username, password);
+    
+    private void bookAppointment(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        EditRandevouzTable ert = new EditRandevouzTable();
+        EditMessageTable emt = new EditMessageTable();
+        Randevouz r, temp, pc;
+        r = ert.jsonToRandevouz(s);
+        try(PrintWriter out = response.getWriter()){
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            temp = ert.databaseToRandevouz(r.getRandevouz_id());
+            ert.updateRandevouz(temp.getRandevouz_id(), temp.getUser_id(), temp.getUser_info(), "selected");
+            pc = ert.databaseToRandevouzSelect("selected", temp.getUser_id(), temp.getDoctor_id());
+            if(pc != null){
+                Message m = new Message();
+                m.setUser_id(pc.getUser_id());
+                m.setDoctor_id(pc.getDoctor_id());
+                m.setSender("Info Center");
+                m.setDate_time(r.getDate_time());
+                m.setMessage("IMPORTANT!! Your appointment is due in 4 days.");
+                m.setBlood_donation(0);
+                m.setBloodtype("null");
+                emt.createNewMessage(m);
+                
+                Message l;
+                l = emt.databaseToMessageDay(pc.getDoctor_id(), pc.getUser_id(), r.getDate_time());
+                if(l != null){
+                    response.setStatus(200);
+                    jo.addProperty("success", "SUCCESS!");
+                    out.write(jo.toString());
+                }
+                else{
+                    response.setStatus(404);
+                        jo.addProperty("fail", "FAIL!");
+                        out.write(jo.toString());
+                }
+            }
+            else{
+                response.setStatus(404);
+                        jo.addProperty("fail", "FAIL!");
+                        out.write(jo.toString());
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void bloodDonationMessage(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        JSON_Converter jc = new JSON_Converter();
+        String s = jc.getJSONFromAjax(request.getReader());
+        Doctor d, temp;
+        int siz = 0;
+        EditDoctorTable edt = new EditDoctorTable();
+        d = edt.jsonToDoctor(s);
+        ArrayList<Randevouz> r = new ArrayList<Randevouz>();
+        EditRandevouzTable ert = new EditRandevouzTable();
+        SimpleUser su;
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        EditMessageTable emt = new EditMessageTable();
+        try(PrintWriter out = response.getWriter()){
+            Gson gson = new Gson();
+            JsonObject jo = new JsonObject();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            temp = edt.databaseToDoctorID(d.getDoctor_id());
+            r = ert.databaseToRandevouzComplete("completed", d.getDoctor_id());
+            if(r != null){
+               for(int i = 0; i < r.size(); i++){
+                   su = esut.databaseToSimpleUserID(r.get(i).getUser_id());
+                   if(su != null){
+                       if(su.getBlooddonor() == 1 && su.getBloodtype().equals(d.getBloodtype())){
+                           Message m = new Message();
+                           m.setDoctor_id(d.getDoctor_id());
+                           m.setUser_id(su.getUser_id());
+                           m.setUsername(temp.getUsername());
+                           m.setSender(temp.getUsername());
+                           m.setMessage("You have an appointment for blood donation.");
+                           m.setBlood_donation(1);
+                           m.setBloodtype(d.getBloodtype());
+                           emt.createNewMessageBD(m);
+                       }
+                       else{
+                            response.setStatus(404);
+                            jo.addProperty("fail", "FAIL!");
+                            out.write(jo.toString());
+                       }
+                   }
+                   else{
+                       response.setStatus(404);
+                        jo.addProperty("fail", "FAIL!");
+                        out.write(jo.toString());
+                   }
+               } 
+               for(int j = 0; j < r.size(); j++){
+                   su = esut.databaseToSimpleUserID(r.get(j).getUser_id());
+                   if(su != null){
+                      siz++;
+                   }
+               }
+               ArrayList<Message> tp = new ArrayList<Message>();
+               tp = emt.databaseToMessageB(d.getDoctor_id(), 1);
+               if(tp!= null){
+                   if(tp.size() == siz){
+                   response.setStatus(200);
+                    jo.addProperty("success", "SUCCESS!");
+                    out.write(jo.toString());
+                   }
+                   else{
+                   response.setStatus(404);
+                    jo.addProperty("fail", "FAIL!");
+                    out.write(jo.toString());
+                   }
+               }
+               else{
+                   response.setStatus(404);
+                    jo.addProperty("fail", "FAIL!");
+                    out.write(jo.toString());
+               }
+            }
+            else{
+                    response.setStatus(404);
+                    jo.addProperty("fail", "FAIL!");
+                    out.write(jo.toString());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     private void insertBloodTest(HttpServletRequest request, HttpServletResponse response) throws IOException{
         
@@ -1046,6 +1183,14 @@ public class UserServlet extends HttpServlet {
              
          case "/InsertTreatment":
              insertTreatment(request, response);
+             break;
+             
+         case "/BloodDonationMessage":
+             bloodDonationMessage(request, response);
+             break;
+             
+         case "/BookAppointment":
+             bookAppointment(request, response);
              break;
 
 	default:

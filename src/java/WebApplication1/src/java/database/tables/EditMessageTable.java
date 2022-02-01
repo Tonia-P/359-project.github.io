@@ -66,6 +66,25 @@ public class EditMessageTable {
         return null;
     }
     
+     public Message databaseToMessageDay(int doctor_id, int user_id, String date) throws SQLException, ClassNotFoundException{
+         Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id= '" + doctor_id + "' AND user_id ='" + user_id + "' AND date_time ='" + date + "'");
+            rs.next();
+            String json=DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            Message bt = gson.fromJson(json, Message.class);
+            return bt;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    
     public ArrayList<Message> databaseToAllMessages(int doctor_id, int user_id) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -185,6 +204,30 @@ public class EditMessageTable {
         }
         return null;
     }
+     
+     public ArrayList<Message> databaseToMessageB(int doctor_id, int blooddonnor) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> m = new ArrayList<Message>();
+        ResultSet rs;
+        
+        try{
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + doctor_id + "' AND blood_donnation ='" + blooddonnor + "'");
+            while(rs.next()){
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Message mess = gson.fromJson(json, Message.class);
+                m.add(mess);
+            }
+            System.out.println(m);
+            return m;
+        }
+        catch(Exception e){
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
 
     public void createMessageTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
@@ -224,6 +267,35 @@ public class EditMessageTable {
                     + "'" + msg.getDoctor_id() + "',"
                     + "'" + msg.getUser_id() + "',"
                     + "'" + msg.getDate_time() + "',"
+                    + "'" + msg.getMessage() + "',"
+                    + "'" + msg.getSender() + "',"
+                    + "'" + msg.getBlood_donation() + "',"
+                    + "'" + msg.getBloodtype()+ "'"
+                    + ")";
+            //stmt.execute(table);
+            System.out.println(insertQuery);
+            stmt.executeUpdate(insertQuery);
+            System.out.println("# The bloodtest was successfully added in the database.");
+
+            /* Get the member id from the database and set it to the member */
+            stmt.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EditBloodTestTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void createNewMessageBD(Message msg) throws ClassNotFoundException {
+        try {
+            Connection con = DB_Connection.getConnection();
+
+            Statement stmt = con.createStatement();
+
+            String insertQuery = "INSERT INTO "
+                    + " message (doctor_id,user_id,date_time,message,sender,blood_donation,bloodtype) "
+                    + " VALUES ("
+                    + "'" + msg.getDoctor_id() + "',"
+                    + "'" + msg.getUser_id() + "',"
+                    + "CURRENT_TIMESTAMP,"
                     + "'" + msg.getMessage() + "',"
                     + "'" + msg.getSender() + "',"
                     + "'" + msg.getBlood_donation() + "',"
