@@ -251,9 +251,9 @@ const Graph = ({ amka }) => {
 
     return (
 
-        <Box background='gray.900' py={5} h='400px' maxW='700px' minW='500px' borderRadius='5' overflow='hidden'>
-            Chart here
-            <HStack>
+        <Box background='gray.900' py={5} h='100%'  maxW='700px' minW='600px' borderRadius='5' >
+            Chart for {amka.amka}
+            <HStack display='flex' justifyContent='space-around'>
               <Button onClick={() => {changeData('blood_sugar','#38A169')
                                       chartRef.current.update();}} colorScheme='green' >Blood sugar</Button>
               <Button onClick={() => {changeData('iron','#FC8181')

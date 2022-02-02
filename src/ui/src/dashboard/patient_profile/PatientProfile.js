@@ -9,6 +9,7 @@ import {
     Input,
     Button,
     GridItem,
+    Flex,
     Grid
   } from '@chakra-ui/react';
   import { UserContext } from '../../contexts/UserContext';
@@ -17,6 +18,7 @@ import {
   import dayjs from 'dayjs';
   import $ from 'jquery';
 import Graph from '../../bloodtest/graph/Graph';
+import TreatmentTable from './TreatmentTable';
 
 
   
@@ -25,7 +27,7 @@ const PatientsProfile = () => {
   const [ allPatients, setAllPatients ] = useState([])
   const { userInfo } = useContext(UserContext);
   const params = useParams();
-  const [ patientInfo, setPatientInfo ] = useState()
+  const [ patientInfo, setPatientInfo ] = useState({})
 
 
   useEffect(() => {
@@ -74,16 +76,25 @@ const PatientsProfile = () => {
 
         <Grid
           w='100%'
-          h='90vh'
+          h='150vh'
           templateRows='repeat(2, 1fr)'
           templateColumns='repeat(5, 1fr)'
           gap={4}
         >
-          <GridItem rowSpan={2} h= '100%' colSpan={2} bg='tomato' />
-          <GridItem colSpan={3} h= '100%' bg='papayawhip' >
-              <Graph amka={patientInfo.amka} />
+          <GridItem rowSpan={2} h= '100%' colSpan={2} bg='gray.900' >
+              {patientInfo.amka}
           </GridItem>
-          <GridItem colSpan={3} h= '100%' bg='papayawhip' />
+          <GridItem colSpan={3} h= '100%' display='flex' alignItems='center' justifyContent='center' >
+
+              {patientInfo.amka  && <Graph amka={{amka: patientInfo.amka}} />}
+          </GridItem>
+          <GridItem colSpan={3} h= '100%' p={3} >
+              <Flex justifyContent='space-between'>
+                  <Text>Treatments</Text>
+                  <Button>Add new</Button>
+              </Flex>
+              <TreatmentTable user_id={params} />
+          </GridItem>
         </Grid>
    
 

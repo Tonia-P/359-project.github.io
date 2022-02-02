@@ -39,7 +39,8 @@ const MessageRows = (info) =>{
 
             const docVals = {
               doctor_id: info.info.doctor_id,
-              username: info.info.sender
+              username: info.info.username
+              
             }
             var urlEnd2 = 'http://localhost:8080/WebApplication1/AllMessages';
             var dets = JSON.stringify(docVals);
