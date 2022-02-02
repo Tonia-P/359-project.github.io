@@ -68,7 +68,16 @@ function App() {
     
     console.log("USER INFO IN PAGE!!")
     console.log(values)
-    setUserInfo(values);
+    var usertype;
+    if(values.username === "admin"){
+      usertype = "admin";
+    }
+    else if(values.specialty) usertype = "doctor";
+    else usertype = "user";
+    setUserInfo({
+      ...values,
+      usertype: usertype
+    })
     setIsLogged(true);
 
     if(values.username === "admin"){
@@ -183,7 +192,7 @@ function App() {
 
                     <Route path="/" element={ <Navigate to='/dashboard' replace /> } />
                     <Route path="/register" element={ <Form /> } />
-                    <Route path='/newBloodTest/:user_id' element={<SubmitBloodTest /> }/>
+                    <Route path='/newBloodTest/:amka' element={<SubmitBloodTest /> }/>
 
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                         <Route path="allbloodtests" element={<AllBloodTests />} />

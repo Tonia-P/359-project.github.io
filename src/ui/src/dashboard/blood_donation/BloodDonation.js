@@ -65,6 +65,32 @@ const BloodDonation = () => {
       console.log(bloodVals)
   }
 
+  const handleSubmit = () =>{
+    var json_vals = JSON.stringify(bloodVals);
+    console.log(bloodVals)
+    
+        var urlEnd = 'http://localhost:8080/WebApplication1/BloodDonationMessage';
+        $.ajax({
+            url: urlEnd,
+            type: "POST",
+            contentType: 'json',
+            data: json_vals,
+            success: function (result) {
+              console.log("Success");
+                const json = JSON.parse(result)
+                console.log(json)
+
+                
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                var json = JSON.parse(result.responseText)
+                console.log(json)
+
+            }
+        });
+  }
+
 
 
     return (
@@ -118,7 +144,7 @@ const BloodDonation = () => {
                 Submit
             </Button>
             :
-            <Button colorScheme='teal' onClick={handleClick}>
+            <Button colorScheme='teal' onClick={handleSubmit}>
                 Submit
             </Button>
             

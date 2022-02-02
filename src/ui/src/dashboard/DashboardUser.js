@@ -50,7 +50,7 @@ const DashboardUser = () => {
             >
               
                 <GridItem rowSpan={3} colSpan={3} >
-                <Link to={`/newBloodTest/${userInfo.user_id}`}>
+                <Link to={`/newBloodTest/${userInfo.amka}`}>
                     <Button background='green.400' colorScheme='green' p={[3,3,3,3,5]} h='85%' w='100%' overflow='hidden'>
                         
                         <Icon as={GiBookCover} position='absolute' color='green.200' h={[100,100,100,100,200]} w={[100,100,100,100,200]} left='60%' top='50%' zIndex='1' />
