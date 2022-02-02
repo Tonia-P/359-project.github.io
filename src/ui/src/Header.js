@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { 
     Grid, 
     GridItem, 
@@ -16,11 +16,14 @@ import { Logo } from './Logo';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import './header.css';
+import { UserContext } from './contexts/UserContext';
 
 
-const Header = (isLogged) => {
+const Header = () => {
 
     const [ username, setUsermame ] = useState('');
+    const { userInfo, isLogged, setIsLogged } = useContext(UserContext);
+
 
     function read_cookie(name) {
         var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
@@ -35,7 +38,9 @@ const Header = (isLogged) => {
 
         document.cookie = cookie_user;
         document.cookie = cookie_pass;
+        setIsLogged(false)
         window.location.reload();
+
     }
 
     useEffect(
@@ -56,15 +61,12 @@ const Header = (isLogged) => {
 
                 
             <GridItem colSpan={5} h='7' justifySelf="flex-start" >
-            <Button colorScheme='teal' size='sm'>
-                    <Link to="/bloodtest">Blood test</Link>
-                </Button>
             </GridItem>
             <GridItem colSpan={1} h='7' justifySelf="flex-end" >
             <ColorModeSwitcher size='sm' justifySelf="flex-start" />
             </GridItem>
 
-            {!isLogged.isLogged ?
+            {!isLogged ?
 
             <>
 
@@ -87,15 +89,15 @@ const Header = (isLogged) => {
 
             <Menu closeOnSelect={true} direction= "rtl">
               <MenuButton   >
-              <Avatar name={ username } size='sm' src='https://bit.ly/tioluwani-kolawole' />
+              <Avatar name={ userInfo.firstname } size='sm' src='https://bit.ly/tioluwani-kolawole' />
               </MenuButton>
               <MenuList minWidth='240px'>
               <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
               <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
-              <Link to="/Users"><MenuItem>User List</MenuItem></Link>
-              <Link to="/Certify"><MenuItem>Certify Doctors</MenuItem></Link>
-              <Link to="/Messages"><MenuItem>Messages</MenuItem></Link>
-              <Link to="/Rendezvous"><MenuItem>Rendezvous</MenuItem></Link>
+              {username === 'admin' && <Link to="/Certify"><MenuItem>Certify Doctors</MenuItem></Link>}
+              {userInfo.usertype !== 'admin' && <Link to="/Messages"><MenuItem>Messages</MenuItem></Link>}
+              {userInfo.usertype === 'doctor' && <Link to="/Rendezvous"><MenuItem>Rendezvous</MenuItem></Link>}
+              {userInfo.usertype === 'user' && <Link to="/find_doctor"><MenuItem>Find doctor</MenuItem></Link>}
               <MenuDivider />
                 <MenuItem onClick={handleLogout}><Link to="/">Logout</Link></MenuItem>
                 

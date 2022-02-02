@@ -61,7 +61,7 @@ function App() {
 
   });
 
-  const user = useMemo(() => ({ userInfo, setUserInfo, isLogged }), [ userInfo, setUserInfo, isLogged ]);
+  const user = useMemo(() => ({ userInfo, setUserInfo, isLogged, setIsLogged }), [ userInfo, setUserInfo, isLogged, setIsLogged ]);
 
 
   const submitForm = (values) => {
@@ -121,13 +121,21 @@ function App() {
             success: function (result) {
               console.log("Success");
                 const json = JSON.parse(result)
-                console.log(result);
-                setUserInfo(json)
-                setIsLogged(true)
-
-                if(userInfo.username === "admin"){
-                  userInfo.usertype = "admin";
+                var usertype;
+                if(json.username === "admin"){
+                  usertype = "admin";
                 }
+                else if(json.specialty) usertype = "doctor";
+                else usertype = "user";
+                setUserInfo({
+                  ...json,
+                  usertype: usertype
+                })
+                
+
+                
+                console.log(userInfo)
+                setIsLogged(true)
             },
             error: function (result) {
                 console.log(result.responseText)
@@ -151,7 +159,7 @@ function App() {
 
       <UserContext.Provider value= { user }>
         <Router>
-        <Header isLogged= {isLogged} />
+        <Header />
           <Box textAlign="center" fontSize="xl">
               <VStack spacing={8}>
 
