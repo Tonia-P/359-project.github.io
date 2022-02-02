@@ -14,6 +14,7 @@ import Graph from './graph/Graph';
 import BloodTestForm from './form/BloodTestForm';
 import { NavigateFunction, useLocation, useNavigate, useParams } from "react-router";
 import AllBloodTests from './AllBloodTests';
+import TreatmentForm from './form/TreatmentForm';
 
 
 
@@ -33,7 +34,7 @@ const SubmitTreatment = () =>{
         <Flex h='100%' justifyContent='center' alignItems='center'>
 
         <Graph amka={params}/>
-        <BloodTestForm amka={params}/>
+        <TreatmentForm params={params}/>
         </Flex>
 
         <AllBloodTests amka={params} />

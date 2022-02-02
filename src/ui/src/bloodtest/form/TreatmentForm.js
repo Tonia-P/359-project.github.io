@@ -22,15 +22,13 @@ import {
 
 
   
-const BloodTestForm = ({ amka, user_id }) => {
+const TreatmentForm = ({ params }) => {
 
-  const [ allPatients, setAllPatients ] = useState([])
   const { userInfo } = useContext(UserContext);
-  const [ isNext, setIsNext ] = useState(false)
 
   const [ values, setValues ] = useState({
         doctor_id: userInfo.doctor_id,
-        user_id: user_id.user_id,
+        user_id: params.user_id,
         start_date: '',
         end_date: '',
         treatment_text: ''
@@ -52,18 +50,18 @@ const BloodTestForm = ({ amka, user_id }) => {
 
     await setErrors( () =>{
         var tmp = {};
-        if(values.medical_center === ''){
+        if(values.treatment_text === ''){
             tmp.medical_center = 'This field is required.';
         }
-        if(values.test_date === ''){
+        if(values.start_date === ''){
             tmp.test_date = 'This field is required.';
         }
-        else if(dayjs(values.test_date).isAfter(dayjs())){
+        else if(dayjs(values.start_date).isAfter(dayjs())){
             tmp.test_date = 'Time traveler spotted';
         }
         console.log(tmp)
         if(Object.entries(tmp).length === 0){
-            setIsNext(true)
+            insertBT()
         }
         return tmp
     })
@@ -83,7 +81,7 @@ const BloodTestForm = ({ amka, user_id }) => {
     var json_vals = JSON.stringify(o);
     console.log(json_vals)
 
-    var urlEnd = 'http://localhost:8080/WebApplication1/InsertBloodTest';
+    var urlEnd = 'http://localhost:8080/WebApplication1/InsertTreatment';
     $.ajax({
         url: urlEnd,
         type: "POST",
@@ -151,121 +149,50 @@ const BloodTestForm = ({ amka, user_id }) => {
             alignContent='space-between' 
             justifyContent='space-between' 
         >
-{!isNext ?
             <>
             <VStack>
-                <Heading fontSize='lg' mb={3}>Submit new blood test</Heading>
-                <FormControl isRequired id= "medical_center" isInvalid={errors.medical_center}>
-                    <FormLabel>Medical Center</FormLabel>
+                <Heading fontSize='lg' mb={3}>Submit new treatment</Heading>
+                <FormControl isRequired id= "treatment_text" isInvalid={errors.medical_center}>
+                    <FormLabel>Treatment text</FormLabel>
                     <Input 
                         type= "text" 
-                        name= "medical_center"
-                        value= {values.medical_center}
+                        name= "treatment_text"
+                        value= {values.treatment_text}
                         onChange= {handleChange} 
-                        placeholder= "Medical center"
+                        placeholder= "text"
                         minLength="8"
                         />
-                        <FormErrorMessage >{errors.medical_center}</FormErrorMessage>
+                        <FormErrorMessage >{errors.treatment_text}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl isRequired id= "test_date" isInvalid={errors.test_date}>
-                    <FormLabel>Test date</FormLabel>
+                <FormControl isRequired id= "start_date" isInvalid={errors.test_date}>
+                    <FormLabel>Start date</FormLabel>
                     <Input 
                         type= "date" 
-                        name= "test_date"
-                        value= {values.test_date}
+                        name= "start_date"
+                        value= {values.start_date}
                         onChange= {handleChange} 
-                        placeholder= "test_date"
+                        placeholder= "start_date"
                         />
-                        <FormErrorMessage >{errors.test_date}</FormErrorMessage>
+                        <FormErrorMessage >{errors.start_date}</FormErrorMessage>
+                </FormControl>
+                <FormControl isRequired id= "end_date" isInvalid={errors.test_date}>
+                    <FormLabel>End date</FormLabel>
+                    <Input 
+                        type= "date" 
+                        name= "end_date"
+                        value= {values.end_date}
+                        onChange= {handleChange} 
+                        placeholder= "end_date"
+                        />
+                        <FormErrorMessage >{errors.end_date}</FormErrorMessage>
                 </FormControl>
             </VStack>
 
-            <Button onClick={handleNext}>
-                Next
-            </Button>
-            </>
-
-            :
-
-            <>
-            <VStack>
-                <Heading fontSize='lg' mb={3}>Submit new blood test</Heading>
-                <FormControl  id= "blood_sugar" isInvalid={errors.blood_sugar}>
-                    <FormLabel>Blood Sugar</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "blood_sugar"
-                        value= {values.blood_sugar}
-                        onChange= {handleChange} 
-                        placeholder= "Blood Sugar"
-                        />
-                        <FormErrorMessage >{errors.blood_sugar}</FormErrorMessage>
-                </FormControl>
-                <FormControl  id= "vitamin_d3" >
-                    <FormLabel>Vitamin D3</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "vitamin_d3"
-                        value= {values.vitamin_d3}
-                        onChange= {handleChange} 
-                        placeholder= "Vitamin D3"
-                        />
-                </FormControl>
-                <FormControl  id= "cholesterol" >
-                    <FormLabel>Cholesterol</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "cholesterol"
-                        value= {values.cholesterol}
-                        onChange= {handleChange} 
-                        placeholder= "Cholesterol"
-                        />
-                </FormControl>
-                <FormControl  id= "iron" >
-                    <FormLabel>Iron</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "iron"
-                        value= {values.iron}
-                        onChange= {handleChange} 
-                        placeholder= "Iron"
-                        />
-                </FormControl>
-                <FormControl  id= "vitamin_d3" >
-                    <FormLabel>Vitamin D3</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "vitamin_d3"
-                        value= {values.vitamin_d3}
-                        onChange= {handleChange} 
-                        placeholder= "Vitamin D3"
-                        />
-                </FormControl>
-                <FormControl  id= "vitamin_b12" >
-                    <FormLabel>Vitamin D12</FormLabel>
-                    <Input 
-                        type= "text" 
-                        name= "vitamin_b12"
-                        value= {values.vitamin_b12}
-                        onChange= {handleChange} 
-                        placeholder= "Vitamin D12"
-                        />
-                </FormControl>
-                
-            </VStack>
-
-            <Flex justifyContent='space-between'>
-            <Button onClick={() =>{setIsNext(false)}}>
-                Back
-            </Button>
-            <Button colorScheme='teal' onClick={handleSubmit}>
+            <Button onClick={handleNext} >
                 Submit
             </Button>
-            </Flex>
             </>
-
-}
 
         </Box>
    
@@ -273,4 +200,4 @@ const BloodTestForm = ({ amka, user_id }) => {
     );
 };
   
-  export default BloodTestForm;
+  export default TreatmentForm;

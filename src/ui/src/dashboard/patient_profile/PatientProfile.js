@@ -14,6 +14,7 @@ import {
   } from '@chakra-ui/react';
   import { UserContext } from '../../contexts/UserContext';
   import { NavigateFunction, useLocation, useNavigate, useParams } from "react-router";
+  import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
   import dayjs from 'dayjs';
   import $ from 'jquery';
@@ -83,15 +84,22 @@ const PatientsProfile = () => {
         >
           <GridItem rowSpan={2} h= '100%' colSpan={2} bg='gray.900' >
               {patientInfo.amka}
+              <Link to={`/newTreatment/${patientInfo.user_id}/${patientInfo.amka}`}>
+                        <Button>Add new</Button>
+                    </Link>
           </GridItem>
           <GridItem colSpan={3} h= '100%' display='flex' alignItems='center' justifyContent='center' >
 
               {patientInfo.amka  && <Graph amka={{amka: patientInfo.amka}} />}
           </GridItem>
           <GridItem colSpan={3} h= '100%' p={3} >
-              <Flex justifyContent='space-between'>
-                  <Text>Treatments</Text>
-                  <Button>Add new</Button>
+              <Flex justifyContent='space-between' zIndex='3'>
+                    <Text>Treatments</Text>
+                    {patientInfo.amka  &&
+                    <Link to={`/newTreatment/${patientInfo.user_id}/${patientInfo.amka}`}>
+                        <Button>Add new</Button>
+                    </Link>
+}
               </Flex>
               <TreatmentTable user_id={params} />
           </GridItem>

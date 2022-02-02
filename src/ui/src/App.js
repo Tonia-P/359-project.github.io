@@ -31,6 +31,8 @@ import DashboardDoctor from './dashboard/DashboardDoctor';
 import SubmitBloodTest from './bloodtest/SubmitBloodTest';
 import DashboardUser from './dashboard/DashboardUser';
 import PatientsProfile from './dashboard/patient_profile/PatientProfile';
+import SubmitTreatment from './bloodtest/SubmitTreatment';
+import DashboardVisitor from './dashboard/DashboardVisitor';
 
 function App() {
 
@@ -180,6 +182,8 @@ function App() {
                     <>
                       <Route path="/loginMenu" element={ <LoginPage/>}/>
                       <Route path="/login" element={ <LoginForm submitForm= {submitForm} />}/>
+                      <Route path="/find_doctor" element={<FindDoctor /> } />
+                      <Route path="/dashboard" element={<DashboardVisitor /> } />
                       <Route path="/loginAdmin" element={<LoginFormAdmin submitForm = {submitForm} />} />
                     </>
                     :
@@ -214,6 +218,7 @@ function App() {
                     <Route path="patient/:user_id" element={<PatientsProfile /> } />
                     <Route path="/rendezvous" element={<Rendezvous /> } />
                     <Route path="/dashboard" element={<DashboardDoctor/> } />
+                    <Route path="/newTreatment/:user_id/:amka" element={<SubmitTreatment/> } />
                     </>
                     }
                     
@@ -233,6 +238,7 @@ function App() {
                       <Route path='/newBloodTest/:amka' element={<SubmitBloodTest /> }/>
                     </>
                     }
+
                     <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 </Routes>
                   

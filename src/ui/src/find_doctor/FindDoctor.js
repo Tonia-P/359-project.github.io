@@ -109,7 +109,7 @@ const FindDoctor = () => {
                     	console.error(err);
                     });
                 }
-                else if (isLogged === 0) setFilteredDoctors([])
+                else if (isLogged === 0) setFilteredDoctors(allDoctors)
 
       }, [isDocLoaded, isLogged]);
       
