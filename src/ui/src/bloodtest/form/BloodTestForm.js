@@ -82,7 +82,8 @@ const BloodTestForm = ({ amka }) => {
 
 
   const insertBT = () =>{
-    var json_vals = JSON.stringify(values);
+    let o = Object.fromEntries(Object.entries(values).filter(([_, v]) => v != null));
+    var json_vals = JSON.stringify(o);
     console.log(json_vals)
 
     var urlEnd = 'http://localhost:8080/WebApplication1/InsertBloodTest';
@@ -200,7 +201,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "blood_sugar"
-                        autoComplete= "on"
                         value= {values.blood_sugar}
                         onChange= {handleChange} 
                         placeholder= "Blood Sugar"
@@ -212,7 +212,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "cholesterol"
-                        autoComplete= "on"
                         value= {values.cholesterol}
                         onChange= {handleChange} 
                         placeholder= "Cholesterol"

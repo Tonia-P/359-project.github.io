@@ -81,7 +81,7 @@ const PatientsProfile = () => {
         >
           <GridItem rowSpan={2} h= '100%' colSpan={2} bg='tomato' />
           <GridItem colSpan={3} h= '100%' bg='papayawhip' >
-              <Graph amka={patientInfo} />
+              <Graph amka={patientInfo.amka} />
           </GridItem>
           <GridItem colSpan={3} h= '100%' bg='papayawhip' />
         </Grid>
