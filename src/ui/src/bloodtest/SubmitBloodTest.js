@@ -32,7 +32,7 @@ const SubmitBloodTest = () =>{
         <Flex h='100%' justifyContent='center' alignItems='center'>
 
         <Graph amka={params}/>
-        <BloodTestForm />
+        <BloodTestForm amka={params}/>
         </Flex>
         </Box>
     )

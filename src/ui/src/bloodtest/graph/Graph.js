@@ -155,17 +155,8 @@ const Graph = ({ amka }) => {
     responsive: true,
     plugins: {
       drawTime: 'beforeDraw',
-      annotation: {
-        annotations: {
-          line1: {
-            type: 'box',
-            yMin: 60,
-            yMax: 100,
-            borderWidth: 0,
-            backgroundColor: 'rgba(159, 168, 218, 0.2)'
-          }
-        }
-      },
+      
+      
       legend: {
         display: false,
       },

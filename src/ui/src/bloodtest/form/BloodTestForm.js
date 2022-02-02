@@ -22,24 +22,23 @@ import {
 
 
   
-const BloodTestForm = () => {
+const BloodTestForm = ({ amka }) => {
 
   const [ allPatients, setAllPatients ] = useState([])
   const { userInfo } = useContext(UserContext);
   const [ isNext, setIsNext ] = useState(false)
 
   const [ values, setValues ] = useState({
-      amka: '',
+      amka: amka.amka,
       test_date: '',
       medical_center: '',
       blood_sugar: '',
       cholesterol: '',
-      iron_level: '',
+      iron: '',
       vitamin_d3: '',
-      vitamin_d12: ''
+      vitamin_b12: ''
   })
   const [ errors, setErrors ] = useState({
-      medical_center:''
   })
 
   const handleChange = e => {
@@ -75,12 +74,65 @@ const BloodTestForm = () => {
 
   }
 
+  
+
   const handleNext = () =>{
       validate();
   }
 
+
+  const insertBT = () =>{
+    var json_vals = JSON.stringify(values);
+    console.log(json_vals)
+
+    var urlEnd = 'http://localhost:8080/WebApplication1/InsertBloodTest';
+    $.ajax({
+        url: urlEnd,
+        type: "POST",
+        contentType: 'json',
+        data: json_vals,
+        success: function (result) {
+          console.log("Success");
+            const json = JSON.parse(result)
+            console.log(json)
+
+            setValues(json)
+            
+        },
+        error: function (result) {
+            console.log(result.responseText)
+            var json = JSON.parse(result.responseText)
+            console.log(json)
+
+        }
+    });
+  
+  }
+
+
+  useEffect(() => {
+    console.log(errors)
+  }, [errors]);
+  
+
   const handleSubmit = () =>{
       console.log(values)
+      
+      
+        setErrors(() =>{
+            var tmp = {}
+            if(values.blood_sugar ==='' && values.iron ==='' && values.cholesterol ==='' && values.vitamin_b12 ==='' && values.vitamin_d3 ==='' ){
+             tmp = {blood_sugar: "Please fill at least one field"};
+            }
+             if(Object.entries(tmp).length === 0)  insertBT();
+
+             return tmp;
+                
+        })
+
+      
+
+      
   }
 
 
@@ -143,7 +195,7 @@ const BloodTestForm = () => {
             <>
             <VStack>
                 <Heading fontSize='lg' mb={3}>Submit new blood test</Heading>
-                <FormControl  id= "blood_sugar" >
+                <FormControl  id= "blood_sugar" isInvalid={errors.blood_sugar}>
                     <FormLabel>Blood Sugar</FormLabel>
                     <Input 
                         type= "text" 
@@ -153,6 +205,7 @@ const BloodTestForm = () => {
                         onChange= {handleChange} 
                         placeholder= "Blood Sugar"
                         />
+                        <FormErrorMessage >{errors.blood_sugar}</FormErrorMessage>
                 </FormControl>
                 <FormControl  id= "cholesterol" >
                     <FormLabel>Cholesterol</FormLabel>
@@ -165,13 +218,13 @@ const BloodTestForm = () => {
                         placeholder= "Cholesterol"
                         />
                 </FormControl>
-                <FormControl  id= "iron_level" >
+                <FormControl  id= "iron" >
                     <FormLabel>Iron</FormLabel>
                     <Input 
                         type= "text" 
-                        name= "iron_level"
+                        name= "iron"
                         autoComplete= "on"
-                        value= {values.iron_level}
+                        value= {values.iron}
                         onChange= {handleChange} 
                         placeholder= "Iron"
                         />
