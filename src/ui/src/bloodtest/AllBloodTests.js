@@ -9,7 +9,7 @@ import {
 import $ from 'jquery';
 import ListRow from './ListRow';
 
-  const AllBloodTests = () =>{
+  const AllBloodTests = ({ amka }) =>{
 
 
     const [ tests, setTests ] = useState([]);
@@ -18,27 +18,31 @@ import ListRow from './ListRow';
 
     useEffect (
     () => {
-        var urlEnd = 'http://localhost:8080/WebApplication1/rest/bloodtests/list';
-        $.ajax({
-            url: urlEnd,
-            type: "GET",
-            contentType: 'application/json',
-            success: function (result) {
-              console.log("Success");
-              console.log(result);
-                setTests(result);
-                //setInfo(result)
-                console.log(tests);
-                setIsLoaded(true);
-            },
-            error: function (result) {
-                console.log("Fail");
-                console.log(result);
-
-                setIsLoaded(false);
-            }
-        });
-    }
+      var json_vals = JSON.stringify(amka);
+      console.log(amka)
+      
+          var urlEnd = 'http://localhost:8080/WebApplication1/AmkaToBloodtests';
+          $.ajax({
+              url: urlEnd,
+              type: "POST",
+              contentType: 'json',
+              data: json_vals,
+              success: function (result) {
+                console.log("Success");
+                  const json = JSON.parse(result)
+                  console.log(json)
+  
+                  setTests(json)
+                  
+              },
+              error: function (result) {
+                  console.log(result.responseText)
+                  var json = JSON.parse(result.responseText)
+                  console.log(json)
+  
+              }
+          });
+        }
     ,
     []);
 

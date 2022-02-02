@@ -30,6 +30,7 @@ import FindDoctor from './find_doctor/FindDoctor';
 import DashboardDoctor from './dashboard/DashboardDoctor';
 import SubmitBloodTest from './bloodtest/SubmitBloodTest';
 import DashboardUser from './dashboard/DashboardUser';
+import PatientsProfile from './dashboard/patient_profile/PatientProfile';
 
 function App() {
 
@@ -210,7 +211,7 @@ function App() {
                     
                     {userInfo.usertype === 'doctor' && 
                     <>
-                    <Route path="patient/:user_id" element={<>AAAAAAAAAA</>} />
+                    <Route path="patient/:user_id" element={<PatientsProfile /> } />
                     <Route path="/rendezvous" element={<Rendezvous /> } />
                     <Route path="/dashboard" element={<DashboardDoctor/> } />
                     </>

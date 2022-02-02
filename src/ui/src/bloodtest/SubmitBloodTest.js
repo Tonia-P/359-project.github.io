@@ -13,6 +13,7 @@ import {
 import Graph from './graph/Graph';
 import BloodTestForm from './form/BloodTestForm';
 import { NavigateFunction, useLocation, useNavigate, useParams } from "react-router";
+import AllBloodTests from './AllBloodTests';
 
 
 
@@ -34,6 +35,8 @@ const SubmitBloodTest = () =>{
         <Graph amka={params}/>
         <BloodTestForm amka={params}/>
         </Flex>
+
+        <AllBloodTests amka={params} />
         </Box>
     )
 }

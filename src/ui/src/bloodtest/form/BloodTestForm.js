@@ -240,13 +240,13 @@ const BloodTestForm = ({ amka }) => {
                         placeholder= "Vitamin D3"
                         />
                 </FormControl>
-                <FormControl  id= "vitamin_d12" >
+                <FormControl  id= "vitamin_b12" >
                     <FormLabel>Vitamin D12</FormLabel>
                     <Input 
                         type= "text" 
-                        name= "vitamin_d12"
+                        name= "vitamin_b12"
                         autoComplete= "on"
-                        value= {values.vitamin_d12}
+                        value= {values.vitamin_b12}
                         onChange= {handleChange} 
                         placeholder= "Vitamin D12"
                         />
