@@ -193,7 +193,7 @@ function App() {
 
                     <Route path="/" element={ <Navigate to='/dashboard' replace /> } />
                     <Route path="/register" element={ <Form /> } />
-                    <Route path='/newBloodTest/:amka' element={<SubmitBloodTest /> }/>
+                    
 
                     <Route path="bloodtest" element= { <BloodTestMenu />} >
                         <Route path="allbloodtests" element={<AllBloodTests />} />
@@ -230,6 +230,7 @@ function App() {
                     <>
                       <Route path="/find_doctor" element={<FindDoctor /> } />
                       <Route path="/dashboard" element={<DashboardUser/> } />
+                      <Route path='/newBloodTest/:amka' element={<SubmitBloodTest /> }/>
                     </>
                     }
                     <Route path="*" element={ <div> Error 404: Page not found. </div> } />

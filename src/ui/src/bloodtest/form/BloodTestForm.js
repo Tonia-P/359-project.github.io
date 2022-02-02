@@ -32,11 +32,11 @@ const BloodTestForm = ({ amka }) => {
       amka: amka.amka,
       test_date: '',
       medical_center: '',
-      blood_sugar: null,
-      cholesterol: null,
-      iron: null,
-      vitamin_d3: null,
-      vitamin_b12: null
+      blood_sugar: '',
+      cholesterol: '',
+      iron: '',
+      vitamin_d3: '',
+      vitamin_b12: ''
   })
   const [ errors, setErrors ] = useState({
   })
@@ -82,7 +82,7 @@ const BloodTestForm = ({ amka }) => {
 
 
   const insertBT = () =>{
-    let o = Object.fromEntries(Object.entries(values).filter(([_, v]) => v != null));
+    let o = Object.fromEntries(Object.entries(values).filter(([_, v]) => v != ''));
     var json_vals = JSON.stringify(o);
     console.log(json_vals)
 
@@ -163,7 +163,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "medical_center"
-                        autoComplete= "on"
                         value= {values.medical_center}
                         onChange= {handleChange} 
                         placeholder= "Medical center"
@@ -177,7 +176,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "date" 
                         name= "test_date"
-                        autoComplete= "on"
                         value= {values.test_date}
                         onChange= {handleChange} 
                         placeholder= "test_date"
@@ -207,6 +205,16 @@ const BloodTestForm = ({ amka }) => {
                         />
                         <FormErrorMessage >{errors.blood_sugar}</FormErrorMessage>
                 </FormControl>
+                <FormControl  id= "vitamin_d3" >
+                    <FormLabel>Vitamin D3</FormLabel>
+                    <Input 
+                        type= "text" 
+                        name= "vitamin_d3"
+                        value= {values.vitamin_d3}
+                        onChange= {handleChange} 
+                        placeholder= "Vitamin D3"
+                        />
+                </FormControl>
                 <FormControl  id= "cholesterol" >
                     <FormLabel>Cholesterol</FormLabel>
                     <Input 
@@ -222,7 +230,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "iron"
-                        autoComplete= "on"
                         value= {values.iron}
                         onChange= {handleChange} 
                         placeholder= "Iron"
@@ -233,7 +240,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "vitamin_d3"
-                        autoComplete= "on"
                         value= {values.vitamin_d3}
                         onChange= {handleChange} 
                         placeholder= "Vitamin D3"
@@ -244,7 +250,6 @@ const BloodTestForm = ({ amka }) => {
                     <Input 
                         type= "text" 
                         name= "vitamin_b12"
-                        autoComplete= "on"
                         value= {values.vitamin_b12}
                         onChange= {handleChange} 
                         placeholder= "Vitamin D12"
