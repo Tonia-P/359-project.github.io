@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import Form from './register/Form';
 import Header from './Header';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom'
 import LoginForm from './landing/LoginForm';
 import LoginFormAdmin from './landing/LoginFormAdmin';
 import Dashboard from './landing/Dashboard';
@@ -180,25 +180,49 @@ function App() {
                       <Route path="/allMessages" element={<Messages />} />
                     </>
                     }
+
+                    <Route path="/" element={ <Navigate to='/dashboard' replace /> } />
                     <Route path="/register" element={ <Form /> } />
-                    <Route path="/dashboard" element= {isLogged ? (userInfo.username === 'admin' ? <AdminDashBoard  /> : userInfo.specialty ? <DashboardDoctor/> : <DashboardUser/> ) : <div> Error 404: Page not found. </div>} />
-                    <Route path="bloodtest" element= { <BloodTestMenu />} >
-                      <Route path="allbloodtests" element={<AllBloodTests />} />
-                      <Route path="new" element={<NewBloodTest />} />
-                    </Route>
-                    <Route path="*" element={ <div> Error 404: Page not found. </div> } />
-                    <Route path="/profile" element={<Profile callback={ submitForm }/>}>
-                      <Route path="account" element={<AccountInfo />} />
-                      <Route path="address" element={<AddressInfo />} />
-                      <Route path="personal" element={<PersonalInfo />} />
-                      <Route path="additional" element={<> additional </>} />
-                    </Route>
                     <Route path='/newBloodTest/:user_id' element={<SubmitBloodTest /> }/>
+
+                    <Route path="bloodtest" element= { <BloodTestMenu />} >
+                        <Route path="allbloodtests" element={<AllBloodTests />} />
+                        <Route path="new" element={<NewBloodTest />} />
+                    </Route>
+                    
+                    {userInfo.usertype !== 'admin' && 
+                    <Route path="/profile" element={<Profile callback={ submitForm }/>} > 
+                        <Route path="account" element={<AccountInfo />} />
+                        <Route path="address" element={<AddressInfo />} />
+                        <Route path="personal" element={<PersonalInfo />} />
+                        <Route path="additional" element={<> additional </>} />
+                    </Route>
+                    }
+                    
+                    {userInfo.usertype === 'doctor' && 
+                    <>
                     <Route path="patient/:user_id" element={<>AAAAAAAAAA</>} />
-                    <Route path="/Users" element={<AdminTable />}/>
-                    <Route path="/Certify" element={<CertifyTable />}/>
                     <Route path="/rendezvous" element={<Rendezvous /> } />
-                    <Route path="/find_doctor" element={<FindDoctor /> } />
+                    <Route path="/dashboard" element={<DashboardDoctor/> } />
+                    </>
+                    }
+                    
+                    
+                    {userInfo.usertype === 'admin' && 
+                    <>
+                      <Route path="/Users" element={<AdminTable />}/>
+                      <Route path="/Certify" element={<CertifyTable />}/>
+                      <Route path="/dashboard" element={<AdminDashBoard/> } />
+                    </>
+                    }
+                    
+                    {userInfo.usertype === 'user' && 
+                    <>
+                      <Route path="/find_doctor" element={<FindDoctor /> } />
+                      <Route path="/dashboard" element={<DashboardUser/> } />
+                    </>
+                    }
+                    <Route path="*" element={ <div> Error 404: Page not found. </div> } />
                 </Routes>
                   
                   
