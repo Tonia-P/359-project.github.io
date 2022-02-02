@@ -16,6 +16,7 @@ import {
 
   import dayjs from 'dayjs';
   import $ from 'jquery';
+import Graph from '../../bloodtest/graph/Graph';
 
 
   
@@ -72,16 +73,17 @@ const PatientsProfile = () => {
     return (
 
         <Grid
-          h='100%'
           w='100%'
+          h='90vh'
           templateRows='repeat(2, 1fr)'
           templateColumns='repeat(5, 1fr)'
           gap={4}
         >
-          <GridItem rowSpan={2} colSpan={1} bg='tomato' />
-          <GridItem colSpan={2} bg='papayawhip' />
-          <GridItem colSpan={2} bg='papayawhip' />
-          <GridItem colSpan={4} bg='tomato' />
+          <GridItem rowSpan={2} h= '100%' colSpan={2} bg='tomato' />
+          <GridItem colSpan={3} h= '100%' bg='papayawhip' >
+              <Graph amka={patientInfo} />
+          </GridItem>
+          <GridItem colSpan={3} h= '100%' bg='papayawhip' />
         </Grid>
    
 

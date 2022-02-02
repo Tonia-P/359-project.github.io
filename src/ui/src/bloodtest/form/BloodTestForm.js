@@ -32,11 +32,11 @@ const BloodTestForm = ({ amka }) => {
       amka: amka.amka,
       test_date: '',
       medical_center: '',
-      blood_sugar: '',
-      cholesterol: '',
-      iron: '',
-      vitamin_d3: '',
-      vitamin_b12: ''
+      blood_sugar: null,
+      cholesterol: null,
+      iron: null,
+      vitamin_d3: null,
+      vitamin_b12: null
   })
   const [ errors, setErrors ] = useState({
   })
