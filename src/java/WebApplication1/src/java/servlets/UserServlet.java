@@ -269,20 +269,41 @@ public class UserServlet extends HttpServlet {
         
         JSON_Converter jc = new JSON_Converter();
         String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("Values: " + s);
         EditTreatmentTable ett = new EditTreatmentTable();
+        EditSimpleUserTable esut = new EditSimpleUserTable();
+        SimpleUser u;
+        EditBloodTestTable ebtt = new EditBloodTestTable();
+        BloodTest b;
         Treatment t, temp;
+        Gson gson = new Gson();
+        JsonObject jo = new JsonObject();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         try(PrintWriter out = response.getWriter()){
-            ett.addTreatmentFromJSON(s);
             t = ett.jsonToTreatment(s);
-            temp = ett.databaseToTreatmentI(t.getUser_id(), t.getDoctor_id(), t.getStart_date());
-            Gson gson = new Gson();
-            JsonObject jo = new JsonObject();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            if(temp!= null){
-                response.setStatus(200);
-                jo.addProperty("success", "SUCCESS!");
-                out.write(jo.toString());
+            u = esut.databaseToSimpleUserID(t.getUser_id());
+            if(u != null){
+                b = ebtt.databaseToBloodTestId(u.getAmka());
+                if(b != null){
+                    ett.addTreatmentFromJSON(s, b);
+                    temp = ett.databaseToTreatmentI(t.getUser_id(), t.getDoctor_id(), t.getStart_date());
+                    if(temp!= null){
+                        response.setStatus(200);
+                        jo.addProperty("success", "SUCCESS!");
+                        out.write(jo.toString());
+                    }
+                    else{
+                        response.setStatus(404);
+                        jo.addProperty("fail", "FAIL!");
+                        out.write(jo.toString());
+                    }
+                }
+                else{
+                    response.setStatus(404);
+                    jo.addProperty("fail", "FAIL!");
+                    out.write(jo.toString());
+                }
             }
             else{
                 response.setStatus(404);

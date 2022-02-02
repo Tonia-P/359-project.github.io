@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mainClasses.BloodTest;
 import mainClasses.Message;
 import mainClasses.Randevouz;
 import mainClasses.Treatment;
@@ -27,10 +28,12 @@ import mainClasses.Treatment;
 public class EditTreatmentTable {
 
     
-    public void addTreatmentFromJSON(String json) throws ClassNotFoundException{
+    public void addTreatmentFromJSON(String json, BloodTest b) throws ClassNotFoundException{
          Treatment msg=jsonToTreatment(json);
-         createNewTreatment(msg);
+         
+         createNewTreatment(msg, b);
     }
+    
     public String treatmentToJSON(Treatment tr) {
         Gson gson = new Gson();
 
@@ -133,7 +136,7 @@ public class EditTreatmentTable {
      *
      * @throws ClassNotFoundException
      */
-    public void createNewTreatment(Treatment tr) throws ClassNotFoundException {
+    public void createNewTreatment(Treatment tr, BloodTest b) throws ClassNotFoundException {
         try {
             Connection con = DB_Connection.getConnection();
 
@@ -147,7 +150,7 @@ public class EditTreatmentTable {
                     + "'" + tr.getStart_date() + "',"
                     + "'" + tr.getEnd_date()+ "',"
                     + "'" + tr.getTreatment_text() + "',"
-                    + "'" + tr.getBloodtest_id()+ "'"
+                    + "'" + b.getBloodtest_id()+ "'"
                     + ")";
             //stmt.execute(table);
             System.out.println(insertQuery);
