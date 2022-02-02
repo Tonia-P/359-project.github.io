@@ -123,6 +123,7 @@ public class UserServlet extends HttpServlet {
         String s = jc.getJSONFromAjax(request.getReader());
         Doctor d, temp;
         int siz = 0;
+        ArrayList<SimpleUser> id = new ArrayList<SimpleUser>();
         EditDoctorTable edt = new EditDoctorTable();
         d = edt.jsonToDoctor(s);
         ArrayList<Randevouz> r = new ArrayList<Randevouz>();
@@ -141,16 +142,42 @@ public class UserServlet extends HttpServlet {
                for(int i = 0; i < r.size(); i++){
                    su = esut.databaseToSimpleUserID(r.get(i).getUser_id());
                    if(su != null){
-                       if(su.getBlooddonor() == 1 && su.getBloodtype().equals(d.getBloodtype())){
-                           Message m = new Message();
-                           m.setDoctor_id(d.getDoctor_id());
-                           m.setUser_id(su.getUser_id());
-                           m.setUsername(temp.getUsername());
-                           m.setSender(temp.getUsername());
-                           m.setMessage("You have an appointment for blood donation.");
-                           m.setBlood_donation(1);
-                           m.setBloodtype(d.getBloodtype());
-                           emt.createNewMessageBD(m);
+                       if(su.getBlooddonor() == 1 && su.getBloodtype().equals(d.getBloodtype()) ){
+                           if(id.size() == 0){
+                               id.add(su);
+                               
+                               Message m = new Message();
+                               m.setDoctor_id(d.getDoctor_id());
+                               m.setUser_id(su.getUser_id());
+                               m.setUsername(temp.getUsername());
+                               m.setSender(temp.getUsername());
+                               m.setMessage("You have an appointment for blood donation.");
+                               m.setBlood_donation(1);
+                               m.setBloodtype(d.getBloodtype());
+                               emt.createNewMessageBD(m);
+                           }
+                           else{
+                               int fl = 1;
+                               int h = 0;
+                               while(h < id.size()){
+                                   if(id.get(h).getUser_id() == su.getUser_id()){
+                                       fl = 0;
+                                   }
+                                   h++;
+                               }
+                               if(fl == 1){
+                                   id.add(su);
+                                   Message m = new Message();
+                                   m.setDoctor_id(d.getDoctor_id());
+                                   m.setUser_id(su.getUser_id());
+                                   m.setUsername(temp.getUsername());
+                                   m.setSender(temp.getUsername());
+                                   m.setMessage("You have an appointment for blood donation.");
+                                   m.setBlood_donation(1);
+                                   m.setBloodtype(d.getBloodtype());
+                                   emt.createNewMessageBD(m);
+                               }
+                           }
                        }
                        else{
                             response.setStatus(404);
@@ -206,10 +233,13 @@ public class UserServlet extends HttpServlet {
         
         JSON_Converter jc = new JSON_Converter();
         String s = jc.getJSONFromAjax(request.getReader());
+        System.out.println("Values: " + s);
         EditBloodTestTable ebtt = new EditBloodTestTable();
         BloodTest b, temp;
         try(PrintWriter out = response.getWriter()){
+            System.out.println("-----------before add----------");
             ebtt.addBloodTestFromJSON(s);
+            System.out.println("-----------after add----------");
             b = ebtt.jsonToBloodTest(s);
             temp = ebtt.databaseToBloodTest(b.getAmka(), b.getTest_date());
             Gson gson = new Gson();

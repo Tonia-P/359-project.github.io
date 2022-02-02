@@ -29,7 +29,9 @@ public class EditBloodTestTable {
     
     public void addBloodTestFromJSON(String json) throws ClassNotFoundException{
          BloodTest bt=jsonToBloodTest(json);
+         System.out.println("IN ADD, VALUES: " + bt.getAmka() + ", " + bt.getMedical_center() + ", " + bt.getBlood_sugar_level() + ", " + bt.getCholesterol_level() + ", " + bt.getIron_level() + ", " + bt.getVitamin_b12_level() + ", " + bt.getVitamin_d3_level() +", " +  bt.getTest_date());
          bt.setValues();
+         
          createNewBloodTest(bt);
     }
     

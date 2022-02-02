@@ -126,10 +126,14 @@ const BloodDonation = () => {
               </Text>
 
             <Select placeholder='Select option' onChange={handleChange} name='bloodtype' isRequired >
-                <option value='A'>A</option>
-                <option value='B'>B</option>
-                <option value='AB'>AB</option>
-                <option value='O'>O</option>
+                <option value='A+'>A+</option>
+                <option value='A-'>A-</option>
+                <option value='B+'>B+</option>
+                <option value='B-'>B-</option>
+                <option value='AB+'>AB+</option>
+                <option value='AB-'>AB-</option>
+                <option value='O+'>O+</option>
+                <option value='O-'>O-</option>
             </Select>
 
           </ModalBody>

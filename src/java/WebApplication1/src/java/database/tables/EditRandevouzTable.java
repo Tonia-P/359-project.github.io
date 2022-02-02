@@ -167,7 +167,7 @@ public class EditRandevouzTable {
         
         
         try{
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "' AND date_time BETWEEN '" + bf + "' AND '" + af + "' AND status = 'empty'");
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + dr_id + "' AND date_time BETWEEN '" + bf + "' AND '" + af + "' AND status = 'free'");
             while(rs.next()){
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();

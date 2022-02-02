@@ -212,7 +212,7 @@ public class EditMessageTable {
         ResultSet rs;
         
         try{
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id ='" + doctor_id + "' AND blood_donation ='" + blooddonnor + "'");
+            rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id ='" + doctor_id + "' AND blood_donation ='" + blooddonnor + "'");
             while(rs.next()){
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
