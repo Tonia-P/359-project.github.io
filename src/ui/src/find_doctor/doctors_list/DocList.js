@@ -9,16 +9,18 @@ import {
   import DocRow from './DocRow';
   import $ from 'jquery';
   import { MapContext } from '../../contexts/MapContext'
+  import { UserContext } from '../../contexts/UserContext';
 import DocFilter from './DocFilter';
 
 
 
-const DocList = (values, isLogged) => {
+const DocList = () => {
 
 
 
 
-    const { filteredDoctors } = useContext(MapContext)
+    const { filteredDoctors, allDoctors } = useContext(MapContext)
+    const { isLogged } = useContext(UserContext)
 
   
     return (
@@ -30,11 +32,15 @@ const DocList = (values, isLogged) => {
           <Text >All doctors</Text>
         </Box>
 
-        <DocFilter/>
+        {isLogged && <DocFilter/>}
 
        
         <VStack  spacing='0px' overflow-y='scroll'>
-            {filteredDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)}
+            {isLogged ? 
+            filteredDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)
+            : 
+            allDoctors.map(doctor => <DocRow doctor={doctor} key={doctor.doctor_id} />)
+            }
             <Box h='100px'></Box>
          </VStack>
         

@@ -7,6 +7,7 @@ import React, { useState, useEffect, useContext, useRef, useCallback } from 'rea
     VStack,
     Divider,
     Heading,
+    Link,
     Flex,
     Icon,
     Button
@@ -29,6 +30,7 @@ import './mapStyle.css'
 import { AiFillCar } from 'react-icons/ai';
 import { FaRoad, FaMapMarkedAlt } from 'react-icons/fa';
 import { ImLocation } from 'react-icons/im';
+import { BrowserRouter as Router, Routes, Route, Link as ReachLink } from 'react-router-dom'
 
 
 
@@ -37,7 +39,7 @@ const MapMarker = ({ doctor, map }) => {
 
     
 
-    const { userInfo } = useContext(UserContext)
+    const { userInfo, isLogged } = useContext(UserContext)
     const { selectedDoctor, setSelectedDoctor, setIsBooking } = useContext(MapContext)
     const circleRef = useRef()
 
@@ -84,6 +86,8 @@ const MapMarker = ({ doctor, map }) => {
 
                     <Divider/>
 
+                    {isLogged ?
+                    <>
                     <Flex justifyContent='space-between' h='30px' w='100%' alignItems='center'>
                         <Icon as={FaMapMarkedAlt} color='white' w={7} h={7} mr={3}/>
                         <Text fontWeight='bold' fontSize='md'>{doctor.address}</Text>
@@ -100,6 +104,12 @@ const MapMarker = ({ doctor, map }) => {
                     
 
                     <Button colorScheme='teal' onClick={handleBook}>Book</Button>
+                    </>
+
+                    :
+                    <Text my={3}> <ReachLink to='/loginMenu'><Link color='teal.500'>Login </Link></ReachLink>
+            or <Link as={ReachLink} color='teal.500' to='/register'>register </Link> to continue</Text>
+}
                 </VStack>
               
 

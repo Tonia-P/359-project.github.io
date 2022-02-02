@@ -89,9 +89,9 @@ const DocList = (values, isLogged) => {
 
     const handleSubmit = e => {
 
-      e.preventDefault();
-      var urlEnd = 'http://localhost:8080/WebApplication1/bookAppointment';
-      var dets = JSON.stringify(rendezvouDet);
+
+      var urlEnd = 'http://localhost:8080/WebApplication1/BookAppointment';
+      var dets = JSON.stringify(selectedRendezvous);
 
       $.ajax({
         url: urlEnd,
@@ -172,7 +172,7 @@ const DocList = (values, isLogged) => {
 
           </VStack>
 
-          <Button colorScheme='teal'>Submit</Button>
+          <Button onClick={handleSubmit} colorScheme='teal'>Submit</Button>
           </Flex>
 }
 

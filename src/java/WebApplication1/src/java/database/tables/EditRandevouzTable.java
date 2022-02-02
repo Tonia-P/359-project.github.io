@@ -94,7 +94,7 @@ public class EditRandevouzTable {
 
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id= '" + doctor_id +"' AND status ='" + selected + "' AND user_di ='" + user_id + "'");
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id= '" + doctor_id +"' AND status ='" + selected + "' AND user_id ='" + user_id + "'");
             rs.next();
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
