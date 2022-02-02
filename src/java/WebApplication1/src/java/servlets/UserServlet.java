@@ -372,8 +372,8 @@ public class UserServlet extends HttpServlet {
         System.out.println("DETS: " + d.getDoctor_id() + ", " + d.getUsername());
         
         try(PrintWriter out = response.getWriter()){
-            m = emt.databaseToMessageS(d.getDoctor_id(), d.getUsername());
-            u = esut.databaseToSimpleUserID(m.getUser_id());
+            
+            u = esut.databaseToSimpleUserU(d.getUsername());
             if(u != null){
                 System.out.println("DETS2: " + u.getUser_id());
                 temp = ert.databaseToRandevouzM(d.getDoctor_id(), u.getUser_id());
@@ -394,6 +394,7 @@ public class UserServlet extends HttpServlet {
                     response.setStatus(404);
                 }
             }
+            
             else{
                 response.setStatus(404);
             }
